@@ -24,21 +24,21 @@ Beta will focus on locking down recommend settings and creating extra tools to s
    Shadow-SX
    |_
       Dolphin-x64
-	  ShadowData
-	  
+      ShadowData
+
 5. Place your clean ripped Shadow The Hedgehog NTSC ISO named "ShadowTheHedgehog" into the folder. - CRC64: B964387A53E0D95C
 
 6. Drag the files inside of "Shadow-SX-Files" onto your "Shadow-SX" Folder. This will copy over the dolphin settings and game changes. This also will make this dolphin exe into a portable version which will keep settings and changes local to this version without messing with any existing dolphin settings on your computer.
 
-	Your folder should now look like this:
-	
+    Your folder should now look like this:
+
     Shadow-SX
     |_
       Dolphin-x64
       ShadowData
-	  ShadowSXResources
-	  ShadowSXLauncher.exe
-	  
+      ShadowSXResources
+      ShadowSXLauncher.exe
+
 7. Within ShadowSXResources\CustomTextures, there is a folder named GUPE8P.  Copy (not move) that folder and paste it in: Dolphin-x64\User\Load\Textures.  This adds some custom textures that will clearly show the game as Shadow SX during load screens along with a few other modifications for a better experience when using higher internal resolutions.
 
 8. In the Dolphin-x64\User\Load\Textures\Buttons folder, delete all folders except for the one that lists your prefered button display, deleting all if you want to use the default GC button layout.
