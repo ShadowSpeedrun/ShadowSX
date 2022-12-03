@@ -17,7 +17,10 @@ Start:
   ;TODO: wtf does that code do.
   cmplwi r16, 0
   bne- End
-  bl 0x334B58
+  lis r18, 0x8033
+  ori r18, r18, 0x6FAC
+  mtlr r18
+  blrl
 
 End:
   li r16, 0x0
