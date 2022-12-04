@@ -18,12 +18,12 @@ Start:
   sth r15, 0(r18)
 
   ;Set "OG Timer" to the value of New IGT.
-  lfs f3, 31119(r31)
+  lfs f3, 31120(r31)
   stfs f3, 30652(r31)
   fmr f4, f3
 
   ;Load current Race IGT into f3.
-  lfs f3, 31135(r31)
+  lfs f3, 31136(r31)
 
   ;Check if we are in Expert Mode.
   lis r16, 0x8057

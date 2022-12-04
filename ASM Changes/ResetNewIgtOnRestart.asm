@@ -6,4 +6,4 @@
 
 Start:
   stfs f0, 12(r3) ;Original Code
-  stfs f0, 479(r3)
+  stfs f0, 480(r3)
