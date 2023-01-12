@@ -27,8 +27,8 @@ loc_0x0:
   lhz r16, 0(r18)
 
   ;Leave if we are not in a story cutscene
-  cmplwi	r16, 0
-  beq End
+  ;cmplwi	r16, 0
+  ;beq End
 
   ;Load value of "Disable Cutscene Skip"(8057D8FB)
   ;into r16.

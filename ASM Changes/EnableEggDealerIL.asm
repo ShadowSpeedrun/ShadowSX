@@ -33,12 +33,6 @@ CheckIfEggDealer:
   or r18, r16, r17
   lwz r19, 0(r18)
 
-  ;Load "Egg Dealer IL Flag" Address into r18.
-  lis r16, 0x8057
-  li r17, 0x7777
-  addi r17, r17, 0x61B2
-  or r18, r16, r17
-
   ;Only enable if boss is Egg Dealer
   cmplwi r19, 0x3
   beq EnableEggIL
@@ -50,14 +44,24 @@ CheckIfEggDealer:
   beq EnableEggIL
   b DisableEggIL
 
+LoadEggDealerILFlag:
+  ;Load "Egg Dealer IL Flag" Address into r18.
+  lis r16, 0x8057
+  li r17, 0x7777
+  addi r17, r17, 0x61B2
+  or r18, r16, r17
+  blr
+
 EnableEggIL:
   ;Set "Egg Dealer IL Flag" to true.
+  bl LoadEggDealerILFlag
   li r19, 0x1
   sth r19, 0(r18)
   b End
   
 DisableEggIL:
   ;Set "Egg Dealer IL Flag" to False.
+  bl LoadEggDealerILFlag
   li r19, 0x0
   sth r19, 0(r18)
   b End
