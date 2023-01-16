@@ -1,0 +1,7 @@
+GUPE8P
+
+Shadow the Hedgehog
+SX - Enable Race Mode Timer [BlazinZzetti]
+0257D8F5 00000001
+SX - Restore Original Cutscene Skip [BlazinZzetti]
+0257D8FB 00000001

@@ -1,24 +1,22 @@
 ///////////////////////////////////////////////////////
 ////    SHADOW THE HEDGEHOG - SPEEDRUNNER'S CUT    ////
-////                 BETA RELEASE                  ////
+////                BETA 2 RELEASE                 ////
 ///////////////////////////////////////////////////////
 
-The goal of this beta release is to test out the game with the majority of the modifications and to see how everyone can run this configuration of Dolphin. Ideally everyone should be running on the same settings to keep things as fair as possible.  Lets figure out needs adjustments together!
+The goal of this beta release is to test out the game with what I consider release candidate changes. This release is also now Console Compatible since the required changes are now in the form of a ROM patch, so running the patched ISO on console hardware is now possible. Extra changes like custom colors for shadow and button prompts are still Dolphin only.
 
-Beta will focus on locking down recommend settings and creating extra tools to speed up setup and configuration along with a handful of visual mods to make it clear that this is not original Shadow.
+There's a small handful of possible changes left to make for quality of life, but everything gameplay mechanic wise is in this release and should be exactly the same compared to the eventual 1.0 release.
 
 ///////////////////////////////////////////////////////
 ////              SETUP INSTRUCTIONS               ////
 ///////////////////////////////////////////////////////
 
-1. Create a folder named, "Shadow-SX".
+1. Create a new folder for holding the downloaded files. The name doesnt have to be exact, but I would recommended "Shadow-SX" for the name.
 
 2. Download the latest Dolphin Development Build.
 
 3. Extract the contents such that the Dolphin-x64 folder is in the Shadow-SX folder.  
  
-4. Create a Folder named, "ShadowData".
-
    Your folder should now look like:
    
    Shadow-SX
@@ -26,28 +24,38 @@ Beta will focus on locking down recommend settings and creating extra tools to s
       Dolphin-x64
       ShadowData
 
-5. Place your clean ripped Shadow The Hedgehog NTSC ISO named "ShadowTheHedgehog" into the folder. - CRC64: B964387A53E0D95C
-
-6. Drag the files inside of "Shadow-SX-Files" onto your "Shadow-SX" Folder. This will copy over the dolphin settings and game changes. This also will make this dolphin exe into a portable version which will keep settings and changes local to this version without messing with any existing dolphin settings on your computer.
+4. Drag the files inside of "Shadow-SX-Files" onto your "Shadow-SX" Folder. This will copy over the dolphin settings and game changes. This also will make this dolphin exe into a portable version which will keep settings and changes local to this version without messing with any existing dolphin settings on your computer.
 
     Your folder should now look like this:
 
     Shadow-SX
     |_
       Dolphin-x64
-      ShadowData
       ShadowSXResources
       ShadowSXLauncher.exe
+	  
+5. If you dont already have a patched ROM, you should now create one using the ShadowSXLauncher.  If you are on Mac or Linux, or would prefer not to use the Launcher to patch the ROM, you can use the manual patching tools provided on the download page.
 
-7. Within ShadowSXResources\CustomTextures, there is a folder named GUPE8P.  Copy (not move) that folder and paste it in: Dolphin-x64\User\Load\Textures.  This adds some custom textures that will clearly show the game as Shadow SX during load screens along with a few other modifications for a better experience when using higher internal resolutions.
+    To patch the ROM using the ShadowSXLauncher:
+        1. Open the launcher, then press the "Create Shadow SX ROM" button.
+        2. Select your original clean ripped Shadow the Hedgehog ISO ROM. - CRC32: F582CF1E
+        3. Select where you want to save your patched ROM copy. (The original ROM will not be altered)
+	
+	Assuming everything is correct, the ROM will be created. If you come across an error that is not fixable with the provided suggestions, reach out on the Shadow Speedrunning Discord Server for help.
 
-8. In the Dolphin-x64\User\Load\Textures\Buttons folder, delete all folders except for the one that lists your prefered button display, deleting all if you want to use the default GC button layout.
+    The remaining steps are for those that wish to play on PC with the Dolphin Emulator. If you are only planning on playing on Console, you do not need to follow the remaining steps, simply run the patched ROM on your console of choice.
+	
+	If you want to enable options settings, you can use the codes found in the GeckoCodesForConsole folder. Some additional work may be needed to get these codes working on your choice of console.
 
-9. Run "Dolphin.exe" in the Dolphin-x64 folder.
+6. Within ShadowSXResources\CustomTextures, there is a folder named GUPE8P.  Copy (not move) that folder and paste it in: Dolphin-x64\User\Load\Textures.  This adds some custom textures that can be use to improve or customize the look of Shadow SX.
 
-10. Double click the main window where instructed to set the rom path to ShadowData.
+7. In the Dolphin-x64\User\Load\Textures\Buttons folder, delete all folders except for the one that lists your preferred button display, deleting all if you want to use the default GC button layout.
 
-11. Click on the Controllers icon to set up your controller.
+8. Run "Dolphin.exe" in the Dolphin-x64 folder.
+
+9. Double click the main window where instructed to set the rom path to where your ShadowSX ROM will be.
+
+10. Click on the Controllers icon to set up your controller.
 
 GC controllers should be mapped 1 to 1 or using an adapter.
 
@@ -70,3 +78,5 @@ If you want, you could run Shadow SX from Dolphin.exe, but it is recommended tha
 The end goal is to have a set of settings that would allow everyone to play on the same "Console". The default settings should work for everyone, but if you need to adjust settings to get things working, let me know. From my tests so far, it appears that you can increase the visual quality of the game, but at the cost of reduced framerate or more frequent drops in framerate.  The real time appears to be unaffected, so whether you want fast framerates of improved visual quality is currently up to you.
 
 Regarding Aspect Ratio, Auto or Force 4:3 should be fine. If you have a decent 4:3 Monitor, set the option to Stretch to Window and run it full screen on that monitor for the best experience.
+
+Make sure to enable Background Input in the Controller Settings if you want to be able to play the game while having working on something else on your computer.
