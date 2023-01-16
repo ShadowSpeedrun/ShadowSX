@@ -22,7 +22,6 @@ There's a small handful of possible changes left to make for quality of life, bu
    Shadow-SX
    |_
       Dolphin-x64
-      ShadowData
 
 4. Drag the files inside of "Shadow-SX-Files" onto your "Shadow-SX" Folder. This will copy over the dolphin settings and game changes. This also will make this dolphin exe into a portable version which will keep settings and changes local to this version without messing with any existing dolphin settings on your computer.
 
