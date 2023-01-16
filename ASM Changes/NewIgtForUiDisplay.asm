@@ -9,7 +9,7 @@ Start:
   ;TODO: go clean that up probably.
 
   ;Load New IGT into f1.
-  lfs f1, 29219(r29)
+  lfs f1, 29220(r29)
    
   ;Use Race IGT if in Race Mode and in Story.
 
@@ -36,7 +36,7 @@ Start:
   bne- End
   
   ;Load "Race IGT" into f1.
-  lfs f1, 29235(r29)
+  lfs f1, 29236(r29)
 
 End:
   li r16, 0x0

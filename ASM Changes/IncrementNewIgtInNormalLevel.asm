@@ -34,9 +34,9 @@ Start:
 
 ApplyTime:
   ;Add timestep to New IGT.
-  lfs f1, 479(r3)
+  lfs f1, 480(r3)
   fadds f1, f1, f0
-  stfs f1, 479(r3)
+  stfs f1, 480(r3)
 
   ;Check if in Expert Mode.
   ;to determine if Story or Expert
@@ -57,7 +57,7 @@ LoadStoryRaceTime:
 
 CalcRaceTime:
   fadds f1, f1, f0
-  stfs f1, 495(r3)
+  stfs f1, 496(r3)
 
 End:
   li r16, 0x0
