@@ -1,11 +1,13 @@
 ///////////////////////////////////////////////////////
 ////    SHADOW THE HEDGEHOG - SPEEDRUNNER'S CUT    ////
-////                BETA 2 RELEASE                 ////
+////                BETA 3 RELEASE                 ////
 ///////////////////////////////////////////////////////
 
-The goal of this beta release is to test out the game with what I consider release candidate changes. This release is also now Console Compatible since the required changes are now in the form of a ROM patch, so running the patched ISO on console hardware is now possible. Extra changes like custom colors for shadow and button prompts are still Dolphin only.
+This update adds in a few quality of life and polish items. The main noticable change is the addition of 2 new blue message screens, 1 of which would have effected RTA timing of runs.
 
-There's a small handful of possible changes left to make for quality of life, but everything gameplay mechanic wise is in this release and should be exactly the same compared to the eventual 1.0 release.
+While it may look like little has changed, there's quite a bit of new code to get these features in, so any help playtesting would be much appriciated.
+
+Like with the last update, the only things left I would like to add before a 1.0 release are not esstinal to the gameplay or would majorly change how you would play each level.  So feel free to get some practice in while I get things finished up.
 
 ///////////////////////////////////////////////////////
 ////              SETUP INSTRUCTIONS               ////
@@ -44,7 +46,7 @@ There's a small handful of possible changes left to make for quality of life, bu
 
     The remaining steps are for those that wish to play on PC with the Dolphin Emulator. If you are only planning on playing on Console, you do not need to follow the remaining steps, simply run the patched ROM on your console of choice.
 	
-	If you want to enable options settings, you can use the codes found in the GeckoCodesForConsole folder. Some additional work may be needed to get these codes working on your choice of console.
+	All optional settings as of now are enablable in the game itself without the need for extra files. The first blue message that appears on boot will explain how to enable one or more options.
 
 6. Within ShadowSXResources\CustomTextures, there is a folder named GUPE8P.  Copy (not move) that folder and paste it in: Dolphin-x64\User\Load\Textures.  This adds some custom textures that can be use to improve or customize the look of Shadow SX.
 
@@ -64,6 +66,8 @@ B = Left Face Button
 A = Bottom Face Button
 X = Right Face Button
 Y = Top Face Button
+
+Be sure to enable the Modern UI Control option in game if you want a similar UI navigation experience as those console versions.
 
 ************************************************************************
                         Congratulations! 
