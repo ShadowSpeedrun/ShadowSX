@@ -85,30 +85,21 @@ bne RenderHours
 
 RemoveHours:
   ;0x20 = space
-  li r16, 0x0
-  stb r16, 0(r21)
-  addi r21, r21, 1
   li r16, 0x20
-  stb r16, 0(r21)
-  addi r21, r21, 1
+  sth r16, 0(r21)
+  addi r21, r21, 2
 
   b RenderMinutes
 
 RenderHours:
-  li r17, 0x0
-  stb r17, 0(r21)
-  addi r21, r21, 1
   addi r16, r16, 0x30
-  stb r16, 0(r21)
-  addi r21, r21, 1
+  sth r16, 0(r21)
+  addi r21, r21, 2
   
   ;Render Colon
-  li r16, 0x0
-  stb r16, 0(r21)
-  addi r21, r21, 1
   li r16, 0x3A
-  stb r16, 0(r21)
-  addi r21, r21, 1
+  sth r16, 0(r21)
+  addi r21, r21, 2
 
   li r17, 60
   divw r16, r20, r17
@@ -122,12 +113,9 @@ RenderMinutes:
   bl RenderTimeSection
 
   ;Render Colon
-  li r16, 0x0
-  stb r16, 0(r21)
-  addi r21, r21, 1
   li r16, 0x3A
-  stb r16, 0(r21)
-  addi r21, r21, 1
+  sth r16, 0(r21)
+  addi r21, r21, 2
   ;Fall Through to continue on.
 
 ;Load Byte for Seconds
@@ -136,12 +124,9 @@ lbz r16, 1(r18)
 bl RenderTimeSection
 
 ;Render Period
-li r16, 0x0
-stb r16, 0(r21)
-addi r21, r21, 1
 li r16, 0x2E
-stb r16, 0(r21)
-addi r21, r21, 1
+sth r16, 0(r21)
+addi r21, r21, 2
 
 ;Load Byte for SubSeconds
 bl LoadTimeByteAddress
@@ -178,38 +163,26 @@ RenderTensPlace:
   mulli r16, r18, 10
   sub r17, r17, r16
 
-  li r16, 0x0
-  stb r16, 0(r21)
-  addi r21, r21, 1
   mr r16, r18
   addi r16, r16, 0x30
-  stb r16, 0(r21)
-  addi r21, r21, 1
+  sth r16, 0(r21)
+  addi r21, r21, 2
 
-  li r16, 0x0
-  stb r16, 0(r21)
-  addi r21, r21, 1
   mr r16, r17
   addi r16, r16, 0x30
-  stb r16, 0(r21)
-  addi r21, r21, 1
+  sth r16, 0(r21)
+  addi r21, r21, 2
 
   blr
 
 RenderOnesPlace:
-  li r17, 0x0
-  stb r17, 0(r21)
-  addi r21, r21, 1
   li r17, 0x30
-  stb r17, 0(r21)
-  addi r21, r21, 1
+  sth r17, 0(r21)
+  addi r21, r21, 2
 
-  li r17, 0x0
-  stb r17, 0(r21)
-  addi r21, r21, 1
   addi r16, r16, 0x30
-  stb r16, 0(r21)
-  addi r21, r21, 1
+  sth r16, 0(r21)
+  addi r21, r21, 2
 
   blr
 
