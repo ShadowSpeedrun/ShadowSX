@@ -20,10 +20,24 @@ Start:
   lwz r18, 0(r18)
 
   ;If Westopolis, Reset Time
-  ;Else, Exit
+  ;Else, If Last Way, Reset Last Way Time
+  ;Else, Do nothing.
   cmplwi r18, 100
+  beq- ResetStory
+  cmplwi r18, 700
   bne- End
+
+ResetLast:  
+  ;Load address of Story Race Time
+  ;into r18. (80577AF4)
+  ;f2 is 0.0f, store to Last Story Race Time
+  li r17, 0x7777
+  addi r17, r17, 0x3AD
+  or r18, r16, r17
+  stfs f2, 0(r18)
+  b End
   
+ResetStory:
   ;Load address of Story Race Time
   ;into r18. (80577AF4)
   ;f3 is 0.0f, store to Story Race Time

@@ -47,12 +47,28 @@ ApplyTime:
   or r18, r16, r17
   lbz r16, 0(r18)
   cmpwi r16, 0x1
-  bne- LoadStoryRaceTime
-  lfs f0, -23580(r3)
-  b CalcRaceTime
+  beq LoadExpertRaceTime
+  ;Check if Last Story
+  lis r16, 0x8057
+  li r17, 0x7777
+  addi r17, r17, 0x618C
+  or r18, r16, r17
+  lhz r16, 0(r18)
+  cmpwi r16, 0x1
+  beq LoadLastStoryRaceTime
+  
+  ;Default to Story Race Time if neither are enabled.
 
 LoadStoryRaceTime:
   lfs f0, -23604(r3)
+  b CalcRaceTime
+
+LoadExpertRaceTime:
+  lfs f0, -23580(r3)
+  b CalcRaceTime
+
+LoadLastStoryRaceTime:
+  lfs f0, -23556(r3)
   b CalcRaceTime
 
 CalcRaceTime:

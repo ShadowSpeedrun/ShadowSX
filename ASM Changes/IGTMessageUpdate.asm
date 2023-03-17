@@ -17,13 +17,54 @@ mflr r22
 lwz r21, 0(r10)
 addi r21, r21, 0x24
 
-;Load Memory Race Time(80577AF4)
-;Optimize this
+
+;Determine the Timer to Display
+;First check for Expert flag(8057D7C5)
+
+lis r16, 0x8057
+li r17, 0x7777
+addi r17, r17, 0x604E
+or r18, r16, r17
+lbz r16, 0(r18)
+cmpwi r16, 1
+beq SetExpertTime
+ 
+;check for Last Story Flag(8057D903)
+lis r16, 0x8057
+li r17, 0x7777
+addi r17, r17, 0x618c
+or r18, r16, r17
+lhz r16, 0(r18)
+cmpwi r16, 1
+beq SetLastTime
+
+;Both checks failed, default to Story Mode Time
+;Story Race(80577AF4)
+
 lis r16, 0x8057
 li r17, 0x7777
 addi r17, r17, 0x37D
 or r18, r16, r17
 lfs f1, 0(r18)
+b GetDigits
+
+SetExpertTime:
+  ;Expert Race(80577B0C)
+  lis r16, 0x8057
+  li r17, 0x7777
+  addi r17, r17, 0x395
+  or r18, r16, r17
+  lfs f1, 0(r18)
+  b GetDigits
+
+SetLastTime:
+  ;Last Story Race(80577B24)
+  lis r16, 0x8057
+  li r17, 0x7777
+  addi r17, r17, 0x3AD
+  or r18, r16, r17
+  lfs f1, 0(r18)
+  ;b GetDigits
 
 GetDigits:
   ;r4 -> r14

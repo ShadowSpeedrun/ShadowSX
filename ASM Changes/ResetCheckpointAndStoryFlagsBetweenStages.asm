@@ -20,6 +20,10 @@ Start:
   ;Add Offet to then set "Story Mode Flag" to false.
   addi r18, r18, 0x50
   sth r15, 0(r18)
+
+  ;Again, but for Last Story Flag
+  addi r18, r18, 0xC
+  sth r15, 0(r18)
   
   ;Cleanup to prevent
   ;accidental code changes.

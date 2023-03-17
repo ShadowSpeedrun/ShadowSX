@@ -35,10 +35,27 @@ Start:
   ;Save Race IGT to the appropriate
   ;save location based on Expert flag.
   cmpwi r16, 0x1
-  bne- SaveRaceTimeStory
+  beq SaveExpertRaceTime
+
+  ;Check if we are in Last Story.
+  lis r16, 0x8057
+  li r17, 0x7777
+  addi r17, r17, 0x618C
+  or r18, r16, r17
+  lhz r16, 0(r18)
+  cmpwi r16, 0x1
+  beq SaveLastStoryRaceTime
+  b SaveRaceTimeStory
   
+SaveExpertRaceTime:
   ;Save to Expert Race Time.
   stfs f3, 7060(r31)
+  fmr f4, f3
+  b End
+
+SaveLastStoryRaceTime:
+  ;Save to Last Story Race Time.
+  stfs f3, 7084(r31)
   fmr f4, f3
   b End
 
