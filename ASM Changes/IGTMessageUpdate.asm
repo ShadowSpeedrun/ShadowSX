@@ -1,4 +1,25 @@
 #To be inserted at 8004a47c
+;save LR to restore later
+mflr r22
+
+;r10 contains address to start of our message.
+lwz r21, 0(r10)
+
+cmpwi r11, 1
+bne Exit
+
+;Check for if we are rendering blank message(8057D8FD = 44)
+lis r16, 0x8057
+li r17, 0x7777
+addi r17, r17, 0x6186
+or r18, r16, r17
+lhz r16, 0(r18)
+cmpwi r16, 44
+beq RenderSXIntro
+
+;Offset it to the start of the dynamic section.
+addi r21, r21, 0x24
+
 ;Determine that we are trying to render the Time message.
 ;Check for Time Flag (8057D901)
 lis r16, 0x8057
@@ -8,15 +29,6 @@ or r18, r16, r17
 lhz r16, 0(r18)
 cmpwi r16, 1
 bne End
-
-;save LR to restore later
-mflr r22
-
-;r10 contains address to start of our message.
-;Offset it to the start of the dynamic section.
-lwz r21, 0(r10)
-addi r21, r21, 0x24
-
 
 ;Determine the Timer to Display
 ;First check for Expert flag(8057D7C5)
@@ -174,9 +186,7 @@ bl LoadTimeByteAddress
 lbz r16, 2(r18)
 bl RenderTimeSection
 
-;Restore LR before exiting
-mtlr r22
-b End
+b Exit
 
 LoadTimeByteAddress:
   lis r16, 0x8060
@@ -226,6 +236,260 @@ RenderOnesPlace:
   addi r21, r21, 2
 
   blr
+
+RenderSXIntro:
+  mr r20, r21
+  ;0x0A = NewLine
+  ;0x20 = Space
+
+  li r16, 26; 13 spaces 2 bytes each
+  li r17, 1
+  bl MoveCursorR16XR17Y
+
+  bl SXTitle
+
+  li r16, 26; 13 spaces 2 bytes each
+  li r17, 2
+  bl MoveCursorR16XR17Y
+
+  bl SXSubTitle
+
+  li r16, 10; 5 spaces 2 bytes each
+  li r17, 4
+  bl MoveCursorR16XR17Y
+
+  bl SXWebsite
+
+  li r16, 26; 13 spaces 2 bytes each
+  li r17, 6
+  bl MoveCursorR16XR17Y
+
+  bl AtoStart
+
+  li r16, 24; 12 spaces 2 bytes each
+  li r17, 8
+  bl MoveCursorR16XR17Y
+
+  bl ZforOptions
+  b Exit
+
+SXTitle:
+  mflr r14
+
+  ;Shadow SX Beta V4
+  	lis r16, 0x53
+  addi r16, r16, 0x68
+  bl RenderR16R21
+  	lis r16, 0x61
+  addi r16, r16, 0x64
+  bl RenderR16R21
+  	lis r16, 0x6F
+  addi r16, r16, 0x77
+  bl RenderR16R21
+  	lis r16, 0x20
+  addi r16, r16, 0x53
+  bl RenderR16R21
+  	lis r16, 0x58
+  addi r16, r16, 0x20
+  bl RenderR16R21
+  	lis r16, 0x42
+  addi r16, r16, 0x65
+  bl RenderR16R21
+  	lis r16, 0x74
+  addi r16, r16, 0x61
+  bl RenderR16R21
+  	lis r16, 0x20
+  addi r16, r16, 0x56
+  bl RenderR16R21
+  	lis r16, 0x34
+  addi r16, r16, 0x20  
+  bl RenderR16R21
+
+  mtlr r14
+  li r14, 0
+  blr
+
+SXSubTitle:
+  mflr r14
+
+  ;Speedrunners's Cut
+        lis r16, 0x53
+  addi r16, r16, 0x70
+  bl RenderR16R21
+        lis r16, 0x65
+  addi r16, r16, 0x65
+  bl RenderR16R21
+  	lis r16, 0x64
+  addi r16, r16, 0x72
+  bl RenderR16R21
+  	lis r16, 0x75
+  addi r16, r16, 0x6E
+  bl RenderR16R21
+  	lis r16, 0x6E
+  addi r16, r16, 0x65
+  bl RenderR16R21
+  	lis r16, 0x72
+  addi r16, r16, 0x27
+  bl RenderR16R21
+  	lis r16, 0x73
+  addi r16, r16, 0x20
+  bl RenderR16R21
+  	lis r16, 0x43
+  addi r16, r16, 0x75
+  bl RenderR16R21
+  	lis r16, 0x74
+  addi r16, r16, 0x20  
+  bl RenderR16R21
+
+  mtlr r14
+  li r14, 0
+  blr
+
+SXWebsite:
+  mflr r14
+
+  ;www.shadowspeedrun.com/ShadowSX
+  	lis r16, 0x77
+  addi r16, r16, 0x77
+  bl RenderR16R21
+  	lis r16, 0x77
+  addi r16, r16, 0x2e
+  bl RenderR16R21
+  	lis r16, 0x73
+  addi r16, r16, 0x68
+  bl RenderR16R21
+  	lis r16, 0x61
+  addi r16, r16, 0x64
+  bl RenderR16R21
+  	lis r16, 0x6f
+  addi r16, r16, 0x77
+  bl RenderR16R21
+  	lis r16, 0x73
+  addi r16, r16, 0x70
+  bl RenderR16R21
+  	lis r16, 0x65
+  addi r16, r16, 0x65
+  bl RenderR16R21
+  	lis r16, 0x64
+  addi r16, r16, 0x72
+  bl RenderR16R21
+  	lis r16, 0x75
+  addi r16, r16, 0x6e
+  bl RenderR16R21
+  	lis r16, 0x2e
+  addi r16, r16, 0x63
+  bl RenderR16R21
+  	lis r16, 0x6f
+  addi r16, r16, 0x6d
+  bl RenderR16R21
+  	lis r16, 0x2f
+  addi r16, r16, 0x53
+  bl RenderR16R21
+  	lis r16, 0x68
+  addi r16, r16, 0x61
+  bl RenderR16R21
+  	lis r16, 0x64
+  addi r16, r16, 0x6f
+  bl RenderR16R21
+  	lis r16, 0x77
+  addi r16, r16, 0x53
+  bl RenderR16R21
+  	lis r16, 0x58
+  addi r16, r16, 0x20
+  bl RenderR16R21
+
+  mtlr r14
+  li r14, 0
+  blr
+
+AtoStart:
+  mflr r14
+
+  ;Press A to Start
+  	lis r16, 0x50
+  addi r16, r16, 0x72
+  bl RenderR16R21
+  	lis r16, 0x65
+  addi r16, r16, 0x73
+  bl RenderR16R21
+  	lis r16, 0x73
+  addi r16, r16, 0x20
+  bl RenderR16R21
+  	lis r16, 0x41
+  addi r16, r16, 0x20
+  bl RenderR16R21
+  	lis r16, 0x74
+  addi r16, r16, 0x6f
+  bl RenderR16R21
+  	lis r16, 0x20
+  addi r16, r16, 0x53
+  bl RenderR16R21
+  	lis r16, 0x74
+  addi r16, r16, 0x61
+  bl RenderR16R21
+  	lis r16, 0x72
+  addi r16, r16, 0x74
+  bl RenderR16R21
+
+  mtlr r14
+  li r14, 0
+  blr
+
+ZforOptions:
+  mflr r14
+
+  ;Press z for Options
+  ;lowercase to avoid swapping out txd for now.
+  	lis r16, 0x50
+  addi r16, r16, 0x72
+  bl RenderR16R21
+  	lis r16, 0x65
+  addi r16, r16, 0x73
+  bl RenderR16R21
+  	lis r16, 0x73
+  addi r16, r16, 0x20
+  bl RenderR16R21
+  	lis r16, 0x7a
+  addi r16, r16, 0x20
+  bl RenderR16R21
+  	lis r16, 0x66
+  addi r16, r16, 0x6f
+  bl RenderR16R21
+  	lis r16, 0x72
+  addi r16, r16, 0x20
+  bl RenderR16R21
+  	lis r16, 0x4f
+  addi r16, r16, 0x70
+  bl RenderR16R21
+  	lis r16, 0x74
+  addi r16, r16, 0x69
+  bl RenderR16R21
+  	lis r16, 0x6f
+  addi r16, r16, 0x6e
+  bl RenderR16R21
+  	lis r16, 0x73
+  addi r16, r16, 0x20
+  bl RenderR16R21
+
+  mtlr r14
+  li r14, 0
+  blr
+
+MoveCursorR16XR17Y:
+  ;Use Saved start
+  add r21, r20, r16
+  mulli r16, r17, 88 ;43 character, 1 newline
+  add r21, r21, r16
+  blr
+
+RenderR16R21: 
+  stw r16, 0(r21)
+  addi r21, r21, 4
+  blr  
+
+Exit:
+  ;Restore LR before exiting
+  mtlr r22
 
 End:
   li r14, 0x0
