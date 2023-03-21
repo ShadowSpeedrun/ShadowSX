@@ -1,0 +1,9 @@
+            Shadow SX Options             
+                                          
+       Cutscene Skip     -  +On +Off      
+       Race Timer        -  +On +Off      
+       Modern UI Control -  +On +Off      
+                                          
+       Dpad Up Down to select Option      
+     Dpad Left Right to change Option     
+             Press A to Start             

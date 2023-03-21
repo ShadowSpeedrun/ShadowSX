@@ -17,6 +17,42 @@ bne- End
 li r20, 44
 sth r20, 0(r18)
 
+;Check if Rom Settings are valid
+;If not, assign default settings.
+
+CheckCSSkip:
+  lis r16, 0x8057
+  addi r18, r16, 0x7B2C
+  lbz r17, 0(r18)
+  cmpwi r17, 0
+  beq CheckRT
+  cmpwi r17, 1
+  beq CheckRT
+  li r17, 1
+  stb r17, 0(r18)
+
+CheckRT:
+  lis r16, 0x8057
+  addi r18, r16, 0x7B2D
+  lbz r17, 0(r18)
+  cmpwi r17, 0
+  beq CheckMUI
+  cmpwi r17, 1
+  beq CheckMUI
+  li r17, 0
+  stb r17, 0(r18)
+
+CheckMUI:
+  lis r16, 0x8057
+  addi r18, r16, 0x7B2E
+  lbz r17, 0(r18)
+  cmpwi r17, 0
+  beq End
+  cmpwi r17, 1
+  beq End
+  li r17, 0
+  stb r17, 0(r18)
+
 End:
   li r16, 0x0
   li r17, 0x0
