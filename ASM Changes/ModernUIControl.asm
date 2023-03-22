@@ -3,14 +3,12 @@
 ;Original Code
 lwzx r4, r29, r0
 
-;Load "EnableXboxUI" Address into r18. (8057D8FF)
-lis r16, 0x8057
-li r17, 0x7777
-addi r17, r17, 0x6188
-or r18, r16, r17
+;Load "EnableXboxUI" Address into r18. (80577B2E)
+lis r18, 0x8057
+addi r18, r18, 0x7B2E
 
 ;Check if feature is enabled.
-lhz r19, 0(r18)
+lbz r19, 0(r18)
 cmplwi r19, 1
 bne- End
 
@@ -29,7 +27,5 @@ PressBack:
   b End
 
 End:
-  li r16, 0x0
-  li r17, 0x0
   li r18, 0x0
   li r19, 0x0

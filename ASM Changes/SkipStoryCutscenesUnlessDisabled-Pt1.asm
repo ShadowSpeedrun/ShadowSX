@@ -9,19 +9,17 @@ Start:
   cmplwi	r0, 0
   beq End
 
-  ;Load value of "Disable Cutscene Skip"(8057D8FB)
-  ;into r16.
-  lis r16, 0x8057
-  li r17, 0x7777
-  addi r17, r17, 0x6184
-  or r18, r16, r17
-  lhz r16, 0(r18)
+  ;Load value of "Enable Cutscene Skip"(80577B2C)
+  ;into r18.
+  lis r18, 0x8057
+  addi r18, r18, 0x7B2C
+  lbz r16, 0(r18)
 
-  ;If we want to disable the skip
-  ;leave without changing r0.
-  ;Else, make r0 0 to allow skipping the current cutscene
+  ;If we want to enable the skip
+  ;make r0 0 to allow skipping the current cutscene
+  ;Else, leave without changing r0.
   cmplwi	r16, 1
-  beq End
+  bne End
   li r0, 0
   
 End:
