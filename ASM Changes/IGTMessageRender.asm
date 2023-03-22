@@ -9,14 +9,20 @@ lhz r16, 0(r18)
 cmpwi r16, 1
 bne End
 
+;Ensure we are trying to render the IGT Message.
+lis r18, 0x807D
+addi r18, r18, 0x5700
+lwz r16, 0(r18)
+cmpwi r16, 43
+bne End
+
 ;save LR to restore later
 mflr r22
 
 ;r10 contains address to start of our message.
 ;Offset it to the start of the dynamic section.
 lwz r21, 0(r10)
-addi r21, r21, 0x24
-
+addi r21, r21, 0x24
 
 ;Determine the Timer to Display
 ;First check for Expert flag(8057D7C5)
