@@ -1,4 +1,4 @@
-#To be inserted at 80035a28
+#To be inserted at 8035a280
 ;Initialize Intro Message
 
 ;Original Code
