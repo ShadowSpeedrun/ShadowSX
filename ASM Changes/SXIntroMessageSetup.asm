@@ -1,8 +1,8 @@
-#To be inserted at 8035a280
+#To be inserted at 80359c94
 ;Initialize Intro Message
 
 ;Original Code
-;lhz r4, 40
+stw r0, 0x0014 (sp)
 
 ;Load Intro Message ID (8057D8FD)
 lis r16, 0x8057

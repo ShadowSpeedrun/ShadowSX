@@ -1,0 +1,9 @@
+            Shadow SX Options             
+                                          
+       Changes will be saved to the       
+       memory card on next game save      
+                                          
+  A quick way to force a save is to enter 
+   and exit the main menu options menu.   
+                                          
+             Press A to Start             

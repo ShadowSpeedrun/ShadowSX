@@ -9,11 +9,9 @@ cmpwi r11, 1
 bne Exit
 
 ;Check for if we are rendering blank message(8057D8FD = 44)
-lis r16, 0x8057
-li r17, 0x7777
-addi r17, r17, 0x6186
-or r18, r16, r17
-lhz r16, 0(r18)
+lis r18, 0x807D
+addi r18, r18, 0x5700
+lwz r16, 0(r18)
 cmpwi r16, 44
 beq RenderSXIntro
 bne Exit
@@ -65,13 +63,6 @@ RenderSXIntro:
  
   bl BlankScreen
   
-  ;Load the value of "P1 Button State" into r19.(8056ED4C)
-  lis r16, 0x8056
-  li r17, 0x7777
-  addi r17, r17, 0x75D5
-  or r18, r16, r17
-  lwz r19, 0(r18)
-
   ;Check which screen to show
   lis r16, 0x8057
   li r17, 0x7777
@@ -80,7 +71,9 @@ RenderSXIntro:
   lhz r16, 0(r18)
   cmpwi r16, 0
   beq RenderSXStart
-  bne RenderSXOptions
+  cmpwi r16, 1
+  beq RenderSXOptions
+  bne RenderSXSaveMessage
 
 RenderSXStart:
   li r16, 26; 13 spaces 2 bytes each
@@ -113,12 +106,47 @@ RenderSXStart:
 
   bl ZforOptions
 
+  bl GetNewButtonPressesToR16
+
+  andi. r18, r16, 32
+  ;r18 is z button press isolated.  
+
+  li r19, 1
+  cmpwi r18, 32
+  beql ScreenToOptionsR19
+  
+  bl StoreCurrentInput 
+ 
+  b Exit
+
+ScreenToOptionsR19:
+  mflr r15
+
+  lis r16, 0x8057
+  li r17, 0x7777
+  addi r17, r17, 0x6184
+  or r18, r16, r17
+
+  sth r19, 0(r18)
+
+  mtlr r15
+  li r15, 0
+  blr
+
+GetNewButtonPressesToR16:
+  ;Load the value of "P1 Button State" into r19.(8056ED4C)
+  lis r16, 0x8056
+  li r17, 0x7777
+  addi r17, r17, 0x75D5
+  or r18, r16, r17
+  lwz r19, 0(r18)
+
   ;Load current saved input into r16
   lis r16, 0x8057
   li r17, 0x7777
   addi r17, r17, 0x6180
   or r18, r16, r17
-  lhz r16, 0(r18)
+  lwz r16, 0(r18)
  
   ;r19 is current input
   ;r16 is last seen input
@@ -128,27 +156,8 @@ RenderSXStart:
   and r16, r19, r16
   ;r16 should be which buttons are now pressed.
 
-  andi. r18, r16, 32
-  ;r18 is z button press isolated.  
-
-  cmpwi r18, 32
-  beql ScreenToOptions
-  
-  bl StoreCurrentInput 
- 
-  b Exit
-
-ScreenToOptions:
-  mflr r15
-  lis r16, 0x8057
-  li r17, 0x7777
-  addi r17, r17, 0x6184
-  or r18, r16, r17
-  li r16, 1
-  sth r16, 0(r18)
-  mtlr r15
-  li r15, 0
   blr
+
 
 StoreCurrentInput:
   ;Load the value of "P1 Button State" into r19.(8056ED4C)
@@ -238,29 +247,54 @@ RenderSXOptions:
   lhz r16, 0(18)
   bl SelectedOptionR16  
 
-  ;Load current saved input into r16
-  lis r16, 0x8057
-  li r17, 0x7777
-  addi r17, r17, 0x6180
-  or r18, r16, r17
-  lwz r16, 0(r18)
- 
-  ;r19 is current input
-  ;r16 is last seen input
-  xor r16, r16, r19  
-  ;r16 should be which buttons changed state
-
-  and r16, r19, r16
-  ;r16 should be which buttons are now pressed.
+  bl GetNewButtonPressesToR16
 
   andi. r19, r16, 960
   ;r19 is dpad button presses isolated.  
 
   cmpwi r19, 0
-  bgtl ProcessDpadOptions  
+  bgtl ProcessDpadOptions
 
   bl StoreCurrentInput 
 
+  b Exit
+
+RenderSXSaveMessage:
+  li r16, 26; 13 spaces 2 bytes each
+  li r17, 0
+  bl MoveCursorR16XR17Y
+  bl SXOptionsTitle
+
+  li r16, 16; 8 spaces 2 bytes each
+  li r17, 2
+  bl MoveCursorR16XR17Y
+  bl SXOptionSave1
+
+  li r16, 16; 8 spaces 2 bytes each
+  li r17, 3
+  bl MoveCursorR16XR17Y
+  bl SXOptionSave2
+
+  li r16, 6; 6 spaces 2 bytes each
+  li r17, 5
+  bl MoveCursorR16XR17Y
+  bl SXOptionSave3
+
+  ;One position back because too lazy to remove space
+  li r16, 6; 3 spaces 2 bytes each
+  li r17, 6
+  bl MoveCursorR16XR17Y
+  bl SXOptionSave4
+
+  li r16, 28; 14 spaces 2 bytes each
+  li r17, 8
+  bl MoveCursorR16XR17Y
+  bl AtoStart
+
+  bl GetNewButtonPressesToR16
+  
+  bl StoreCurrentInput 
+ 
   b Exit
 
 ProcessDpadOptions:
@@ -917,6 +951,246 @@ RenderR16R21:
   li r15, 0
   blr 
 
+SXOptionSave1:
+  mflr r14
+
+  ;Changes will be saved to the
+  	lis r16, 0x43
+  addi r16, r16, 0x68
+  bl RenderR16R21
+  	lis r16, 0x61
+  addi r16, r16, 0x6e
+  bl RenderR16R21
+  	lis r16, 0x67
+  addi r16, r16, 0x65
+  bl RenderR16R21
+  	lis r16, 0x73
+  addi r16, r16, 0x20
+  bl RenderR16R21
+  	lis r16, 0x77
+  addi r16, r16, 0x69
+  bl RenderR16R21
+  	lis r16, 0x6c
+  addi r16, r16, 0x6c
+  bl RenderR16R21
+  	lis r16, 0x20
+  addi r16, r16, 0x62
+  bl RenderR16R21
+  	lis r16, 0x65
+  addi r16, r16, 0x20
+  bl RenderR16R21
+  	lis r16, 0x73
+  addi r16, r16, 0x61
+  bl RenderR16R21
+  	lis r16, 0x76
+  addi r16, r16, 0x65
+  bl RenderR16R21
+  	lis r16, 0x64
+  addi r16, r16, 0x20
+  bl RenderR16R21
+  	lis r16, 0x74
+  addi r16, r16, 0x6f
+  bl RenderR16R21
+  	lis r16, 0x20
+  addi r16, r16, 0x74
+  bl RenderR16R21
+  	lis r16, 0x68
+  addi r16, r16, 0x65
+  bl RenderR16R21
+
+  mtlr r14
+  li r14, 0
+  blr
+
+SXOptionSave2:
+  mflr r14
+
+  ;memory card on next game save
+  	lis r16, 0x6d
+  addi r16, r16, 0x65
+  bl RenderR16R21
+  	lis r16, 0x6d
+  addi r16, r16, 0x6f
+  bl RenderR16R21
+  	lis r16, 0x72
+  addi r16, r16, 0x79
+  bl RenderR16R21
+  	lis r16, 0x20
+  addi r16, r16, 0x63
+  bl RenderR16R21
+  	lis r16, 0x61
+  addi r16, r16, 0x72
+  bl RenderR16R21
+  	lis r16, 0x64
+  addi r16, r16, 0x20
+  bl RenderR16R21
+  	lis r16, 0x6f
+  addi r16, r16, 0x6e
+  bl RenderR16R21
+  	lis r16, 0x20
+  addi r16, r16, 0x6e
+  bl RenderR16R21
+  	lis r16, 0x65
+  addi r16, r16, 0x78
+  bl RenderR16R21
+  	lis r16, 0x74
+  addi r16, r16, 0x20
+  bl RenderR16R21
+  	lis r16, 0x67
+  addi r16, r16, 0x61
+  bl RenderR16R21
+  	lis r16, 0x6d
+  addi r16, r16, 0x65
+  bl RenderR16R21
+  	lis r16, 0x20
+  addi r16, r16, 0x73
+  bl RenderR16R21
+  	lis r16, 0x61
+  addi r16, r16, 0x76
+  bl RenderR16R21
+  	lis r16, 0x65
+  addi r16, r16, 0x20
+  bl RenderR16R21
+
+  mtlr r14
+  li r14, 0
+  blr
+
+SXOptionSave3:
+  mflr r14
+
+  ;A quick way to force a save is to enter
+  	lis r16, 0x41
+  addi r16, r16, 0x20
+  bl RenderR16R21
+  	lis r16, 0x71
+  addi r16, r16, 0x75
+  bl RenderR16R21
+  	lis r16, 0x69
+  addi r16, r16, 0x63
+  bl RenderR16R21
+  	lis r16, 0x6b
+  addi r16, r16, 0x20
+  bl RenderR16R21
+  	lis r16, 0x77
+  addi r16, r16, 0x61
+  bl RenderR16R21
+  	lis r16, 0x79
+  addi r16, r16, 0x20
+  bl RenderR16R21
+  	lis r16, 0x74
+  addi r16, r16, 0x6f
+  bl RenderR16R21
+  	lis r16, 0x20
+  addi r16, r16, 0x66
+  bl RenderR16R21
+  	lis r16, 0x6f
+  addi r16, r16, 0x72
+  bl RenderR16R21
+  	lis r16, 0x63
+  addi r16, r16, 0x65
+  bl RenderR16R21
+  	lis r16, 0x20
+  addi r16, r16, 0x61
+  bl RenderR16R21
+  	lis r16, 0x20
+  addi r16, r16, 0x73
+  bl RenderR16R21
+  	lis r16, 0x61
+  addi r16, r16, 0x76
+  bl RenderR16R21
+  	lis r16, 0x65
+  addi r16, r16, 0x20
+  bl RenderR16R21
+  	lis r16, 0x69
+  addi r16, r16, 0x73
+  bl RenderR16R21
+ 	lis r16, 0x20
+  addi r16, r16, 0x74
+  bl RenderR16R21
+  	lis r16, 0x6f
+  addi r16, r16, 0x20
+  bl RenderR16R21
+  	lis r16, 0x65
+  addi r16, r16, 0x6e
+  bl RenderR16R21
+  	lis r16, 0x74
+  addi r16, r16, 0x65
+  bl RenderR16R21
+  	lis r16, 0x72
+  addi r16, r16, 0x20
+  bl RenderR16R21
+
+  mtlr r14
+  li r14, 0
+  blr
+
+SXOptionSave4:
+  mflr r14
+
+  ;and exit the main menu options menu.
+  	lis r16, 0x20
+  addi r16, r16, 0x61
+  bl RenderR16R21
+  	lis r16, 0x6e
+  addi r16, r16, 0x64
+  bl RenderR16R21
+  	lis r16, 0x20
+  addi r16, r16, 0x65
+  bl RenderR16R21
+  	lis r16, 0x78
+  addi r16, r16, 0x69
+  bl RenderR16R21
+  	lis r16, 0x74
+  addi r16, r16, 0x20
+  bl RenderR16R21
+  	lis r16, 0x74
+  addi r16, r16, 0x68
+  bl RenderR16R21
+  	lis r16, 0x65
+  addi r16, r16, 0x20
+  bl RenderR16R21
+  	lis r16, 0x6d
+  addi r16, r16, 0x61
+  bl RenderR16R21
+  	lis r16, 0x69
+  addi r16, r16, 0x6e
+  bl RenderR16R21
+  	lis r16, 0x20
+  addi r16, r16, 0x6d
+  bl RenderR16R21
+  	lis r16, 0x65
+  addi r16, r16, 0x6e
+  bl RenderR16R21
+  	lis r16, 0x75
+  addi r16, r16, 0x20
+  bl RenderR16R21
+  	lis r16, 0x6f
+  addi r16, r16, 0x70
+  bl RenderR16R21
+  	lis r16, 0x74
+  addi r16, r16, 0x69
+  bl RenderR16R21
+  	lis r16, 0x6f
+  addi r16, r16, 0x6e
+  bl RenderR16R21
+  	lis r16, 0x73
+  addi r16, r16, 0x20
+  bl RenderR16R21
+  	lis r16, 0x6d
+  addi r16, r16, 0x65
+  bl RenderR16R21
+  	lis r16, 0x6e
+  addi r16, r16, 0x75
+  bl RenderR16R21
+  	lis r16, 0x2e
+  addi r16, r16, 0x20
+  bl RenderR16R21
+
+  mtlr r14
+  li r14, 0
+  blr
+
 Exit:
   ;Restore LR before exiting
   mtlr r22
@@ -933,5 +1207,7 @@ End:
   li r22, 0x0
   ;Original Code
   lis r5, 0x8057
+
+
 
 
