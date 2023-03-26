@@ -2,9 +2,6 @@
 ;save LR to restore later
 mflr r22
 
-;r10 contains address to start of our message.
-lwz r21, 0(r10)
-
 cmpwi r11, 1
 bne Exit
 
@@ -16,53 +13,7 @@ cmpwi r16, 44
 beq RenderSXIntro
 bne Exit
 
-BlankScreen:
- mflr r14  
-
-  bl BlankScreenLine
-  bl BlankScreenLine
-  bl BlankScreenLine
-  bl BlankScreenLine
-  bl BlankScreenLine
-  bl BlankScreenLine
-  bl BlankScreenLine
-  bl BlankScreenLine
-  bl BlankScreenLine
-
-  mtlr r14
-  li r14, 0
-  blr
-
-BlankScreenLine:
-  lis r16, 0x20
-  addi r16, r16, 0x20
-  li r17, 0
-  b BlankScreenWrite
-
-BlankScreenEnd:
-  li r16, 0x20
-  sth r16, 0(r21)
-  addi r21, r21, 4
-  ;Extra shift to skip 0x0a
-  blr
-
-BlankScreenLoop:
-  cmpwi r17, 21
-  blt BlankScreenWrite
-  b BlankScreenEnd
-
-BlankScreenWrite:
-  stw r16, 0(r21)
-  addi r21, r21, 4
-  addi r17, r17, 1
-  b BlankScreenLoop
-
-RenderSXIntro:
-  ;Start by rendering a blank screen
-  mr r20, r21
- 
-  bl BlankScreen
-  
+RenderSXIntro:  
   ;Check which screen to show
   lis r16, 0x8057
   li r17, 0x7777
@@ -76,36 +27,12 @@ RenderSXIntro:
   bne RenderSXSaveMessage
 
 RenderSXStart:
-  li r16, 26; 13 spaces 2 bytes each
-  li r17, 1
-  bl MoveCursorR16XR17Y
+  ;r10 contains address to start of our message.
+  lwz r21, 0(r10)
 
-  bl SXTitle
-
-  li r16, 26; 13 spaces 2 bytes each
-  li r17, 2
-  bl MoveCursorR16XR17Y
-
-  bl SXSubTitle
-
-  li r16, 10; 5 spaces 2 bytes each
-  li r17, 4
-  bl MoveCursorR16XR17Y
-
-  bl SXWebsite
-
-  li r16, 26; 13 spaces 2 bytes each
-  li r17, 6
-  bl MoveCursorR16XR17Y
-
-  bl AtoStart
-
-  li r16, 24; 12 spaces 2 bytes each
-  li r17, 8
-  bl MoveCursorR16XR17Y
-
-  bl ZforOptions
-
+  ;Start by rendering a blank screen
+  mr r20, r21
+  
   bl GetNewButtonPressesToR16
 
   andi. r18, r16, 32
@@ -177,75 +104,42 @@ StoreCurrentInput:
   blr
 
 RenderSXOptions:
-  ;0x0A = NewLine
-  ;0x20 = Space
+  ;r10 contains address to start of our message.
+  lwz r21, 0x14(r10)
 
-  li r16, 26; 13 spaces 2 bytes each
-  li r17, 0
-  bl MoveCursorR16XR17Y
-  bl SXOptionsTitle
+  ;Start by rendering a blank screen
+  mr r20, r21
 
-  li r16, 12; 6 spaces 2 bytes each
-  li r17, 2
-  bl MoveCursorR16XR17Y
-  bl CSOption
-
-  li r16, 50; 25 spaces 2 bytes each
-  li r17, 2
-  bl MoveCursorR16XR17Y
+  li r16, 0x5e
+  bl MoveCursorR16X
 
   lis r16, 0x8057
   addi r18, r16, 0x7B2C
   lbz r17, 0(r18)
   bl RenderOptionR17On
 
-  li r16, 12; 6 spaces 2 bytes each
-  li r17, 3
-  bl MoveCursorR16XR17Y
-  bl RTOption
+  li r16, 0x9E
+  bl MoveCursorR16X
 
-  li r16, 50; 25 spaces 2 bytes each
-  li r17, 3
-  bl MoveCursorR16XR17Y
   lis r16, 0x8057
   addi r18, r16, 0x7B2D
   lbz r17, 0(r18)
   bl RenderOptionR17On
 
-  li r16, 12; 6 spaces 2 bytes each
-  li r17, 4
-  bl MoveCursorR16XR17Y
-  bl MUIOption
+  li r16, 0xDE
+  bl MoveCursorR16X
 
-  li r16, 50; 25 spaces 2 bytes each
-  li r17, 4
-  bl MoveCursorR16XR17Y
   lis r16, 0x8057
   addi r18, r16, 0x7B2E
   lbz r17, 0(r18)
   bl RenderOptionR17On
-
-  li r16, 14; 7 spaces 2 bytes each
-  li r17, 6
-  bl MoveCursorR16XR17Y
-  bl DpadSelectText
-
-  li r16, 10; 5 spaces 2 bytes each
-  li r17, 7
-  bl MoveCursorR16XR17Y
-  bl DpadChangeText
-
-  li r16, 26; 13 spaces 2 bytes each
-  li r17, 8
-  bl MoveCursorR16XR17Y
-  bl AtoStart
-
+  
   lis r16, 0x8057
   li r17, 0x7777
   addi r17, r17, 0x617E 
   or r18, r17, r16
   lhz r16, 0(18)
-  bl SelectedOptionR16  
+  bl SelectedOptionR16
 
   bl GetNewButtonPressesToR16
 
@@ -260,36 +154,11 @@ RenderSXOptions:
   b Exit
 
 RenderSXSaveMessage:
-  li r16, 26; 13 spaces 2 bytes each
-  li r17, 0
-  bl MoveCursorR16XR17Y
-  bl SXOptionsTitle
+  ;r10 contains address to start of our message.
+  lwz r21, 0x28(r10)
 
-  li r16, 16; 8 spaces 2 bytes each
-  li r17, 2
-  bl MoveCursorR16XR17Y
-  bl SXOptionSave1
-
-  li r16, 16; 8 spaces 2 bytes each
-  li r17, 3
-  bl MoveCursorR16XR17Y
-  bl SXOptionSave2
-
-  li r16, 6; 6 spaces 2 bytes each
-  li r17, 5
-  bl MoveCursorR16XR17Y
-  bl SXOptionSave3
-
-  ;One position back because too lazy to remove space
-  li r16, 6; 3 spaces 2 bytes each
-  li r17, 6
-  bl MoveCursorR16XR17Y
-  bl SXOptionSave4
-
-  li r16, 28; 14 spaces 2 bytes each
-  li r17, 8
-  bl MoveCursorR16XR17Y
-  bl AtoStart
+  ;Start by rendering a blank screen
+  mr r20, r21
 
   bl GetNewButtonPressesToR16
   
@@ -423,340 +292,6 @@ DpadRightOptions:
   li r14, 0
   blr
 
-SXTitle:
-  mflr r14
-
-  ;Shadow SX Beta V4
-  	lis r16, 0x53
-  addi r16, r16, 0x68
-  bl RenderR16R21
-  	lis r16, 0x61
-  addi r16, r16, 0x64
-  bl RenderR16R21
-  	lis r16, 0x6F
-  addi r16, r16, 0x77
-  bl RenderR16R21
-  	lis r16, 0x20
-  addi r16, r16, 0x53
-  bl RenderR16R21
-  	lis r16, 0x58
-  addi r16, r16, 0x20
-  bl RenderR16R21
-  	lis r16, 0x42
-  addi r16, r16, 0x65
-  bl RenderR16R21
-  	lis r16, 0x74
-  addi r16, r16, 0x61
-  bl RenderR16R21
-  	lis r16, 0x20
-  addi r16, r16, 0x56
-  bl RenderR16R21
-  	lis r16, 0x34
-  addi r16, r16, 0x20  
-  bl RenderR16R21
-
-  mtlr r14
-  li r14, 0
-  blr
-
-SXSubTitle:
-  mflr r14
-
-  ;Speedrunners's Cut
-        lis r16, 0x53
-  addi r16, r16, 0x70
-  bl RenderR16R21
-        lis r16, 0x65
-  addi r16, r16, 0x65
-  bl RenderR16R21
-  	lis r16, 0x64
-  addi r16, r16, 0x72
-  bl RenderR16R21
-  	lis r16, 0x75
-  addi r16, r16, 0x6E
-  bl RenderR16R21
-  	lis r16, 0x6E
-  addi r16, r16, 0x65
-  bl RenderR16R21
-  	lis r16, 0x72
-  addi r16, r16, 0x27
-  bl RenderR16R21
-  	lis r16, 0x73
-  addi r16, r16, 0x20
-  bl RenderR16R21
-  	lis r16, 0x43
-  addi r16, r16, 0x75
-  bl RenderR16R21
-  	lis r16, 0x74
-  addi r16, r16, 0x20  
-  bl RenderR16R21
-
-  mtlr r14
-  li r14, 0
-  blr
-
-SXWebsite:
-  mflr r14
-
-  ;www.shadowspeedrun.com/ShadowSX
-  	lis r16, 0x77
-  addi r16, r16, 0x77
-  bl RenderR16R21
-  	lis r16, 0x77
-  addi r16, r16, 0x2e
-  bl RenderR16R21
-  	lis r16, 0x73
-  addi r16, r16, 0x68
-  bl RenderR16R21
-  	lis r16, 0x61
-  addi r16, r16, 0x64
-  bl RenderR16R21
-  	lis r16, 0x6f
-  addi r16, r16, 0x77
-  bl RenderR16R21
-  	lis r16, 0x73
-  addi r16, r16, 0x70
-  bl RenderR16R21
-  	lis r16, 0x65
-  addi r16, r16, 0x65
-  bl RenderR16R21
-  	lis r16, 0x64
-  addi r16, r16, 0x72
-  bl RenderR16R21
-  	lis r16, 0x75
-  addi r16, r16, 0x6e
-  bl RenderR16R21
-  	lis r16, 0x2e
-  addi r16, r16, 0x63
-  bl RenderR16R21
-  	lis r16, 0x6f
-  addi r16, r16, 0x6d
-  bl RenderR16R21
-  	lis r16, 0x2f
-  addi r16, r16, 0x53
-  bl RenderR16R21
-  	lis r16, 0x68
-  addi r16, r16, 0x61
-  bl RenderR16R21
-  	lis r16, 0x64
-  addi r16, r16, 0x6f
-  bl RenderR16R21
-  	lis r16, 0x77
-  addi r16, r16, 0x53
-  bl RenderR16R21
-  	lis r16, 0x58
-  addi r16, r16, 0x20
-  bl RenderR16R21
-
-  mtlr r14
-  li r14, 0
-  blr
-
-AtoStart:
-  mflr r14
-
-  ;Press A to Start
-  	lis r16, 0x50
-  addi r16, r16, 0x72
-  bl RenderR16R21
-  	lis r16, 0x65
-  addi r16, r16, 0x73
-  bl RenderR16R21
-  	lis r16, 0x73
-  addi r16, r16, 0x20
-  bl RenderR16R21
-  	lis r16, 0x41
-  addi r16, r16, 0x20
-  bl RenderR16R21
-  	lis r16, 0x74
-  addi r16, r16, 0x6f
-  bl RenderR16R21
-  	lis r16, 0x20
-  addi r16, r16, 0x53
-  bl RenderR16R21
-  	lis r16, 0x74
-  addi r16, r16, 0x61
-  bl RenderR16R21
-  	lis r16, 0x72
-  addi r16, r16, 0x74
-  bl RenderR16R21
-
-  mtlr r14
-  li r14, 0
-  blr
-
-ZforOptions:
-  mflr r14
-
-  ;Press z for Options
-  ;lowercase to avoid swapping out txd for now.
-  	lis r16, 0x50
-  addi r16, r16, 0x72
-  bl RenderR16R21
-  	lis r16, 0x65
-  addi r16, r16, 0x73
-  bl RenderR16R21
-  	lis r16, 0x73
-  addi r16, r16, 0x20
-  bl RenderR16R21
-  	lis r16, 0x7a
-  addi r16, r16, 0x20
-  bl RenderR16R21
-  	lis r16, 0x66
-  addi r16, r16, 0x6f
-  bl RenderR16R21
-  	lis r16, 0x72
-  addi r16, r16, 0x20
-  bl RenderR16R21
-  	lis r16, 0x4f
-  addi r16, r16, 0x70
-  bl RenderR16R21
-  	lis r16, 0x74
-  addi r16, r16, 0x69
-  bl RenderR16R21
-  	lis r16, 0x6f
-  addi r16, r16, 0x6e
-  bl RenderR16R21
-  	lis r16, 0x73
-  addi r16, r16, 0x20
-  bl RenderR16R21
-
-  mtlr r14
-  li r14, 0
-  blr
-
-SXOptionsTitle:
-  mflr r14
-
-  ;Shadow SX Options
-  	lis r16, 0x53
-  addi r16, r16, 0x68
-  bl RenderR16R21
-  	lis r16, 0x61
-  addi r16, r16, 0x64
-  bl RenderR16R21
-  	lis r16, 0x6F
-  addi r16, r16, 0x77
-  bl RenderR16R21
-  	lis r16, 0x20
-  addi r16, r16, 0x53
-  bl RenderR16R21
-  	lis r16, 0x58
-  addi r16, r16, 0x20
-  bl RenderR16R21
-  	lis r16, 0x4f
-  addi r16, r16, 0x70
-  bl RenderR16R21
-  	lis r16, 0x74
-  addi r16, r16, 0x69
-  bl RenderR16R21
-  	lis r16, 0x6f
-  addi r16, r16, 0x6e
-  bl RenderR16R21
-  	lis r16, 0x73
-  addi r16, r16, 0x20  
-  bl RenderR16R21
-
-  mtlr r14
-  li r14, 0
-  blr
-
-CSOption:
-  mflr r14
-
-  ;Cutscene Skip
-
-  	lis r16, 0x20
-  addi r16, r16, 0x43
-  bl RenderR16R21
-  	lis r16, 0x75
-  addi r16, r16, 0x74
-  bl RenderR16R21
-  	lis r16, 0x73
-  addi r16, r16, 0x63
-  bl RenderR16R21
-  	lis r16, 0x65
-  addi r16, r16, 0x6e
-  bl RenderR16R21
-  	lis r16, 0x65
-  addi r16, r16, 0x20
-  bl RenderR16R21
-  	lis r16, 0x53
-  addi r16, r16, 0x6b
-  bl RenderR16R21
-  	lis r16, 0x69
-  addi r16, r16, 0x70
-  bl RenderR16R21
-
-  mtlr r14
-  li r14, 0
-  blr
-
-RTOption:
-  mflr r14
-
-  ;Race Timer
-
-  	lis r16, 0x20
-  addi r16, r16, 0x52
-  bl RenderR16R21
-  	lis r16, 0x61
-  addi r16, r16, 0x63
-  bl RenderR16R21
-  	lis r16, 0x65
-  addi r16, r16, 0x20
-  bl RenderR16R21
-  	lis r16, 0x54
-  addi r16, r16, 0x69
-  bl RenderR16R21
-  	lis r16, 0x6d
-  addi r16, r16, 0x65
-  bl RenderR16R21
-    	lis r16, 0x72
-  addi r16, r16, 0x20
-  bl RenderR16R21
-
-  mtlr r14
-  li r14, 0
-  blr
-
-MUIOption:
-  mflr r14
-
-  ;Modern UI Control
-
-  	lis r16, 0x20
-  addi r16, r16, 0x4d
-  bl RenderR16R21
-  	lis r16, 0x6f
-  addi r16, r16, 0x64
-  bl RenderR16R21
-  	lis r16, 0x65
-  addi r16, r16, 0x72
-  bl RenderR16R21
-  	lis r16, 0x6e
-  addi r16, r16, 0x20
-  bl RenderR16R21
-  	lis r16, 0x55
-  addi r16, r16, 0x49
-  bl RenderR16R21
-  	lis r16, 0x20
-  addi r16, r16, 0x43
-  bl RenderR16R21
-  	lis r16, 0x6f
-  addi r16, r16, 0x6e
-  bl RenderR16R21
-  	lis r16, 0x74
-  addi r16, r16, 0x72
-  bl RenderR16R21
-  	lis r16, 0x6f
-  addi r16, r16, 0x6c
-  bl RenderR16R21
-
-  mtlr r14
-  li r14, 0
-  blr
-
 RenderOptionR17On:
   mflr r14
 
@@ -787,7 +322,7 @@ RenderOptionR17On:
   addi r16, r16, 0x66
   bl RenderR16R21
   	lis r16, 0x66
-  addi r16, r16, 0x20
+  addi r16, r16, 0x0A
   bl RenderR16R21
 
   mtlr r14
@@ -808,139 +343,38 @@ UnselectedCharacter:
   li r15, 0
   blr
 
-DpadSelectText:
-  mflr r14
-
-  ;Dpad Up Down to select Option
-  	lis r16, 0x44
-  addi r16, r16, 0x70
-  bl RenderR16R21
-  	lis r16, 0x61
-  addi r16, r16, 0x64
-  bl RenderR16R21
-  	lis r16, 0x20
-  addi r16, r16, 0x55
-  bl RenderR16R21
-  	lis r16, 0x70
-  addi r16, r16, 0x20
-  bl RenderR16R21
-  	lis r16, 0x44
-  addi r16, r16, 0x6f
-  bl RenderR16R21
-  	lis r16, 0x77
-  addi r16, r16, 0x6e
-  bl RenderR16R21
-  	lis r16, 0x20
-  addi r16, r16, 0x74
-  bl RenderR16R21
-  	lis r16, 0x6f
-  addi r16, r16, 0x20
-  bl RenderR16R21
-  	lis r16, 0x73
-  addi r16, r16, 0x65
-  bl RenderR16R21
-  	lis r16, 0x6c
-  addi r16, r16, 0x65
-  bl RenderR16R21
-  	lis r16, 0x63
-  addi r16, r16, 0x74
-  bl RenderR16R21
-  	lis r16, 0x20
-  addi r16, r16, 0x4f
-  bl RenderR16R21
-  	lis r16, 0x70
-  addi r16, r16, 0x74
-  bl RenderR16R21
-  	lis r16, 0x69
-  addi r16, r16, 0x6f
-  bl RenderR16R21
-  	lis r16, 0x6e
-  addi r16, r16, 0x20
-  bl RenderR16R21
-
-  mtlr r14
-  li r14, 0
-  blr
-
-DpadChangeText:
-  mflr r14
-
-  ;Dpad Up Down to select Option
-  	lis r16, 0x44
-  addi r16, r16, 0x70
-  bl RenderR16R21
-  	lis r16, 0x61
-  addi r16, r16, 0x64
-  bl RenderR16R21
-  	lis r16, 0x20
-  addi r16, r16, 0x4c
-  bl RenderR16R21
-  	lis r16, 0x65
-  addi r16, r16, 0x66
-  bl RenderR16R21
-  	lis r16, 0x74
-  addi r16, r16, 0x20
-  bl RenderR16R21
-  	lis r16, 0x52
-  addi r16, r16, 0x69
-  bl RenderR16R21
-  	lis r16, 0x67
-  addi r16, r16, 0x68
-  bl RenderR16R21
-  	lis r16, 0x74
-  addi r16, r16, 0x20
-  bl RenderR16R21
-  	lis r16, 0x74
-  addi r16, r16, 0x6f
-  bl RenderR16R21
-  	lis r16, 0x20
-  addi r16, r16, 0x63
-  bl RenderR16R21
-  	lis r16, 0x68
-  addi r16, r16, 0x61
-  bl RenderR16R21
-  	lis r16, 0x6e
-  addi r16, r16, 0x67
-  bl RenderR16R21
-  	lis r16, 0x65
-  addi r16, r16, 0x20
-  bl RenderR16R21
-  	lis r16, 0x4f
-  addi r16, r16, 0x70
-  bl RenderR16R21
-  	lis r16, 0x74
-  addi r16, r16, 0x69
-  bl RenderR16R21
-  	lis r16, 0x6f
-  addi r16, r16, 0x6e
-  bl RenderR16R21
-
-  mtlr r14
-  li r14, 0
-  blr
-
 SelectedOptionR16:
   mflr r14
-  mr r17, r16 
-  li r16, 12 ;6 spaces 2 bytes each
-  addi r17, r17, 2
+  mr r17, r16
   
-  add r21, r20, r16
-  mulli r16, r17, 88 ;43 character, 1 newline
-  add r21, r21, r16
-
-  li r16, 0x2b
+  li r16, 0
+  addi r21, r20, 0x38
+  cmpwi r17, 0
+  beql SelectedCharacter
+  bnel UnselectedCharacter
   sth r16, 0(r21)
-  addi r21, r21, 2
+
+  li r16, 0
+  addi r21, r20, 0x78
+  cmpwi r17, 1
+  beql SelectedCharacter
+  bnel UnselectedCharacter
+  sth r16, 0(r21)
+
+  li r16, 0
+  addi r21, r20, 0xB8
+  cmpwi r17, 2
+  beql SelectedCharacter
+  bnel UnselectedCharacter
+  sth r16, 0(r21)
+
   mtlr r14
   li r14, 0
   blr
 
-MoveCursorR16XR17Y:
+MoveCursorR16X:
   ;Use Saved start
   add r21, r20, r16
-  mulli r16, r17, 88 ;43 character, 1 newline
-  add r21, r21, r16
   blr
 
 RenderR16R21: 
@@ -950,246 +384,6 @@ RenderR16R21:
   mtlr r15
   li r15, 0
   blr 
-
-SXOptionSave1:
-  mflr r14
-
-  ;Changes will be saved to the
-  	lis r16, 0x43
-  addi r16, r16, 0x68
-  bl RenderR16R21
-  	lis r16, 0x61
-  addi r16, r16, 0x6e
-  bl RenderR16R21
-  	lis r16, 0x67
-  addi r16, r16, 0x65
-  bl RenderR16R21
-  	lis r16, 0x73
-  addi r16, r16, 0x20
-  bl RenderR16R21
-  	lis r16, 0x77
-  addi r16, r16, 0x69
-  bl RenderR16R21
-  	lis r16, 0x6c
-  addi r16, r16, 0x6c
-  bl RenderR16R21
-  	lis r16, 0x20
-  addi r16, r16, 0x62
-  bl RenderR16R21
-  	lis r16, 0x65
-  addi r16, r16, 0x20
-  bl RenderR16R21
-  	lis r16, 0x73
-  addi r16, r16, 0x61
-  bl RenderR16R21
-  	lis r16, 0x76
-  addi r16, r16, 0x65
-  bl RenderR16R21
-  	lis r16, 0x64
-  addi r16, r16, 0x20
-  bl RenderR16R21
-  	lis r16, 0x74
-  addi r16, r16, 0x6f
-  bl RenderR16R21
-  	lis r16, 0x20
-  addi r16, r16, 0x74
-  bl RenderR16R21
-  	lis r16, 0x68
-  addi r16, r16, 0x65
-  bl RenderR16R21
-
-  mtlr r14
-  li r14, 0
-  blr
-
-SXOptionSave2:
-  mflr r14
-
-  ;memory card on next game save
-  	lis r16, 0x6d
-  addi r16, r16, 0x65
-  bl RenderR16R21
-  	lis r16, 0x6d
-  addi r16, r16, 0x6f
-  bl RenderR16R21
-  	lis r16, 0x72
-  addi r16, r16, 0x79
-  bl RenderR16R21
-  	lis r16, 0x20
-  addi r16, r16, 0x63
-  bl RenderR16R21
-  	lis r16, 0x61
-  addi r16, r16, 0x72
-  bl RenderR16R21
-  	lis r16, 0x64
-  addi r16, r16, 0x20
-  bl RenderR16R21
-  	lis r16, 0x6f
-  addi r16, r16, 0x6e
-  bl RenderR16R21
-  	lis r16, 0x20
-  addi r16, r16, 0x6e
-  bl RenderR16R21
-  	lis r16, 0x65
-  addi r16, r16, 0x78
-  bl RenderR16R21
-  	lis r16, 0x74
-  addi r16, r16, 0x20
-  bl RenderR16R21
-  	lis r16, 0x67
-  addi r16, r16, 0x61
-  bl RenderR16R21
-  	lis r16, 0x6d
-  addi r16, r16, 0x65
-  bl RenderR16R21
-  	lis r16, 0x20
-  addi r16, r16, 0x73
-  bl RenderR16R21
-  	lis r16, 0x61
-  addi r16, r16, 0x76
-  bl RenderR16R21
-  	lis r16, 0x65
-  addi r16, r16, 0x20
-  bl RenderR16R21
-
-  mtlr r14
-  li r14, 0
-  blr
-
-SXOptionSave3:
-  mflr r14
-
-  ;A quick way to force a save is to enter
-  	lis r16, 0x41
-  addi r16, r16, 0x20
-  bl RenderR16R21
-  	lis r16, 0x71
-  addi r16, r16, 0x75
-  bl RenderR16R21
-  	lis r16, 0x69
-  addi r16, r16, 0x63
-  bl RenderR16R21
-  	lis r16, 0x6b
-  addi r16, r16, 0x20
-  bl RenderR16R21
-  	lis r16, 0x77
-  addi r16, r16, 0x61
-  bl RenderR16R21
-  	lis r16, 0x79
-  addi r16, r16, 0x20
-  bl RenderR16R21
-  	lis r16, 0x74
-  addi r16, r16, 0x6f
-  bl RenderR16R21
-  	lis r16, 0x20
-  addi r16, r16, 0x66
-  bl RenderR16R21
-  	lis r16, 0x6f
-  addi r16, r16, 0x72
-  bl RenderR16R21
-  	lis r16, 0x63
-  addi r16, r16, 0x65
-  bl RenderR16R21
-  	lis r16, 0x20
-  addi r16, r16, 0x61
-  bl RenderR16R21
-  	lis r16, 0x20
-  addi r16, r16, 0x73
-  bl RenderR16R21
-  	lis r16, 0x61
-  addi r16, r16, 0x76
-  bl RenderR16R21
-  	lis r16, 0x65
-  addi r16, r16, 0x20
-  bl RenderR16R21
-  	lis r16, 0x69
-  addi r16, r16, 0x73
-  bl RenderR16R21
- 	lis r16, 0x20
-  addi r16, r16, 0x74
-  bl RenderR16R21
-  	lis r16, 0x6f
-  addi r16, r16, 0x20
-  bl RenderR16R21
-  	lis r16, 0x65
-  addi r16, r16, 0x6e
-  bl RenderR16R21
-  	lis r16, 0x74
-  addi r16, r16, 0x65
-  bl RenderR16R21
-  	lis r16, 0x72
-  addi r16, r16, 0x20
-  bl RenderR16R21
-
-  mtlr r14
-  li r14, 0
-  blr
-
-SXOptionSave4:
-  mflr r14
-
-  ;and exit the main menu options menu.
-  	lis r16, 0x20
-  addi r16, r16, 0x61
-  bl RenderR16R21
-  	lis r16, 0x6e
-  addi r16, r16, 0x64
-  bl RenderR16R21
-  	lis r16, 0x20
-  addi r16, r16, 0x65
-  bl RenderR16R21
-  	lis r16, 0x78
-  addi r16, r16, 0x69
-  bl RenderR16R21
-  	lis r16, 0x74
-  addi r16, r16, 0x20
-  bl RenderR16R21
-  	lis r16, 0x74
-  addi r16, r16, 0x68
-  bl RenderR16R21
-  	lis r16, 0x65
-  addi r16, r16, 0x20
-  bl RenderR16R21
-  	lis r16, 0x6d
-  addi r16, r16, 0x61
-  bl RenderR16R21
-  	lis r16, 0x69
-  addi r16, r16, 0x6e
-  bl RenderR16R21
-  	lis r16, 0x20
-  addi r16, r16, 0x6d
-  bl RenderR16R21
-  	lis r16, 0x65
-  addi r16, r16, 0x6e
-  bl RenderR16R21
-  	lis r16, 0x75
-  addi r16, r16, 0x20
-  bl RenderR16R21
-  	lis r16, 0x6f
-  addi r16, r16, 0x70
-  bl RenderR16R21
-  	lis r16, 0x74
-  addi r16, r16, 0x69
-  bl RenderR16R21
-  	lis r16, 0x6f
-  addi r16, r16, 0x6e
-  bl RenderR16R21
-  	lis r16, 0x73
-  addi r16, r16, 0x20
-  bl RenderR16R21
-  	lis r16, 0x6d
-  addi r16, r16, 0x65
-  bl RenderR16R21
-  	lis r16, 0x6e
-  addi r16, r16, 0x75
-  bl RenderR16R21
-  	lis r16, 0x2e
-  addi r16, r16, 0x20
-  bl RenderR16R21
-
-  mtlr r14
-  li r14, 0
-  blr
 
 Exit:
   ;Restore LR before exiting
