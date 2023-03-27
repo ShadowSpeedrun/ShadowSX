@@ -1,4 +1,4 @@
-#To be inserted at 8035a280
+#To be inserted at 8035a284
 ;Boot intro SX
 
 ;Load Intro Message ID (8057D8FD)
@@ -14,4 +14,4 @@ li r17, 0x0
 li r18, 0x0
 
 ;Original code
-;lhz r4, 40
+li r5, 0
