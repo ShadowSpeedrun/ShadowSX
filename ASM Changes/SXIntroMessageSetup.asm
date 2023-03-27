@@ -1,8 +1,8 @@
-#To be inserted at 8035a280
+#To be inserted at 80359c94
 ;Initialize Intro Message
 
 ;Original Code
-;lhz r4, 40
+stw r0, 0x0014 (sp)
 
 ;Load Intro Message ID (8057D8FD)
 lis r16, 0x8057
@@ -16,6 +16,42 @@ bne- End
 ;Initialize to SX intro
 li r20, 44
 sth r20, 0(r18)
+
+;Check if Rom Settings are valid
+;If not, assign default settings.
+
+CheckCSSkip:
+  lis r16, 0x8057
+  addi r18, r16, 0x7B2C
+  lbz r17, 0(r18)
+  cmpwi r17, 0
+  beq CheckRT
+  cmpwi r17, 1
+  beq CheckRT
+  li r17, 1
+  stb r17, 0(r18)
+
+CheckRT:
+  lis r16, 0x8057
+  addi r18, r16, 0x7B2D
+  lbz r17, 0(r18)
+  cmpwi r17, 0
+  beq CheckMUI
+  cmpwi r17, 1
+  beq CheckMUI
+  li r17, 0
+  stb r17, 0(r18)
+
+CheckMUI:
+  lis r16, 0x8057
+  addi r18, r16, 0x7B2E
+  lbz r17, 0(r18)
+  cmpwi r17, 0
+  beq End
+  cmpwi r17, 1
+  beq End
+  li r17, 0
+  stb r17, 0(r18)
 
 End:
   li r16, 0x0

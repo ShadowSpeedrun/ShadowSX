@@ -14,11 +14,9 @@ Start:
   ;Use Race IGT if in Race Mode and in Story.
 
   ;Load "Race Mode" into r16.
-  lis r16, 0x8057
-  li r17, 0x7777
-  addi r17, r17, 0x617E
-  or r18, r16, r17
-  lhz r16, 0(r18)
+  lis r18, 0x8057
+  addi r18, r18, 0x7B2D
+  lbz r16, 0(r18)
 
   ;If not "Race Mode", leave.
   cmplwi r16, 1
@@ -31,7 +29,7 @@ Start:
   or r18, r16, r17
   lhz r16, 0(r18)
   
-  ;If not "Race Mode", leave.
+  ;If not "Story Mode", leave.
   cmplwi r16, 1
   bne- End
   

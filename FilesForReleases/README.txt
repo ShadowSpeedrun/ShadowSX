@@ -1,13 +1,13 @@
 ///////////////////////////////////////////////////////
 ////    SHADOW THE HEDGEHOG - SPEEDRUNNER'S CUT    ////
-////                BETA 3 RELEASE                 ////
+////                BETA 4 RELEASE                 ////
 ///////////////////////////////////////////////////////
 
-This update adds in a few quality of life and polish items. The main noticeable change is the addition of 2 new blue message screens, 1 of which would have affected RTA timing of runs.
+The main feature in this update is the improved intro with the new options menu for adjusting optional settings.  Unlike last update, these settings are saved on the memory card for convenience.  There's also a few bug fixes regarding the new Total Run Time message.
 
-While it may look like little has changed, there's quite a bit of new code to get these features in, so any help with playtesting this release would be much appreciated.
+Again, this was a decent change in the backend, so any help with playtesting this release would be much appreciated.
 
-Like with the last update, the only things left I would like to add before a 1.0 release are not essential to the gameplay or would majorly change how you would play each level.  So, feel free to get some practice in while I get things finished up.
+Like with the last update, the only things left I would like to add before a 1.0 release are not essential to the gameplay or would majorly change how you would play each level.  So, feel free to get some practice in while I get things finished up. 
 
 ///////////////////////////////////////////////////////
 ////              SETUP INSTRUCTIONS               ////
