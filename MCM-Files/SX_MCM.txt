@@ -29,6 +29,7 @@ NTSC 1.06 --- 0x80117644 ---- 386300A8 -> Branch
 
 
 SX - Dont stop time in checkpoint
+Uses RestoreLR1.asm
 [BlazinZzetti,]
 Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 NTSC 1.06 --- 0x80337030 ---- 28000000 -> Branch
@@ -76,9 +77,8 @@ B2120000 3A000000
 	-==-
 
 
-SX - Dont Restart Timer if Story 1
-Part 1 of 2
-[BlazinZzetti]
+SX - Dont Restart Timer if Story
+[BlazinZzetti,]
 Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 NTSC 1.06 --- 0x80206198 ---- 48130E4D -> Branch
 
@@ -91,15 +91,7 @@ A2120000 28100000
 3A200000 3A400000
 60000000 00000000
 
-
-	-==-
-
-
-SX - Dont Restart Timer if Story 2
-Part 2 of 2
-[BlazinZzetti,]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.06 --- 0x80206238 ---- 48130DAD -> Branch
+------------- 0x80206238 ---- 48130DAD -> Branch
 
 3E008057 3A207777
 3A316180 7E128B78
@@ -479,6 +471,12 @@ NTSC 1.06 --- 0x80356314 ---- 7FDD002E -> Branch
 
 SX Intro and Optional Setting Control
 Injects a new intro message into the boot up of the game.  Optional settings can be adjusted at this time.
+
+Uses files:
+SXIntroMessage.asm
+SXIntroMessageSetup.asm
+SXSettingsSet.asm
+SXIntroFNTRedirect.asm
 [BlazinZzetti,]
 Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 NTSC 1.06 --- 0x8035A284 ---- 38A00000 -> Branch
