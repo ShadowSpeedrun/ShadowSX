@@ -10,7 +10,10 @@ Start:
   stw r0, 0(r3)
 
   ;Set "In Checkpoint" to false.
-  ;r15 is 0x0.
+  ;r15 is supposed to be 0.
+  ;But the last story select mode code could make
+  ;it not 0, so ensure it's 0 now.
+  li r15, 0x0
   lis r16, 0x8057
   li r17, 0x7777
   addi r17, r17, 0x6130
