@@ -17,6 +17,13 @@ Start:
   li r14, 0x0
   sth r14, 0(r18)
 
+  ;Check for select mode flag
+  lis r18, 0x8057
+  ori r18, r18, 0xD8FF
+  lhz r18, 0(r18)
+  cmpwi r18, 0x1
+  beq- End
+
   ;Load "In Expert Mode" value
   li r17, 0x7777
   addi r17, r17, 0x604E
