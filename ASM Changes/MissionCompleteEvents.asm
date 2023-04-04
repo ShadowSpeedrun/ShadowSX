@@ -3,7 +3,7 @@
 
 ;Set "In Checkpoint" False
 ;Set OG Timer to the value of New IGT on mission complete.
-;Save Race Time to save data.
+;Save Race Time to save data, if select mode flag is off.
 
 Start:
   ;Original Code
@@ -21,6 +21,12 @@ Start:
   lfs f3, 31120(r31)
   stfs f3, 30652(r31)
   fmr f4, f3
+
+  lis r18, 0x8057
+  ori r18, r18, 0xD8FF
+  lhz r18, 0(r18)
+  cmpwi r18, 1
+  beq End
 
   ;Load current Race IGT into f3.
   lfs f3, 31136(r31)

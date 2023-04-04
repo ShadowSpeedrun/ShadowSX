@@ -1,0 +1,12 @@
+#To be inserted at 801e33bc
+lis r18, 0x8057
+ori r18, r18, 0xD8FF
+lhz r18, 0(r18)
+cmpwi r18, 1
+beq End
+
+;Original Code
+stw r0, 0x00A0 (r31)
+
+End:
+li r18, 0x0

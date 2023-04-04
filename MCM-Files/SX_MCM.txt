@@ -133,7 +133,7 @@ NTSC 1.06 --- 0x80129BCC ---- 386300A8 -> Branch
 
 SX - Mission Complete Events
 Set "In Checkpoint" False
-Set OG Timer to the value of New IGT on mission complete.
+Set OG Timer to the value of New IGT on mission complete, if not Expert Select Mode
 [BlazinZzetti,]
 Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 NTSC 1.06 --- 0x80205BC8 ---- 9421FFF0 -> Branch
@@ -143,20 +143,23 @@ NTSC 1.06 --- 0x80205BC8 ---- 9421FFF0 -> Branch
 7E128B78 39E00000
 B1F20000 C07F7990
 D07F77BC FC801890
-C07F79A0 3E008057
-3A207777 3A31604E
-7E128B78 8A120000
-2C100001 41820024
+3E408057 6252D8FF
+A2520000 2C120001
+41820064 C07F79A0
 3E008057 3A207777
-3A31618C 7E128B78
-A2120000 2C100001
-41820014 4800001C
-D07F1B94 FC801890
-48000018 D07F1BAC
-FC801890 4800000C
-D07F1B7C FC801890
-3A000000 3A200000
-3A400000 00000000
+3A31604E 7E128B78
+8A120000 2C100001
+41820024 3E008057
+3A207777 3A31618C
+7E128B78 A2120000
+2C100001 41820014
+4800001C D07F1B94
+FC801890 48000018
+D07F1BAC FC801890
+4800000C D07F1B7C
+FC801890 3A000000
+3A200000 3A400000
+60000000 00000000
 
 
 	-==-
@@ -861,23 +864,43 @@ B2120000 7E2803A6
 	-==-
 
 
-Expert In Select Mode
+Expert In Select Mode - Egg Dealer Handicap Mode
 Based on code from Reloaded.
 
-Press X - Need to update to be another button to prevent accidental use with Modern UI.
+Hold Dpad Up while selecting stage.
+
+If Level, load Expert Stage
+If Egg Dealer, set flag to make lives 0 during fight for handicap.
 
 This also sets the From Select Mode Flag needed to prevent modifying other save data.
 [BlazinZzetti,]
 Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 NTSC 1.06 --- 0x80206334 ---- 987F0059 -> Branch
 
-3E408056 6252ED54
-8A520003 72520008
-2C120008 40820014
+3E408056 6252ED4C
+82520000 72520040
+2C120040 4082008C
+3E408058 62524568
+8A520000 2C120001
+41820078 3E408058
+62524570 8A520000
+2C120001 41820018
 38600001 3E408057
 6252D8FF B0720000
-987F0059 38600000
-60000000 00000000
+48000050 3E408058
+6252456C 82520000
+28120003 4182002C
+28120004 41820024
+28120005 4182001C
+28120006 41820014
+48000020 3E408057
+6252D929 4E800020
+4BFFFFF5 3A600001
+B2720000 48000010
+4BFFFFE5 3A600000
+B2720000 987F0059
+38600000 3A400000
+3A600000 00000000
 
 
 	-==-
@@ -930,3 +953,41 @@ NTSC 1.06 ---- 0x2B8CC0 ----- 3860FFFF -> Branch
 
 -------------- 0x4FC700 ----- FFFFFFFF -> 0000001B
 -------------- 0x4FC7A0 ----- 426C6163 -> 0000002C
+
+
+	-==-
+
+
+Expert Select Mode Lives
+Set Lives to 99 if entering Expert Mode from Select Mode
+[BlazinZzetti]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.06 --- 0x8016F014 ---- 800300A0 -> Branch
+
+3E408057 6252D8FF
+A2520000 2C120001
+4182000C 800300A0
+48000008 38000063
+3A400000 00000000
+
+
+	-==-
+
+
+Prevent Saving Expert Lives in Select Mode
+Prevent saving current lives to Expert Lives in memory card on stage exit or complete if entered into level from Select Mode.
+[BlazinZzetti,]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.06 --- 0x801E33BC ---- 901F00A0 -> Branch
+
+3E408057 6252D8FF
+A2520000 2C120001
+41820008 901F00A0
+3A400000 00000000
+
+------------- 0x80204E74 ---- 901E0070 -> Branch
+
+3E408057 6252D8FF
+A2520000 2C120001
+41820008 901E0070
+3A400000 00000000
