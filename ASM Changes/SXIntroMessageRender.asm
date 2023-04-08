@@ -10,7 +10,7 @@ Start:
   cmpwi r11, 1
   bne Exit
   
-  ;Check for if we are rendering blank message(8057D8FD = 44)
+  ;Check for if we are rendering blank message(807D5700 = 44)
   lis r18, 0x807D
   addi r18, r18, 0x5700
   lwz r16, 0(r18)
@@ -51,15 +51,15 @@ RenderSXStart:
   b Exit
 
 ScreenToOptionsR19:
-  mflr r16
+  mflr r15
 
   lis r18, 0x8057
   ori r18, r18, 0xD8FB
 
   sth r19, 0(r18)
 
-  mtlr r16
-  li r16, 0
+  mtlr r15
+  li r15, 0
   blr
 
 GetNewButtonPressesToR16:
@@ -92,7 +92,7 @@ StoreCurrentInput:
   lwz r19, 0(r18)
 
   ;Load address for input save
-  lis r16, 0x8057
+  lis r18, 0x8057
   ori r18, r18, 0xD8F7
   stw r19, 0(r18)
   blr
@@ -192,9 +192,9 @@ DpadUpOptions:
 
   lis r18, 0x8057
   ori r18, r18, 0xD8F5
-  lhz r17, 0(r18)
-  ;r17 is now the current options index
-  cmpwi r17, 0
+  lhz r16, 0(r18)
+  ;r16 is now the current options index
+  cmpwi r16, 0
   bgtl MoveOptionUp
 
   mtlr r14
@@ -216,9 +216,9 @@ DpadDownOptions:
 
   lis r18, 0x8057
   ori r18, r18, 0xD8F5
-  lhz r17, 0(r18)
-  ;r17 is now the current options index
-  cmpwi r17, 2
+  lhz r16, 0(r18)
+  ;r16 is now the current options index
+  cmpwi r16, 2
   bltl MoveOptionDown
 
   mtlr r14
