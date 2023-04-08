@@ -1,62 +1,70 @@
 #To be inserted at 80359c94
+;SXIntroMessageSetup.asm
+
 ;Initialize Intro Message
 
-;Original Code
-stw r0, 0x0014 (sp)
+Start:
+  ;Original Code
+  stw r0, 0x0014 (sp)
+  
+  ;Load Intro Message ID (8057D8FD)
+  lis r18, 0x8057
+  ori r18, r18, 0xD8FD
+  lwz r19, 0(r18)
+  cmplwi r19, 0x0
+  bne- End
+  
+  ;Initialize to SX intro
+  li r19, 44
+  sth r19, 0(r18)
+  
+  ;Check if Rom Settings are valid
+  ;If not, assign default settings.
 
-;Load Intro Message ID (8057D8FD)
-lis r16, 0x8057
-li r17, 0x7777
-addi r17, r17, 0x6186
-or r18, r16, r17
-lwz r19, 0(r18)
-cmplwi r19, 0x0
-bne- End
-
-;Initialize to SX intro
-li r20, 44
-sth r20, 0(r18)
-
-;Check if Rom Settings are valid
-;If not, assign default settings.
+  ;Set r18 to start of flag data.
+  lis r18, 0x8057
+  ori r18, r18, 0x7B2C
 
 CheckCSSkip:
-  lis r16, 0x8057
-  addi r18, r16, 0x7B2C
-  lbz r17, 0(r18)
-  cmpwi r17, 0
+  ;Load location for CSSkip flag
+  lbz r19, 0(r18)
+
+  ;If not 0, or 1
+  ;assign 1 by default.
+  cmpwi r19, 0
   beq CheckRT
-  cmpwi r17, 1
+  cmpwi r19, 1
   beq CheckRT
-  li r17, 1
-  stb r17, 0(r18)
+  li r19, 1
+  stb r19, 0(r18)
 
 CheckRT:
-  lis r16, 0x8057
-  addi r18, r16, 0x7B2D
-  lbz r17, 0(r18)
-  cmpwi r17, 0
+  ;Load location for Race Time flag
+  lbz r19, 1(r18)
+
+  ;If not 0, or 1
+  ;assign 0 by default.
+  cmpwi r19, 0
   beq CheckMUI
-  cmpwi r17, 1
+  cmpwi r19, 1
   beq CheckMUI
-  li r17, 0
-  stb r17, 0(r18)
+  li r19, 0
+  stb r19, 0(r18)
 
 CheckMUI:
-  lis r16, 0x8057
-  addi r18, r16, 0x7B2E
-  lbz r17, 0(r18)
-  cmpwi r17, 0
+  ;Load location for Modern UI Control flag
+  lbz r19, 2(r18)
+
+  ;If not 0, or 1
+  ;assign 0 by default.
+  cmpwi r19, 0
   beq End
-  cmpwi r17, 1
+  cmpwi r19, 1
   beq End
-  li r17, 0
-  stb r17, 0(r18)
+  li r19, 0
+  stb r19, 0(r18)
 
 End:
-  li r16, 0x0
-  li r17, 0x0
   li r18, 0x0
   li r19, 0x0
-  li r20, 0x0
   

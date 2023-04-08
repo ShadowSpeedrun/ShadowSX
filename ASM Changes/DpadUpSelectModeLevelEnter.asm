@@ -1,4 +1,6 @@
 #To be inserted at 80206334
+;DpadUpSelectModeLevelEnter.asm
+
 Start:
   ;Check for Player Input Dpad Up
   ;No Dpad Up = No need to run code.

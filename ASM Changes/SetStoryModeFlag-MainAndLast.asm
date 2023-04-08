@@ -5,14 +5,14 @@ Start:
   ;Original Code
   lwz r4, 12(r31) ;This is the current Stage ID (r4)
 
+  ;Register to set addresses to true.
+  li r16, 0x1
+
   ;Load address of "Story Mode Flag" into r18
-  lis r16, 0x8057
-  li r17, 0x7777
-  addi r17, r17, 0x6180
-  or r18, r16, r17
+  lis r18, 0x8057
+  ori r18, r18, 0xD8F7
 
   ;Set "Story Mode Flag" to true.
-  li r16, 0x1
   sth r16, 0(r18)
 
   ;Check if in Last Way or Devil Doom
@@ -25,16 +25,12 @@ Start:
 
 SetLastStoryFlag:
   ;If true then this
-  lis r16, 0x8057
-  li r17, 0x7777
-  addi r17, r17, 0x618C
-  or r18, r16, r17
-  li r16, 1
+  lis r18, 0x8057
+  ori r18, r18, 0xD903
   sth r16, 0(r18)
 
 End:
   ;Clean up to prevent
   ;accidental code changes.
   li r16, 0x0
-  li r17, 0x0
   li r18, 0x0

@@ -1,74 +1,59 @@
 #To be inserted at 8004a480
-;Determine that we are trying to render the Time message.
-;Check for Time Flag (8057D901)
-lis r16, 0x8057
-li r17, 0x7777
-addi r17, r17, 0x618A
-or r18, r16, r17
-lhz r16, 0(r18)
-cmpwi r16, 1
-bne End
+;IGTMessageRender.asm
 
-;Ensure we are trying to render the IGT Message.
-lis r18, 0x807D
-addi r18, r18, 0x5700
-lwz r16, 0(r18)
-cmpwi r16, 43
-bne End
+Start:
+  ;Determine that we are trying to render the Time message.
+  ;Check for Time Flag (8057D901)
+  lis r16, 0x8057
+  ori r18, r16, 0xD901
+  lhz r18, 0(r18)
+  cmpwi r18, 1
+  bne End
 
-;save LR to restore later
-mflr r22
+  ;Ensure we are trying to render the IGT Message.
+  lis r18, 0x807D
+  addi r18, r18, 0x5700
+  lwz r18, 0(r18)
+  cmpwi r18, 43
+  bne End
 
-;r10 contains address to start of our message.
-;Offset it to the start of the dynamic section.
-lwz r21, 0(r10)
-addi r21, r21, 0x24
+  ;save LR to restore later
+  mflr r22
 
-;Determine the Timer to Display
-;First check for Expert flag(8057D7C5)
+  ;r10 contains address to start of our message.
+  ;Offset it to the start of the dynamic section.
+  lwz r21, 0(r10)
+  addi r21, r21, 0x24
 
-lis r16, 0x8057
-li r17, 0x7777
-addi r17, r17, 0x604E
-or r18, r16, r17
-lbz r16, 0(r18)
-cmpwi r16, 1
-beq SetExpertTime
+  ;Determine the Timer to Display
+  ;First check for Expert flag(8057D7C5)
+  ori r18, r16, 0xD7C5
+  lbz r18, 0(r18)
+  cmpwi r18, 1
+  beq SetExpertTime
  
-;check for Last Story Flag(8057D903)
-lis r16, 0x8057
-li r17, 0x7777
-addi r17, r17, 0x618c
-or r18, r16, r17
-lhz r16, 0(r18)
-cmpwi r16, 1
-beq SetLastTime
+  ;check for Last Story Flag(8057D903)
+  ori r18, r16, 0xD903
+  lhz r18, 0(r18)
+  cmpwi r18, 1
+  beq SetLastTime
 
-;Both checks failed, default to Story Mode Time
-;Story Race(80577AF4)
+  ;Both checks failed, default to Story Mode Time
+  ;Story Race(80577AF4)
 
-lis r16, 0x8057
-li r17, 0x7777
-addi r17, r17, 0x37D
-or r18, r16, r17
-lfs f1, 0(r18)
-b GetDigits
+  ori r18, r16, 0x7AF4
+  lfs f1, 0(r18)
+  b GetDigits
 
 SetExpertTime:
   ;Expert Race(80577B0C)
-  lis r16, 0x8057
-  li r17, 0x7777
-  addi r17, r17, 0x395
-  or r18, r16, r17
+  ori r18, r16, 0x7B0C
   lfs f1, 0(r18)
   b GetDigits
 
 SetLastTime:
   ;Last Story Race(80577B24)
-  lis r16, 0x8057
-  li r17, 0x7777
-  addi r17, r17, 0x3AD
-  or r18, r16, r17
+  ori r18, r16, 0x7B24
   lfs f1, 0(r18)
   ;b GetDigits
 
@@ -82,13 +67,9 @@ GetDigits:
   
   ;Load what sp would be into r19
   lis r16, 0x8060
-  li r17, 0x7777
-  addi r17, r17, 0x3B49
-  or r19, r16, r17
+  ori r19, r16, 0xB2C0
   
-  li r17, 0x7777
-  addi r17, r17, 0x3BC5
-  or r18, r16, r17
+  ori r18, r16, 0xB33C
   
   fctiwz f0, f1
   stwu r19, -0x0020 (r19)
@@ -116,19 +97,19 @@ GetDigits:
   stb r15, 0x0004 (r18)
   addi r19, r19, 32
 
-;LocationOfTimeBytes(8060B33F)
+  ;LocationOfTimeBytes(8060B33F)
 
-;Load Byte for Minutes
-bl LoadTimeByteAddress
-lbz r20, 0(r18)
+  ;Load Byte for Minutes
+  bl LoadTimeByteAddress
+  lbz r20, 0(r18)
 
-li r17, 60
-divw r16, r20, r17
-;r16 is now Hours;
+  li r17, 60
+  divw r16, r20, r17
+  ;r16 is now Hours;
 
-;Render Hours if any
-cmpwi r16, 0
-bne RenderHours
+  ;Render Hours if any
+  cmpwi r16, 0
+  bne RenderHours
 
 RemoveHours:
   ;0x20 = space
@@ -165,31 +146,26 @@ RenderMinutes:
   addi r21, r21, 2
   ;Fall Through to continue on.
 
-;Load Byte for Seconds
-bl LoadTimeByteAddress
-lbz r16, 1(r18)
-bl RenderTimeSection
+Continue:
+  ;Load Byte for Seconds
+  lis r18, 0x8060
+  ori r18, r18, 0xB33F
 
-;Render Period
-li r16, 0x2E
-sth r16, 0(r21)
-addi r21, r21, 2
+  lbz r16, 1(r18)
+  bl RenderTimeSection
 
-;Load Byte for SubSeconds
-bl LoadTimeByteAddress
-lbz r16, 2(r18)
-bl RenderTimeSection
+  ;Render Period
+  li r16, 0x2E
+  sth r16, 0(r21)
+  addi r21, r21, 2
 
-;Restore LR before exiting
-mtlr r22
-b End
+  ;Load Byte for SubSeconds
+  lbz r16, 2(r18)
+  bl RenderTimeSection
 
-LoadTimeByteAddress:
-  lis r16, 0x8060
-  li r17, 0x7777
-  addi r17, r17, 0x3BC8
-  or r18, r16, r17
-  blr
+  ;Restore LR before exiting
+  mtlr r22
+  b End
 
 RenderTimeSection:
   cmpwi r16, 10
@@ -201,11 +177,11 @@ RenderTensPlace:
   ;r16 input
   ;r17 ones
   ;r18 tens
-  ;r14 = 10
-  li r14, 10
+  ;r19 = 10
+  li r19, 10
 
   mr r17, r16
-  divw r16, r16, r14
+  divw r16, r16, r19
   mr r18, r16
   mulli r16, r18, 10
   sub r17, r17, r16

@@ -1,5 +1,10 @@
 #To be inserted at 803562A0
-;Modern UI Control
+;ModernUIControl.asm
+
+;If the option is enabled, this code will swap the
+;action that X and B would preform to match what the
+;non-gamecube versions did.
+
 ;Original Code
 lwzx r4, r29, r0
 

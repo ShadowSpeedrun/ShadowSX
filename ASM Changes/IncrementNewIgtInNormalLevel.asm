@@ -8,14 +8,12 @@
 Start:
   ;Load value of "In Cutscene Flag" to r16.
   lis r16, 0x8057
-  li r17, 0x7777
-  addi r17, r17, 0x6182
-  or r18, r16, r17
-  lhz r16, 0(r18)
+  ori r18, r16, 0xD8F9
+  lhz r17, 0(r18)
   
   ;If "In Cutscene Flag" is 1, we are not in
   ;a level and can leave.
-  cmplwi r16, 0
+  cmplwi r17, 0
   bne- End
   
   ;f0 is timestep
@@ -41,20 +39,15 @@ ApplyTime:
   ;Check if in Expert Mode.
   ;to determine if Story or Expert
   ;Race Time should be used.
-  lis r16, 0x8057
-  li r17, 0x7777
-  addi r17, r17, 0x604E
-  or r18, r16, r17
-  lbz r16, 0(r18)
-  cmpwi r16, 0x1
+  ori r18, r16, 0xD7C5
+  lbz r17, 0(r18)
+  cmpwi r17, 0x1
   beq LoadExpertRaceTime
+
   ;Check if Last Story
-  lis r16, 0x8057
-  li r17, 0x7777
-  addi r17, r17, 0x618C
-  or r18, r16, r17
-  lhz r16, 0(r18)
-  cmpwi r16, 0x1
+  ori r18, r16, 0xD903
+  lhz r17, 0(r18)
+  cmpwi r17, 0x1
   beq LoadLastStoryRaceTime
   
   ;Default to Story Race Time if neither are enabled.
@@ -79,3 +72,5 @@ End:
   li r16, 0x0
   li r17, 0x0
   li r18, 0x0
+
+
