@@ -28,8 +28,6 @@ Start:
   beq SetToSavePrompt
 
 SetToAutoSave:
-  ;Set address back to 8057D8FD
-  addi r18, r18, 2
   ;Move on to the AutoSave, dont allow the message to close.
   li r19, 40
   sth r19, 0(r18)
@@ -38,8 +36,7 @@ SetToAutoSave:
 
 SetToSavePrompt:
   li r3, 2
-  sth r3, 0(r18)
-  addi r18, r18, 2
+  sth r3, -2(r18)
   li r3, 0
 
 End:
