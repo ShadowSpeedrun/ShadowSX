@@ -36,7 +36,7 @@ Start:
   ;If 5 Keys, set door opened.
   lwz r16, 0(r3)
   li r17, 0x40
-  sth r17, 24(r14)
+  sth r17, 24(r16)
   li r16, 0x0
   li r17, 0x0
 End:
