@@ -2,6 +2,19 @@
 ;DpadUpSelectModeLevelEnter.asm
 
 Start:
+  ;Check if we are running from the select mode screen
+  lis r18, 0x8058
+  ori r18, r18, 0x3ACC
+  lwz r16, 0(r18)
+  cmpwi r16, 6
+  bne Exit
+  
+  ;Set from Select Mode Flag to 1
+  li r16, 1
+  lis r18, 0x8057
+  ori r18, r18, 0xD8FF
+  sth r16, 0(r18)
+
   ;Check for Player Input Dpad Up
   ;No Dpad Up = No need to run code.
   lis r18, 0x8056
@@ -29,10 +42,6 @@ Start:
   ;Not a boss, is a level, set expert and continue.
   ;Set Expert Enable To 1
   li r3, 0x1
-  ;Also set from Select Mode to 1
-  lis r18, 0x8057
-  ori r18, r18, 0xD8FF
-  sth r3, 0(r18)
   b DisableEggIL
 
 CheckForEggDealer:
