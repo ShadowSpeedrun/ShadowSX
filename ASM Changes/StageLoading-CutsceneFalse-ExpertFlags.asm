@@ -33,7 +33,7 @@ Start:
   bne- End
 
   ;Set "Story Flag" true.
-  ori r18, r18, 0xD8F7
+  ori r18, r16, 0xD8F7
   sth r17, 0(r18)
 
   ;If Westopolis, reset Expert Race Timer.
