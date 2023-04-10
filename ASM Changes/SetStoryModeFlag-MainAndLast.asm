@@ -18,15 +18,19 @@ Start:
   ;Check if in Last Way or Devil Doom
   ;to set flag to say we are in Last Story.
 
+  ;Load address to "In Last Story" flag
+  lis r18, 0x8057
+  ori r18, r18, 0xD903
   cmplwi r4, 700
   beq SetLastStoryFlag
   cmplwi r4, 710
-  bne End
+  beq SetLastStoryFlag
+  
+  ;If here, not in Last Story.
+  ;Ensure flag is false
+  li r16, 0x0
 
 SetLastStoryFlag:
-  ;If true then this
-  lis r18, 0x8057
-  ori r18, r18, 0xD903
   sth r16, 0(r18)
 
 End:
