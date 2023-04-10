@@ -23,7 +23,7 @@ Start:
   ;r10 contains address to start of our message.
   ;Offset it to the start of the dynamic section.
   lwz r21, 0(r10)
-  addi r21, r21, 0x24
+  addi r21, r21, 0x24
 
   ;Determine the Timer to Display
   ;First check for Expert flag(8057D7C5)
@@ -100,7 +100,8 @@ GetDigits:
   ;LocationOfTimeBytes(8060B33F)
 
   ;Load Byte for Minutes
-  bl LoadTimeByteAddress
+  lis r18, 0x8060
+  ori r18, r18, 0xB33F
   lbz r20, 0(r18)
 
   li r17, 60
@@ -148,7 +149,7 @@ RenderMinutes:
 
 Continue:
   ;Load Byte for Seconds
-  lis r18, 0x8060
+  lis r18, 0x8060
   ori r18, r18, 0xB33F
 
   lbz r16, 1(r18)
@@ -160,6 +161,9 @@ Continue:
   addi r21, r21, 2
 
   ;Load Byte for SubSeconds
+  lis r18, 0x8060
+  ori r18, r18, 0xB33F
+
   lbz r16, 2(r18)
   bl RenderTimeSection
 
