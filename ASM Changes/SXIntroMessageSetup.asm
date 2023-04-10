@@ -49,7 +49,7 @@ CheckRT:
   cmpwi r19, 1
   beq CheckMUI
   li r19, 0
-  stb r19, 0(r18)
+  stb r19, 1(r18)
 
 CheckMUI:
   ;Load location for Modern UI Control flag
@@ -62,7 +62,7 @@ CheckMUI:
   cmpwi r19, 1
   beq End
   li r19, 0
-  stb r19, 0(r18)
+  stb r19, 2(r18)
 
 End:
   li r18, 0x0
