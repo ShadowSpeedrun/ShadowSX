@@ -5,7 +5,7 @@ Start:
   ;Determine that we are trying to render the Time message.
   ;Check for Time Flag (8057D901)
   lis r16, 0x8057
-  ori r18, r16, 0xD901
+  ori r18, r16, 0xD900
   lhz r18, 0(r18)
   cmpwi r18, 1
   bne End
@@ -33,7 +33,7 @@ Start:
   beq SetExpertTime
  
   ;check for Last Story Flag(8057D903)
-  ori r18, r16, 0xD903
+  ori r18, r16, 0xD902
   lhz r18, 0(r18)
   cmpwi r18, 1
   beq SetLastTime

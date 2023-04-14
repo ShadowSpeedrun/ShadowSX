@@ -23,7 +23,7 @@ Start:
   bne- End
 
   ;Load "Story Mode Flag" into r16.
-  ori r18, r17, 0xD8F7
+  ori r18, r17, 0xD8F6
   lhz r16, 0(r18)
   
   ;If not "Story Mode", leave.

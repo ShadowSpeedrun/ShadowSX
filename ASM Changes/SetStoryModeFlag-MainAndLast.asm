@@ -10,7 +10,7 @@ Start:
 
   ;Load address of "Story Mode Flag" into r18
   lis r18, 0x8057
-  ori r18, r18, 0xD8F7
+  ori r18, r18, 0xD8F6
 
   ;Set "Story Mode Flag" to true.
   sth r16, 0(r18)
@@ -20,7 +20,7 @@ Start:
 
   ;Load address to "In Last Story" flag
   lis r18, 0x8057
-  ori r18, r18, 0xD903
+  ori r18, r18, 0xD902
   cmplwi r4, 700
   beq SetLastStoryFlag
   cmplwi r4, 710

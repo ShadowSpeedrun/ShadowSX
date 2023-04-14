@@ -7,7 +7,7 @@ Start:
   
   ;Set Flag for showing the Race Time before Auto Save
   lis r18, 0x8057
-  ori r18, r18, 0xD901
+  ori r18, r18, 0xD900
   
   li r16, 0x1
   sth r16, 0(r18)

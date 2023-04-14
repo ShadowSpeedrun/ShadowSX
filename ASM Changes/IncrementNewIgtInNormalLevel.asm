@@ -8,7 +8,7 @@
 Start:
   ;Load value of "In Cutscene Flag" to r16.
   lis r16, 0x8057
-  ori r18, r16, 0xD8F9
+  ori r18, r16, 0xD8F8
   lhz r17, 0(r18)
   
   ;If "In Cutscene Flag" is 1, we are not in
@@ -45,7 +45,7 @@ ApplyTime:
   beq LoadExpertRaceTime
 
   ;Check if Last Story
-  ori r18, r16, 0xD903
+  ori r18, r16, 0xD902
   lhz r17, 0(r18)
   cmpwi r17, 0x1
   beq LoadLastStoryRaceTime

@@ -2,9 +2,9 @@
 ;ExpertSelectModePreventLivesSave2.asm
 
 Start:
-  ;Load Flag for Expert Select Mode
+  ;Load Flag for Select Mode
   lis r18, 0x8057
-  ori r18, r18, 0xD8FF
+  ori r18, r18, 0xD8FE
   lhz r18, 0(r18)
   
   ;If the Flag is on, dont save lives.

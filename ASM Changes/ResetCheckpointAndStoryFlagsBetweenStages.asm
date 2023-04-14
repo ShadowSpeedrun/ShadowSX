@@ -15,7 +15,7 @@ Start:
   ;it not 0, so ensure it's 0 now.
   li r15, 0x0
   lis r18, 0x8057
-  ori r18, r18, 0xD8A7
+  ori r18, r18, 0xD8A6
   sth r15, 0(r18)
   
   ;Add Offet to then set "Story Mode Flag" to false.

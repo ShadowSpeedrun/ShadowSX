@@ -12,7 +12,7 @@ Start:
   
   ;Load address for "In Cutscene".
   lis r18, 0x8057
-  ori r18, r18, 0xD8F9
+  ori r18, r18, 0xD8F8
  
   ;Set "In Cutscene" to true.
   li r16, 0x1

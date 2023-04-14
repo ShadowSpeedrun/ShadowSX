@@ -7,9 +7,9 @@ Start:
   ;Original Code
   stw r0, 0x0014 (sp)
   
-  ;Load Intro Message ID (8057D8FD)
+  ;Load Intro Message ID (8057D8FC)
   lis r18, 0x8057
-  ori r18, r18, 0xD8FD
+  ori r18, r18, 0xD8FC
   lwz r19, 0(r18)
   cmplwi r19, 0x0
   bne- End

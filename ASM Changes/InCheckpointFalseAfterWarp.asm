@@ -8,7 +8,7 @@ Start:
   ;Load address of "In Checkpoint"
   ;into r18.
   lis r18, 0x8057
-  ori r18, r18, 0xD8A7
+  ori r18, r18, 0xD8A6
   li r16, 0x0
 
   ;Set "In Checkpoint" to false.

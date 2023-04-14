@@ -4,7 +4,7 @@
 Start:
   ;LoadTimeFlagAddress
   lis r18, 0x8057
-  ori r18, r18, 0xD901
+  ori r18, r18, 0xD900
   lhz r19, 0(r18)
   cmpwi r19, 1
   bne- CleanupAndEnd
@@ -30,7 +30,7 @@ Start:
   ;Message Accept. Disable Time Flag
   ;LoadTimeFlagAddress
   lis r18, 0x8057
-  ori r18, r18, 0xD901
+  ori r18, r18, 0xD900
   li r19, 0
   sth r19, 0(r18)
 

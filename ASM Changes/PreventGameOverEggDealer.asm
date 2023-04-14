@@ -6,9 +6,9 @@
 
 Start:
   ;Load value of "Egg Dealer Lives Flag"
-  ;into r18. (8057D929)
+  ;into r18. (8057D928)
   lis r18, 0x8057
-  ori r18, r18, 0xD929
+  ori r18, r18, 0xD928
   lhz r18, 0(r18)
 
   ;If "Egg Dealer Lives Flag" is true

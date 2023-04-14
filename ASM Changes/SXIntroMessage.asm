@@ -4,9 +4,9 @@
 ;Boot intro SX
 
 Start:
-  ;Load Intro Message ID (8057D8FD)
+  ;Load Intro Message ID (8057D8FC)
   lis r18, 0x8057
-  ori r18, r18, 0xD8FD
+  ori r18, r18, 0xD8FC
   lhz r4, 0(r18)
 
   li r18, 0x0

@@ -11,7 +11,7 @@ Start:
   
   ;Set "In Checkpoint" to false.
   lis r16, 0x8057
-  ori r18, r16, 0xD8A7
+  ori r18, r16, 0xD8A6
   li r17, 0x0
   sth r17, 0(r18)
 
@@ -20,8 +20,8 @@ Start:
   stfs f3, 30652(r31)
   fmr f4, f3
 
-  ;Load Flag for Expert Select Mode
-  ori r18, r16, 0xD8FF
+  ;Load Flag for Select Mode
+  ori r18, r16, 0xD8FE
   lhz r18, 0(r18)
   
   ;If flag is on, skip to the end.
@@ -41,7 +41,7 @@ Start:
   beq SaveExpertRaceTime
 
   ;Check if we are in Last Story.
-  ori r18, r16, 0xD903
+  ori r18, r16, 0xD902
   lhz r17, 0(r18)
   cmpwi r17, 0x1
   beq SaveLastStoryRaceTime

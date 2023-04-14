@@ -7,7 +7,7 @@ Start:
 
   ;Set "In Checkpoint" to false.
   lis r18, 0x8057
-  ori r18, r18, 0xD8A7
+  ori r18, r18, 0xD8A6
   li r16, 0x0
   sth r16, 0(r18)
 

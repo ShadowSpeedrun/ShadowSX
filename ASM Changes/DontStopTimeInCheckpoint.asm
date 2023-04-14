@@ -7,7 +7,7 @@
 Start:
   ;Load value of "In Checkpoint" into r16
   lis r18, 0x8057
-  ori r18, r18, 0xD8A7
+  ori r18, r18, 0xD8A6
   lhz r18, 0(r18)
 
   ;If "In Checkpoint" is 1, exit code.

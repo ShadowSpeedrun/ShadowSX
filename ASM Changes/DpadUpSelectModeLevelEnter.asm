@@ -12,7 +12,7 @@ Start:
   ;Set from Select Mode Flag to 1
   li r16, 1
   lis r18, 0x8057
-  ori r18, r18, 0xD8FF
+  ori r18, r18, 0xD8FE
   sth r16, 0(r18)
 
   ;Check for Player Input Dpad Up
@@ -64,7 +64,7 @@ CheckForEggDealer:
 LoadEggDealerILFlag:
   ;Load "Egg Dealer IL Flag" Address into r18.
   lis r18, 0x8057
-  ori r18, r18, 0xD929
+  ori r18, r18, 0xD928
   blr
 
 EnableEggIL:

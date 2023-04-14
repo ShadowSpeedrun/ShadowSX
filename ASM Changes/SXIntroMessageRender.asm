@@ -21,7 +21,7 @@ Start:
 RenderSXIntro:  
   ;Check which screen to show
   lis r18, 0x8057
-  ori r18, r18, 0xD8FB
+  ori r18, r18, 0xD8FA
   
   lhz r16, 0(r18)
   cmpwi r16, 0
@@ -54,7 +54,7 @@ ScreenToOptionsR19:
   mflr r15
 
   lis r18, 0x8057
-  ori r18, r18, 0xD8FB
+  ori r18, r18, 0xD8FA
 
   sth r19, 0(r18)
 
@@ -70,7 +70,7 @@ GetNewButtonPressesToR16:
 
   ;Load current saved input into r16
   lis r18, 0x8057
-  ori r18, r18, 0xD8F7
+  ori r18, r18, 0xD8F6
 
   lwz r16, 0(r18)
  
@@ -93,7 +93,7 @@ StoreCurrentInput:
 
   ;Load address for input save
   lis r18, 0x8057
-  ori r18, r18, 0xD8F7
+  ori r18, r18, 0xD8F6
   stw r19, 0(r18)
   blr
 
@@ -191,7 +191,7 @@ DpadUpOptions:
   mflr r14
 
   lis r18, 0x8057
-  ori r18, r18, 0xD8F5
+  ori r18, r18, 0xD8F4
   lhz r16, 0(r18)
   ;r16 is now the current options index
   cmpwi r16, 0
@@ -215,7 +215,7 @@ DpadDownOptions:
   mflr r14
 
   lis r18, 0x8057
-  ori r18, r18, 0xD8F5
+  ori r18, r18, 0xD8F4
   lhz r16, 0(r18)
   ;r16 is now the current options index
   cmpwi r16, 2
@@ -239,7 +239,7 @@ DpadLeftOptions:
   mflr r14
 
   lis r18, 0x8057
-  ori r18, r18, 0xD8F5
+  ori r18, r18, 0xD8F4
   lhz r16, 0(r18)
   ;r16 is now the current options index
 
@@ -260,7 +260,7 @@ DpadRightOptions:
   mflr r14
 
   lis r18, 0x8057
-  ori r18, r18, 0xD8F5
+  ori r18, r18, 0xD8F4
   lhz r16, 0(r18)
   ;r16 is now the current options index
 

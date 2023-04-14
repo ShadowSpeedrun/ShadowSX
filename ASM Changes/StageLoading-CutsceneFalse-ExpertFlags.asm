@@ -12,13 +12,13 @@ Start:
 
   ;Set "In Cutscene" False
   lis r18, 0x8057
-  ori r18, r18, 0xD8F9
+  ori r18, r18, 0xD8F8
   li r16, 0x0
   sth r16, 0(r18)
 
-  ;Check for Expert Select Mode flag
+  ;Check for Select Mode flag
   lis r16, 0x8057
-  ori r18, r16, 0xD8FF
+  ori r18, r16, 0xD8FE
   lhz r18, 0(r18)
   cmpwi r18, 0x1
   beq- End
@@ -33,7 +33,7 @@ Start:
   bne- End
 
   ;Set "Story Flag" true.
-  ori r18, r16, 0xD8F7
+  ori r18, r16, 0xD8F6
   sth r17, 0(r18)
 
   ;If Westopolis, reset Expert Race Timer.

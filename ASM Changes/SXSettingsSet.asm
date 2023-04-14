@@ -7,9 +7,9 @@ Start:
   bne- End
   
   ;Check the current Message ID to see if we are showing the SX intro.
-  ;Load Intro Message ID (8057D8FD)
+  ;Load Intro Message ID (8057D8FC)
   lis r18, 0x8057
-  ori r18, r18, 0xD8FD
+  ori r18, r18, 0xD8FC
   lhz r19, 0(r18)
   
   cmpwi r19, 44
@@ -20,8 +20,8 @@ Start:
   ;Check if we were in a screen that is supposed to move to
   ;the AutoSave Screen next.
   
-  ;Load value of 0x8057D8FB
-  ;r18 is already set to be 0x8057D8FD
+  ;Load value of 0x8057D8FA
+  ;r18 is already set to be 0x8057D8FC
   lhz r17, -2(r18)
   
   cmpwi r17, 1
