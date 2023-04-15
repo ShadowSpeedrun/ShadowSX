@@ -924,3 +924,18 @@ A2520000 2C120001
 A2520000 2C120001
 41820008 901E0070
 3A400000 00000000
+
+
+
+	-==-
+
+
+Allow Skip to Title Sooner
+Uses SkipIntroSooner.asm
+
+Overrides memory check into to make the game think it has already shown the intro credits, allowing the player to skip to the title screen.
+[BlazinZzetti]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.06 --- 0x803442F8 ---- 8803007F -> Branch
+
+38000000 00000000
