@@ -1,4 +1,6 @@
 #To be inserted at 80337048
+;RestoreLR1.asm
+
 ;Restore link register that DontStopTimeInCheckpoint.asm modified.
 
 Start:

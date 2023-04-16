@@ -1,13 +1,11 @@
 ///////////////////////////////////////////////////////
 ////    SHADOW THE HEDGEHOG - SPEEDRUNNER'S CUT    ////
-////                BETA 4 RELEASE                 ////
+////                BETA 5 RELEASE                 ////
 ///////////////////////////////////////////////////////
 
-The main feature in this update is the improved intro with the new options menu for adjusting optional settings.  Unlike last update, these settings are saved on the memory card for convenience.  There's also a few bug fixes regarding the new Total Run Time message.
+A few updates and fixes this time. Had a few issues with the Race Timer feature, but everything is good now.  The main notable change this time is the ability to enter Last Story and Expert Mode stages from select mode. Details on how are currently on the GitHub release notes.
 
-Again, this was a decent change in the backend, so any help with playtesting this release would be much appreciated.
-
-Like with the last update, the only things left I would like to add before a 1.0 release are not essential to the gameplay or would majorly change how you would play each level.  So, feel free to get some practice in while I get things finished up. 
+I did quite a bit of refactoring of the custom code this time. While I have tested everything out, there's a chance something slipped by.  If you notice anything weird, please reach out.  Updates from here on out should be release candidate worthy and any 1.1 release should be to add improvements not possible at the moment.
 
 ///////////////////////////////////////////////////////
 ////              SETUP INSTRUCTIONS               ////
@@ -56,7 +54,9 @@ Like with the last update, the only things left I would like to add before a 1.0
 
 9. Double click the main window, where instructed, to set the rom path to where your ShadowSX ROM will be.
 
-10. Click on the Controllers icon to set up your controller.
+10. If you plan to run your ROM from a HDD, you may need to reenable the Emulate Disk Speed setting in the game to improve performance.
+
+11. Click on the Controllers icon to set up your controller.
 
 GC controllers should be mapped 1 to 1 or using an adapter.
 
@@ -82,4 +82,4 @@ The end goal is to have a set of settings that would allow everyone to play on t
 
 Regarding Aspect Ratio, Auto or Force 4:3 should be fine. If you have a decent 4:3 Monitor, set the option to Stretch to Window and run it full screen on that monitor for the best experience.
 
-Make sure to enable Background Input in the Controller Settings if you want to be able to play the game while having something else focused on your computer.
+Make sure to enable Background Input in the Controller Settings if you want to be able to play the game while having something else focused on your computer. 

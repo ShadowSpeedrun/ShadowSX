@@ -3,7 +3,7 @@
 
 ;Set "In Checkpoint" False
 ;Set OG Timer to the value of New IGT on mission complete.
-;Save Race Time to save data.
+;Save Race Time to save data, if select mode flag is off.
 
 Start:
   ;Original Code
@@ -11,39 +11,39 @@ Start:
   
   ;Set "In Checkpoint" to false.
   lis r16, 0x8057
-  li r17, 0x7777
-  addi r17, r17, 0x6130
-  or r18, r16, r17
-  li r15, 0x0
-  sth r15, 0(r18)
+  ori r18, r16, 0xD8A6
+  li r17, 0x0
+  sth r17, 0(r18)
 
   ;Set "OG Timer" to the value of New IGT.
   lfs f3, 31120(r31)
   stfs f3, 30652(r31)
   fmr f4, f3
 
+  ;Load Flag for Select Mode
+  ori r18, r16, 0xD8FE
+  lhz r18, 0(r18)
+  
+  ;If flag is on, skip to the end.
+  cmpwi r18, 1
+  beq End
+
   ;Load current Race IGT into f3.
   lfs f3, 31136(r31)
 
   ;Check if we are in Expert Mode.
-  lis r16, 0x8057
-  li r17, 0x7777
-  addi r17, r17, 0x604E
-  or r18, r16, r17
-  lbz r16, 0(r18)
+  ori r18, r16, 0xD7C5
+  lbz r17, 0(r18)
   
   ;Save Race IGT to the appropriate
   ;save location based on Expert flag.
-  cmpwi r16, 0x1
+  cmpwi r17, 0x1
   beq SaveExpertRaceTime
 
   ;Check if we are in Last Story.
-  lis r16, 0x8057
-  li r17, 0x7777
-  addi r17, r17, 0x618C
-  or r18, r16, r17
-  lhz r16, 0(r18)
-  cmpwi r16, 0x1
+  ori r18, r16, 0xD902
+  lhz r17, 0(r18)
+  cmpwi r17, 0x1
   beq SaveLastStoryRaceTime
   b SaveRaceTimeStory
   

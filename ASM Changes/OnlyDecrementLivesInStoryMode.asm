@@ -1,23 +1,20 @@
 #To be inserted at 8016EFA0
-;Original Code
-;add r0, r0, r4
+;OnlyDecrementLiveInStoryMode.asm
 
 Start:
   ;Load value of "Story Mode Flag"
-  ;into r16.
-  lis r16, 0x8057
-  li r17, 0x7777
-  addi r17, r17, 0x6180
-  or r18, r16, r17
-  lhz r16, 0(r18)
+  ;into r18.
+  lis r18, 0x8057
+  ori r18, r18, 0xD8F6
+  lhz r18, 0(r18)
 
   ;If "Story Mode Flag" is true
   ;Allow Original Code to Run.
-  cmplwi r16, 1
+  cmplwi r18, 1
   bne- End
+
+  ;Original Code
   add r0, r0, r4
 
 End:
-  li r16, 0x0
-  li r17, 0x0
   li r18, 0x0

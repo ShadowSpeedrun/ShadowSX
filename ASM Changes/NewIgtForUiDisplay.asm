@@ -14,8 +14,8 @@ Start:
   ;Use Race IGT if in Race Mode and in Story.
 
   ;Load "Race Mode" into r16.
-  lis r18, 0x8057
-  addi r18, r18, 0x7B2D
+  lis r17, 0x8057
+  addi r18, r17, 0x7B2D
   lbz r16, 0(r18)
 
   ;If not "Race Mode", leave.
@@ -23,10 +23,7 @@ Start:
   bne- End
 
   ;Load "Story Mode Flag" into r16.
-  lis r16, 0x8057
-  li r17, 0x7777
-  addi r17, r17, 0x6180
-  or r18, r16, r17
+  ori r18, r17, 0xD8F6
   lhz r16, 0(r18)
   
   ;If not "Story Mode", leave.

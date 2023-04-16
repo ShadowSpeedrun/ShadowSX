@@ -1,24 +1,28 @@
 #To be inserted at 8004a47c
-;save LR to restore later
-mflr r22
+;SXIntroMessageRender.asm
 
-cmpwi r11, 1
-bne Exit
-
-;Check for if we are rendering blank message(8057D8FD = 44)
-lis r18, 0x807D
-addi r18, r18, 0x5700
-lwz r16, 0(r18)
-cmpwi r16, 44
-beq RenderSXIntro
-bne Exit
+Start:
+  ;save LR to restore later
+  mflr r22
+  
+  ;Check if we are trying to render a option text
+  ;If so, skip to the end.
+  cmpwi r11, 1
+  bne Exit
+  
+  ;Check for if we are rendering blank message(807D5700 = 44)
+  lis r18, 0x807D
+  addi r18, r18, 0x5700
+  lwz r16, 0(r18)
+  cmpwi r16, 44
+  beq RenderSXIntro
+  bne Exit
 
 RenderSXIntro:  
   ;Check which screen to show
-  lis r16, 0x8057
-  li r17, 0x7777
-  addi r17, r17, 0x6184
-  or r18, r16, r17
+  lis r18, 0x8057
+  ori r18, r18, 0xD8FA
+  
   lhz r16, 0(r18)
   cmpwi r16, 0
   beq RenderSXStart
@@ -49,10 +53,8 @@ RenderSXStart:
 ScreenToOptionsR19:
   mflr r15
 
-  lis r16, 0x8057
-  li r17, 0x7777
-  addi r17, r17, 0x6184
-  or r18, r16, r17
+  lis r18, 0x8057
+  ori r18, r18, 0xD8FA
 
   sth r19, 0(r18)
 
@@ -62,17 +64,14 @@ ScreenToOptionsR19:
 
 GetNewButtonPressesToR16:
   ;Load the value of "P1 Button State" into r19.(8056ED4C)
-  lis r16, 0x8056
-  li r17, 0x7777
-  addi r17, r17, 0x75D5
-  or r18, r16, r17
+  lis r18, 0x8056
+  ori r18, r18, 0xED4C
   lwz r19, 0(r18)
 
   ;Load current saved input into r16
-  lis r16, 0x8057
-  li r17, 0x7777
-  addi r17, r17, 0x6180
-  or r18, r16, r17
+  lis r18, 0x8057
+  ori r18, r18, 0xD8F6
+
   lwz r16, 0(r18)
  
   ;r19 is current input
@@ -88,18 +87,13 @@ GetNewButtonPressesToR16:
 
 StoreCurrentInput:
   ;Load the value of "P1 Button State" into r19.(8056ED4C)
-  lis r16, 0x8056
-  li r17, 0x7777
-  addi r17, r17, 0x75D5
-  or r18, r16, r17
+  lis r18, 0x8056
+  ori r18, r18, 0xED4C
   lwz r19, 0(r18)
 
   ;Load address for input save
-  lis r16, 0x8057
-  li r17, 0x7777
-  addi r17, r17, 0x6180
-  or r18, r16, r17
-
+  lis r18, 0x8057
+  ori r18, r18, 0xD8F6
   stw r19, 0(r18)
   blr
 
@@ -134,10 +128,9 @@ RenderSXOptions:
   lbz r17, 0(r18)
   bl RenderOptionR17On
   
-  lis r16, 0x8057
-  li r17, 0x7777
-  addi r17, r17, 0x617E 
-  or r18, r17, r16
+  lis r18, 0x8057
+  ori r18, r18, 0xD8F4
+
   lhz r16, 0(18)
   bl SelectedOptionR16
 
@@ -197,10 +190,8 @@ ProcessDpadOptions:
 DpadUpOptions:
   mflr r14
 
-  lis r16, 0x8057
-  li r17, 0x7777
-  addi r17, r17, 0x617E
-  or r18, r16, r17
+  lis r18, 0x8057
+  ori r18, r18, 0xD8F4
   lhz r16, 0(r18)
   ;r16 is now the current options index
   cmpwi r16, 0
@@ -223,10 +214,8 @@ MoveOptionUp:
 DpadDownOptions:
   mflr r14
 
-  lis r16, 0x8057
-  li r17, 0x7777
-  addi r17, r17, 0x617E
-  or r18, r16, r17
+  lis r18, 0x8057
+  ori r18, r18, 0xD8F4
   lhz r16, 0(r18)
   ;r16 is now the current options index
   cmpwi r16, 2
@@ -249,10 +238,8 @@ MoveOptionDown:
 DpadLeftOptions:
   mflr r14
 
-  lis r16, 0x8057
-  li r17, 0x7777
-  addi r17, r17, 0x617E
-  or r18, r16, r17
+  lis r18, 0x8057
+  ori r18, r18, 0xD8F4
   lhz r16, 0(r18)
   ;r16 is now the current options index
 
@@ -272,10 +259,8 @@ DpadLeftOptions:
 DpadRightOptions:
   mflr r14
 
-  lis r16, 0x8057
-  li r17, 0x7777
-  addi r17, r17, 0x617E
-  or r18, r16, r17
+  lis r18, 0x8057
+  ori r18, r18, 0xD8F4
   lhz r16, 0(r18)
   ;r16 is now the current options index
 

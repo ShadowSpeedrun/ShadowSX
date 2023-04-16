@@ -14,9 +14,7 @@ Start:
   ;Load value of StageID
   ;into r18. (8057D748)
   lis r16, 0x8057
-  li r17, 0x7777
-  addi r17, r17, 0x5FD1
-  or r18, r16, r17
+  ori r18, r16, 0xD748
   lwz r18, 0(r18)
 
   ;If Westopolis, Reset Time
@@ -29,11 +27,9 @@ Start:
 
 ResetLast:  
   ;Load address of Story Race Time
-  ;into r18. (80577AF4)
+  ;into r18. (80577B24)
   ;f2 is 0.0f, store to Last Story Race Time
-  li r17, 0x7777
-  addi r17, r17, 0x3AD
-  or r18, r16, r17
+  ori r18, r16, 0x7B24
   stfs f2, 0(r18)
   b End
   
@@ -41,12 +37,9 @@ ResetStory:
   ;Load address of Story Race Time
   ;into r18. (80577AF4)
   ;f3 is 0.0f, store to Story Race Time
-  li r17, 0x7777
-  addi r17, r17, 0x37D
-  or r18, r16, r17
+  ori r18, r16, 0x7AF4
   stfs f3, 0(r18)
 
 End:
   li r16, 0x0
-  li r17, 0x0
   li r18, 0x0
