@@ -104,7 +104,7 @@ RenderSXOptions:
   ;Start by rendering a blank screen
   mr r20, r21
 
-  li r16, 0x5e
+  li r16, 0x60
   bl MoveCursorR16X
 
   lis r16, 0x8057
@@ -112,7 +112,7 @@ RenderSXOptions:
   lbz r17, 0(r18)
   bl RenderOptionR17On
 
-  li r16, 0x9E
+  li r16, 0xA0
   bl MoveCursorR16X
 
   lis r16, 0x8057
@@ -120,7 +120,7 @@ RenderSXOptions:
   lbz r17, 0(r18)
   bl RenderOptionR17On
 
-  li r16, 0xDE
+  li r16, 0xE0
   bl MoveCursorR16X
 
   lis r16, 0x8057
@@ -280,10 +280,10 @@ DpadRightOptions:
 RenderOptionR17On:
   mflr r14
 
-  ;- +On +Off
-  	lis r16, 0x2d
-  addi r16, r16, 0x20
-  bl RenderR16R21
+  ; +On +Off
+  ;	lis r16, 0x20
+  ;addi r16, r16, 0x2d
+  ;bl RenderR16R21
   	lis r16, 0x20
   ;addi r16, r16, 0x2b
 
@@ -307,7 +307,7 @@ RenderOptionR17On:
   addi r16, r16, 0x66
   bl RenderR16R21
   	lis r16, 0x66
-  addi r16, r16, 0x0A
+  addi r16, r16, 0x20
   bl RenderR16R21
 
   mtlr r14
