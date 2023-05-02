@@ -104,7 +104,16 @@ RenderSXOptions:
   ;Start by rendering a blank screen
   mr r20, r21
 
-  li r16, 0x60
+  ;Sub Offset if JPN
+  ;80576972 = 0
+
+  lis r16, 0x8057
+  addi r18, r16, 0x6972
+  lhz r16, 0(r18)
+  cmpwi r16, 0
+  beql JPNOffset1ToR16
+  bnel ENGOffset1ToR16
+
   bl MoveCursorR16X
 
   lis r16, 0x8057
@@ -112,7 +121,13 @@ RenderSXOptions:
   lbz r17, 0(r18)
   bl RenderOptionR17On
 
-  li r16, 0xA0
+  lis r16, 0x8057
+  addi r18, r16, 0x6972
+  lhz r16, 0(r18)
+  cmpwi r16, 0
+  beql JPNOffset2ToR16
+  bnel ENGOffset2ToR16
+
   bl MoveCursorR16X
 
   lis r16, 0x8057
@@ -120,7 +135,13 @@ RenderSXOptions:
   lbz r17, 0(r18)
   bl RenderOptionR17On
 
-  li r16, 0xE0
+  lis r16, 0x8057
+  addi r18, r16, 0x6972
+  lhz r16, 0(r18)
+  cmpwi r16, 0
+  beql JPNOffset3ToR16
+  bnel ENGOffset3ToR16
+
   bl MoveCursorR16X
 
   lis r16, 0x8057
@@ -277,6 +298,30 @@ DpadRightOptions:
   li r14, 0
   blr
 
+JPNOffset1ToR16:
+  li r16, 0x54
+  blr
+
+ENGOffset1ToR16:
+  li r16, 0x62
+  blr
+
+JPNOffset2ToR16:
+  li r16, 0x8E
+  blr
+
+ENGOffset2ToR16:
+  li r16, 0xA2
+  blr
+
+JPNOffset3ToR16:
+  li r16, 0xC0
+  blr
+
+ENGOffset3ToR16:
+  li r16, 0xE2
+  blr
+
 RenderOptionR17On:
   mflr r14
 
@@ -307,7 +352,7 @@ RenderOptionR17On:
   addi r16, r16, 0x66
   bl RenderR16R21
   	lis r16, 0x66
-  addi r16, r16, 0x20
+  addi r16, r16, 0x0A
   bl RenderR16R21
 
   mtlr r14
