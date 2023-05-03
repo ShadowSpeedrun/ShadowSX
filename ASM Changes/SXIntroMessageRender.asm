@@ -148,12 +148,13 @@ RenderSXOptions:
   addi r18, r16, 0x7B2E
   lbz r17, 0(r18)
   bl RenderOptionR17On
-  
-  lis r18, 0x8057
-  ori r18, r18, 0xD8F4
 
-  lhz r16, 0(18)
-  bl SelectedOptionR16
+  lis r16, 0x8057
+  addi r18, r16, 0x6972
+  lhz r16, 0(r18)
+  cmpwi r16, 0
+  beql SelectedOptionJPN
+  bnel SelectedOption
 
   bl GetNewButtonPressesToR16
 
@@ -307,7 +308,7 @@ ENGOffset1ToR16:
   blr
 
 JPNOffset2ToR16:
-  li r16, 0x8E
+  li r16, 0x8C
   blr
 
 ENGOffset2ToR16:
@@ -315,7 +316,7 @@ ENGOffset2ToR16:
   blr
 
 JPNOffset3ToR16:
-  li r16, 0xC0
+  li r16, 0xBE
   blr
 
 ENGOffset3ToR16:
@@ -326,11 +327,7 @@ RenderOptionR17On:
   mflr r14
 
   ; +On +Off
-  ;	lis r16, 0x20
-  ;addi r16, r16, 0x2d
-  ;bl RenderR16R21
-  	lis r16, 0x20
-  ;addi r16, r16, 0x2b
+  lis r16, 0x20 ;Space before
 
   cmpwi r17, 1
   beql SelectedCharacter
@@ -340,8 +337,8 @@ RenderOptionR17On:
   	lis r16, 0x4f
   addi r16, r16, 0x6e
   bl RenderR16R21
-  	lis r16, 0x20
-  ;addi r16, r16, 0x2b
+
+  lis r16, 0x20 ;Space between
 
   cmpwi r17, 0
   beql SelectedCharacter
@@ -373,8 +370,13 @@ UnselectedCharacter:
   li r15, 0
   blr
 
-SelectedOptionR16:
+SelectedOption:
   mflr r14
+
+  lis r18, 0x8057
+  ori r18, r18, 0xD8F4
+
+  lhz r16, 0(18)
   mr r17, r16
   
   li r16, 0
@@ -397,6 +399,46 @@ SelectedOptionR16:
   beql SelectedCharacter
   bnel UnselectedCharacter
   sth r16, 0(r21)
+
+  mtlr r14
+  li r14, 0
+  blr
+
+SelectedOptionJPN:
+  mflr r14
+
+  lis r18, 0x8057
+  ori r18, r18, 0xD8F4
+
+  lhz r16, 0(18)
+  mr r17, r16
+  
+  li r16, 0
+  addi r21, r20, 0x38
+  cmpwi r17, 0
+  beql SelectedCharacter
+  bnel UnselectedCharacter
+  sth r16, 0(r21)
+
+  li r16, 0
+  addi r21, r20, 0x6A
+  cmpwi r17, 1
+  beql SelectedCharacter
+  bnel UnselectedCharacter
+  sth r16, 0(r21)
+
+  li r16, 0
+  addi r21, r20, 0xA2
+  cmpwi r17, 2
+  beql SelectedCharacter
+  bnel UnselectedCharacter
+  sth r16, 0(r21)
+
+  ;Set r16 back to 0 and
+  ;run compare again to
+  ;prevent branch on leave.
+  li r16, 0
+  cmpwi r16, 0
 
   mtlr r14
   li r14, 0
