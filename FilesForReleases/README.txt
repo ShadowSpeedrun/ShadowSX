@@ -1,11 +1,17 @@
 ///////////////////////////////////////////////////////
 ////    SHADOW THE HEDGEHOG - SPEEDRUNNER'S CUT    ////
-////                BETA 5 RELEASE                 ////
+////             RELEASE CANDIDATE 1               ////
 ///////////////////////////////////////////////////////
 
-A few updates and fixes this time. Had a few issues with the Race Timer feature, but everything is good now.  The main notable change this time is the ability to enter Last Story and Expert Mode stages from select mode. Details on how are currently on the GitHub release notes.
+The end is very close! Only a few external things left for this to be ready for launch!
 
-I did quite a bit of refactoring of the custom code this time. While I have tested everything out, there's a chance something slipped by.  If you notice anything weird, please reach out.  Updates from here on out should be release candidate worthy and any 1.1 release should be to add improvements not possible at the moment.
+There is one bug with how one of the boss intro cutscene works with the UV remapping that will have to stay broken for now, due to tool limitations, but maybe by time 1.1 comes around, things will be better. No ETA on when a 1.1 would ever release at the momment or what exactly would be included in it.
+
+The largest change in this release compared to Beta 5 is the language support for the extra messages in the game that this ROM Hack adds. There's also an update to the way bosses handle the game timers to better match expected gameplay comapre to the original.
+
+In addtition to that, the game will now have the Game ID of GUPX8P.  This means you can keep a seperate save file compared to the original game. If you want to convert your existing save, this can be done with a hex editor by simply modifing the game id in the file data.
+
+There will be a Release Candidate 2 soon. Release Candidate in this case is mainly regarding the ROM itself, not the supporting tools.
 
 ///////////////////////////////////////////////////////
 ////              SETUP INSTRUCTIONS               ////
@@ -46,7 +52,7 @@ I did quite a bit of refactoring of the custom code this time. While I have test
 	
 	All optional settings as of now able to be enabled in the game itself without the need for extra files. The first blue message that appears on boot will explain how to enable one or more options.
 
-6. Within ShadowSXResources\CustomTextures, there is a folder named GUPE8P.  Copy (not move) that folder and paste it in: Dolphin-x64\User\Load\Textures.  This adds some custom textures that can be used to improve or customize the look of Shadow SX.
+6. Within ShadowSXResources\CustomTextures, there is a folder named GUPX8P.  Copy (not move) that folder and paste it in: Dolphin-x64\User\Load\Textures.  This adds some custom textures that can be used to improve or customize the look of Shadow SX.
 
 7. In the Dolphin-x64\User\Load\Textures\Buttons folder, delete all folders except for the one that lists your preferred button display, deleting all if you want to use the default GC button layout.
 
@@ -76,7 +82,7 @@ You can now run Shadow the Hedgehog with the Shadow-SX changes applied.
 
 Notes:
 
-If you want, you could run Shadow SX from Dolphin.exe, but it is recommended that you instead use the provided ShadowSXLauncher.exe which allows launching the game standalone without the dolphin interface and adjusting some settings in a more user friendly way.  While I initially planned to have quick access to some of the more common dolphin settings, those will still need to be done with the dolphin interface, a shortcut to which is provided in the settings menu of the launcher.  If you choose to do this, be sure to make sure all of the folders and files are named correctly under the "Shadow-SX" folder based on the above instructions. The main folder itself doesn’t need to be named "Shadow-SX".
+If you want, you could run Shadow SX from Dolphin.exe, but it is recommended that you instead use the provided ShadowSXLauncher.exe which allows launching the game standalone without the dolphin interface and adjusting some settings in a more user friendly way.  While I initially planned to have quick access to some of the more common dolphin settings, those will still need to be done with the dolphin interface, a shortcut to which is provided in the settings menu of the launcher.  If you choose to do this, be sure to make all of the folders and files are named correctly under the "Shadow-SX" folder based on the above instructions. The main folder itself doesn’t need to be named "Shadow-SX".
 
 The end goal is to have a set of settings that would allow everyone to play on the same "Console". The default settings should work for everyone, but if you need to adjust settings to get things working, let me know. From my tests so far, it appears that you can increase the visual quality of the game, but at the cost of reduced framerate or more frequent drops in framerate.  The real time appears to be unaffected, so whether you want fast framerates of improved visual quality is currently up to you.
 
