@@ -991,3 +991,21 @@ Modifies the game ID in code to allow loading from a seperate save file than the
 [dreamsyntax]
 Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 NTSC 1.06 --- 0x805F85E0 ---- 47555045 -> 47555058
+
+
+	-==-
+
+
+Save Data Description Update
+Update SHADOW THE HEDGEHOG to SHADOW SX
+and SHADOWTHEHEDGEHOG to SHADOWSX
+[BlazinZzetti]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.06 --- 0x804FB964 ---- 4F572054 -> 4f572053
+------------- 0x804FB968 ---- 48452048 -> 58002020
+------------- 0x804FB96C ---- 45444745 -> 20202020
+------------- 0x804FB970 ---- 484F4700 -> 20202000
+------------- 0x804fb99c ---- 4F575448 -> 4f575358
+------------- 0x804fb9a0 ---- 45484544 -> 00202020
+------------- 0x804fb9a4 ---- 4745484F -> 20202020
+------------- 0x804fb9a8 ---- 47000000 -> 20000000
