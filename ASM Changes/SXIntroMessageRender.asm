@@ -104,7 +104,16 @@ RenderSXOptions:
   ;Start by rendering a blank screen
   mr r20, r21
 
-  li r16, 0x5e
+  ;Sub Offset if JPN
+  ;80576972 = 0
+
+  lis r16, 0x8057
+  addi r18, r16, 0x6972
+  lhz r16, 0(r18)
+  cmpwi r16, 0
+  beql JPNOffset1ToR16
+  bnel ENGOffset1ToR16
+
   bl MoveCursorR16X
 
   lis r16, 0x8057
@@ -112,7 +121,13 @@ RenderSXOptions:
   lbz r17, 0(r18)
   bl RenderOptionR17On
 
-  li r16, 0x9E
+  lis r16, 0x8057
+  addi r18, r16, 0x6972
+  lhz r16, 0(r18)
+  cmpwi r16, 0
+  beql JPNOffset2ToR16
+  bnel ENGOffset2ToR16
+
   bl MoveCursorR16X
 
   lis r16, 0x8057
@@ -120,19 +135,26 @@ RenderSXOptions:
   lbz r17, 0(r18)
   bl RenderOptionR17On
 
-  li r16, 0xDE
+  lis r16, 0x8057
+  addi r18, r16, 0x6972
+  lhz r16, 0(r18)
+  cmpwi r16, 0
+  beql JPNOffset3ToR16
+  bnel ENGOffset3ToR16
+
   bl MoveCursorR16X
 
   lis r16, 0x8057
   addi r18, r16, 0x7B2E
   lbz r17, 0(r18)
   bl RenderOptionR17On
-  
-  lis r18, 0x8057
-  ori r18, r18, 0xD8F4
 
-  lhz r16, 0(18)
-  bl SelectedOptionR16
+  lis r16, 0x8057
+  addi r18, r16, 0x6972
+  lhz r16, 0(r18)
+  cmpwi r16, 0
+  beql SelectedOptionJPN
+  bnel SelectedOption
 
   bl GetNewButtonPressesToR16
 
@@ -277,15 +299,35 @@ DpadRightOptions:
   li r14, 0
   blr
 
+JPNOffset1ToR16:
+  li r16, 0x54
+  blr
+
+ENGOffset1ToR16:
+  li r16, 0x62
+  blr
+
+JPNOffset2ToR16:
+  li r16, 0x8C
+  blr
+
+ENGOffset2ToR16:
+  li r16, 0xA2
+  blr
+
+JPNOffset3ToR16:
+  li r16, 0xBE
+  blr
+
+ENGOffset3ToR16:
+  li r16, 0xE2
+  blr
+
 RenderOptionR17On:
   mflr r14
 
-  ;- +On +Off
-  	lis r16, 0x2d
-  addi r16, r16, 0x20
-  bl RenderR16R21
-  	lis r16, 0x20
-  ;addi r16, r16, 0x2b
+  ; +On +Off
+  lis r16, 0x20 ;Space before
 
   cmpwi r17, 1
   beql SelectedCharacter
@@ -295,8 +337,8 @@ RenderOptionR17On:
   	lis r16, 0x4f
   addi r16, r16, 0x6e
   bl RenderR16R21
-  	lis r16, 0x20
-  ;addi r16, r16, 0x2b
+
+  lis r16, 0x20 ;Space between
 
   cmpwi r17, 0
   beql SelectedCharacter
@@ -328,8 +370,13 @@ UnselectedCharacter:
   li r15, 0
   blr
 
-SelectedOptionR16:
+SelectedOption:
   mflr r14
+
+  lis r18, 0x8057
+  ori r18, r18, 0xD8F4
+
+  lhz r16, 0(18)
   mr r17, r16
   
   li r16, 0
@@ -352,6 +399,46 @@ SelectedOptionR16:
   beql SelectedCharacter
   bnel UnselectedCharacter
   sth r16, 0(r21)
+
+  mtlr r14
+  li r14, 0
+  blr
+
+SelectedOptionJPN:
+  mflr r14
+
+  lis r18, 0x8057
+  ori r18, r18, 0xD8F4
+
+  lhz r16, 0(18)
+  mr r17, r16
+  
+  li r16, 0
+  addi r21, r20, 0x38
+  cmpwi r17, 0
+  beql SelectedCharacter
+  bnel UnselectedCharacter
+  sth r16, 0(r21)
+
+  li r16, 0
+  addi r21, r20, 0x6A
+  cmpwi r17, 1
+  beql SelectedCharacter
+  bnel UnselectedCharacter
+  sth r16, 0(r21)
+
+  li r16, 0
+  addi r21, r20, 0xA2
+  cmpwi r17, 2
+  beql SelectedCharacter
+  bnel UnselectedCharacter
+  sth r16, 0(r21)
+
+  ;Set r16 back to 0 and
+  ;run compare again to
+  ;prevent branch on leave.
+  li r16, 0
+  cmpwi r16, 0
 
   mtlr r14
   li r14, 0
