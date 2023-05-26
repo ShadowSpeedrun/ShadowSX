@@ -1,17 +1,8 @@
 ///////////////////////////////////////////////////////
 ////    SHADOW THE HEDGEHOG - SPEEDRUNNER'S CUT    ////
-////             RELEASE CANDIDATE 1               ////
 ///////////////////////////////////////////////////////
 
-The end is very close! Only a few external things left for this to be ready for launch!
-
-There is one bug with how one of the boss intro cutscene works with the UV remapping that will have to stay broken for now, due to tool limitations, but maybe by time 1.1 comes around, things will be better. No ETA on when a 1.1 would ever release at the momment or what exactly would be included in it.
-
-The largest change in this release compared to Beta 5 is the language support for the extra messages in the game that this ROM Hack adds. There's also an update to the way bosses handle the game timers to better match expected gameplay comapre to the original.
-
-In addtition to that, the game will now have the Game ID of GUPX8P.  This means you can keep a seperate save file compared to the original game. If you want to convert your existing save, this can be done with a hex editor by simply modifing the game id in the file data.
-
-There will be a Release Candidate 2 soon. Release Candidate in this case is mainly regarding the ROM itself, not the supporting tools.
+Thank you for trying out Shadow SX!
 
 ///////////////////////////////////////////////////////
 ////     SETUP INSTRUCTIONS - PATCHING THE ROM     ////
@@ -38,7 +29,8 @@ There will be a Release Candidate 2 soon. Release Candidate in this case is main
 	
 	Assuming everything is correct, the ROM will be created. If you come across an error that is not fixable with the provided suggestions, reach out on the Shadow Speedrunning Discord Server for help.
 
-    The remaining steps are for those that wish to play on PC with the Dolphin Emulator. If you are only planning on playing on Console, you do not need to follow the remaining steps, simply run the patched ROM on your console of choice.
+    The remaining steps are for those that wish to play on PC with the Dolphin Emulator on Windows. If you are only planning on playing on Console, you do not need to follow the remaining steps, simply run the patched ROM on your console of choice.
+	For those that will be playing on Mac or Linux, you may be able to follow some of these steps, but may need to set things up more manually depending on how dolphin works on those systems.  The Shadow SX launcher only works on Windows at the momment.  A future updated will provide a version that will also work on Mac and Linux.
 	
 	All optional settings for gameplay purposes are able to be configured in the game itself without the need for extra files. The first blue message that appears on boot will explain how to enable one or more options.
 
@@ -88,6 +80,6 @@ Notes:
 
 If you want, you could run Shadow SX from Dolphin.exe, but it is recommended that you instead use the provided ShadowSXLauncher.exe which allows launching the game standalone without the dolphin interface and adjusting some settings in a more user friendly way.  While I initially planned to have quick access to some of the more common dolphin settings, those will still need to be done with the dolphin interface, a shortcut to which is provided in the settings menu of the launcher.  If you choose to do this, be sure to make all of the folders and files are named correctly under the "Shadow-SX" folder based on the above instructions. The main folder itself doesn’t need to be named "Shadow-SX".
 
-The default settings should work for everyone, adjusting the settings is allowed, though keep in mind this may have an effect on performance. From my tests so far, it appears that you can increase the visual quality of the game, but at the cost of reduced framerate or more frequent drops in framerate.  The real time appears to be unaffected, so whether you want fast framerates of improved visual quality is currently up to you. For players expecting to have submittable runs, the framerate (VPS in Dolphin) should be consistent and pretty much always 60.  Footage that does not meet this may not be accepted.
+The default settings should work for everyone, adjusting the settings is allowed, though keep in mind this may have an effect on performance. From my tests so far, it appears that you can increase the visual quality of the game, but at the cost of reduced framerate or more frequent drops in framerate.  The real time appears to be unaffected, so whether you want fast framerates of improved visual quality is currently up to you. For players expecting to have submittable runs, the framerate (VPS in Dolphin) should be consistent and pretty much always 60.  Footage that does not meet this may not be accepted for leaderboard placements.
 
 Regarding Aspect Ratio, Auto or Force 4:3 should be fine. If you have a decent 4:3 Monitor, set the option to Stretch to Window and run it full screen on that monitor for the best experience.
