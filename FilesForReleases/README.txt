@@ -10,7 +10,7 @@ Thank you for trying out Shadow SX!
 
 1. Create a new folder for holding the downloaded files. The name doesn’t have to be exact, but I would recommended "Shadow-SX" for the name.
 
-2. Drag the files inside of "Shadow-SX-Files" onto your "Shadow-SX" Folder. For those planing to play with Dolphin, this will copy over the dolphin settings and game changes. More details on that further down.
+2. Drag the files inside of "Shadow-SX-Files" onto your "Shadow-SX" Folder. For those planning to play with Dolphin, this will copy over the dolphin settings and game changes. More details on that further down.
 
     Your folder should now look like this:
 
@@ -30,7 +30,7 @@ Thank you for trying out Shadow SX!
 	Assuming everything is correct, the ROM will be created. If you come across an error that is not fixable with the provided suggestions, reach out on the Shadow Speedrunning Discord Server for help.
 
     The remaining steps are for those that wish to play on PC with the Dolphin Emulator on Windows. If you are only planning on playing on Console, you do not need to follow the remaining steps, simply run the patched ROM on your console of choice.
-	For those that will be playing on Mac or Linux, you may be able to follow some of these steps, but may need to set things up more manually depending on how dolphin works on those systems.  The Shadow SX launcher only works on Windows at the momment.  A future updated will provide a version that will also work on Mac and Linux.
+	For those that will be playing on Mac or Linux, you may be able to follow some of these steps, but may need to set things up more manually depending on how dolphin works on those systems.  The Shadow SX launcher only works on Windows at the moment.  A future updated will provide a version that will also work on Mac and Linux.
 	
 	All optional settings for gameplay purposes are able to be configured in the game itself without the need for extra files. The first blue message that appears on boot will explain how to enable one or more options.
 
@@ -42,7 +42,7 @@ Thank you for trying out Shadow SX!
 
 2. Extract the contents to the Dolphin-x64 folder that is in the Shadow-SX folder.  
  
-   With the files from eariler this will make this dolphin setup into a portable version which will keep settings and changes local to this version without messing with any existing dolphin settings on your computer.
+   With the files from earlier this will make this dolphin setup into a portable version which will keep settings and changes local to this version without messing with any existing dolphin settings on your computer.
 
 3. Within ShadowSXResources\CustomTextures, there is a folder named GUPX8P.  Copy (not move) that folder and paste it in: Dolphin-x64\User\Load\Textures.  This adds some custom textures that can be used to improve or customize the look of Shadow SX.
 
@@ -54,7 +54,7 @@ Thank you for trying out Shadow SX!
 
 6. Double click the main window, where instructed, to set the rom path to where your ShadowSX ROM will be.
 
-7. If you plan to run your ROM from a HDD, you may need to re-enable the Emulate Disk Speed setting in the game to improve performance.
+7. If you plan to run your ROM from an HDD, you may need to re-enable the Emulate Disk Speed setting in the game to improve performance.
 
 8. Click on the Controllers icon to set up your controller.
 
