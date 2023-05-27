@@ -18,11 +18,12 @@ Thank you for trying out Shadow SX!
     |_
       Dolphin-x64
       ShadowSXResources
+      Cyotek.Windows.Forms.ColorPicker.dll (Currently used for Shadow Color Adjuster)
       ShadowSXLauncher.exe
-	  
-3. If you don’t already have a patched ROM, you should now create one using the ShadowSXLauncher.  If you are on Mac or Linux, or would prefer not to use the Launcher to patch the ROM, you can use the manual patching tools provided on the download page.
 
-    To patch the ROM using the ShadowSXLauncher:
+3. If you don’t already have a patched ROM, you should now create one using the Shadow SX Launcher.  If you are on Mac or Linux, or would prefer not to use the Launcher to patch the ROM, you can use the manual patching tools provided on the download page.
+
+    To patch the ROM using the Shadow SX Launcher:
         1. Open the launcher, then press the "Create Shadow SX ROM" button.
         2. Select your original clean ripped Shadow the Hedgehog ISO ROM. - CRC32: F582CF1E
         3. Select where you want to save your patched ROM copy. (The original ROM will not be altered)
@@ -30,7 +31,8 @@ Thank you for trying out Shadow SX!
 	Assuming everything is correct, the ROM will be created. If you come across an error that is not fixable with the provided suggestions, reach out on the Shadow Speedrunning Discord Server for help.
 
     The remaining steps are for those that wish to play on PC with the Dolphin Emulator on Windows. If you are only planning on playing on Console, you do not need to follow the remaining steps, simply run the patched ROM on your console of choice.
-	For those that will be playing on Mac or Linux, you may be able to follow some of these steps, but may need to set things up more manually depending on how dolphin works on those systems.  The Shadow SX launcher only works on Windows at the moment.  A future updated will provide a version that will also work on Mac and Linux.
+	
+	For those that will be playing on Mac or Linux, you may be able to follow some of these steps, but may need to set things up more manually depending on how dolphin works on those systems.  The Shadow SX launcher only works on Windows at the moment.  A future update will provide a version that will also work on Mac and Linux.
 	
 	All optional settings for gameplay purposes are able to be configured in the game itself without the need for extra files. The first blue message that appears on boot will explain how to enable one or more options.
 
@@ -44,19 +46,15 @@ Thank you for trying out Shadow SX!
  
    With the files from earlier this will make this dolphin setup into a portable version which will keep settings and changes local to this version without messing with any existing dolphin settings on your computer.
 
-3. Within ShadowSXResources\CustomTextures, there is a folder named GUPX8P.  Copy (not move) that folder and paste it in: Dolphin-x64\User\Load\Textures.  This adds some custom textures that can be used to improve or customize the look of Shadow SX.
+3. If you are using the Shadow SX Launcher, you can use the Settings to set up the custom textures created for this release. If not, you can manually copy (not move) over the custom textures you want from ShadowSXResources\CustomTextures to Dolphin-x64\User\Load\Textures\GUPX8P
 
-4. In the Dolphin-x64\User\Load\Textures\Buttons folder, delete all folders except for the one that lists your preferred button display, deleting all if you want to use the default GC button layout.
+4. Run "Dolphin.exe" in the Dolphin-x64 folder.
 
-   Note: Extra custom textures will be handled better with the RC2 Release.
+5. Double click the main window, where instructed, to set the rom path to where your ShadowSX ROM will be.
 
-5. Run "Dolphin.exe" in the Dolphin-x64 folder.
+6. If you plan to run your ROM from an HDD, you may need to re-enable the Emulate Disk Speed setting in the game to improve performance.
 
-6. Double click the main window, where instructed, to set the rom path to where your ShadowSX ROM will be.
-
-7. If you plan to run your ROM from an HDD, you may need to re-enable the Emulate Disk Speed setting in the game to improve performance.
-
-8. Click on the Controllers icon to set up your controller.
+7. Click on the Controllers icon to set up your controller.
 
 GC controllers should be mapped 1 to 1 or using an adapter.
 
