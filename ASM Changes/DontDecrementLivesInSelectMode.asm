@@ -9,7 +9,7 @@ Start:
 
   ;If Phase is "Select Mode", skip Original Code
   cmplwi r16, 0
-  beq- End:
+  beq- End
 
   ;Original Code
   add r0, r0, r4

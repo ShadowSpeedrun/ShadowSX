@@ -1,5 +1,5 @@
 #To be inserted at 80203894
-;ResetCheckpointAndStoryFlagsBetweenStages.asm
+;ResetCheckpointFlagBetweenStages.asm
 
 ;Assume Stage ID of -1 means we are not in a 
 ;level and therefore can reset these flags

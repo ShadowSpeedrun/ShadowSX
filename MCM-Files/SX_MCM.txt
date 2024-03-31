@@ -53,26 +53,6 @@ A2520000 28120000
 	-==-
 
 
-SX - Set Story Main and Last
-Uses SetStoryModeFlag-MainAndLast.asm
-[BlazinZzetti]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.06 --- 0x802D1BE8 ---- 809F000C -> Branch
-
-809F000C 3A000001
-3E408057 6252D8F6
-B2120000 3E408057
-6252D902 280402BC
-41820010 280402C6
-41820008 3A000000
-B2120000 3A000000
-3A400000 00000000
-
-
-	-==-
-
-
-
 SX - Reload Time On Death Checks
 Uses RestoreTimeOnDeathChecks.asm
 
@@ -118,7 +98,8 @@ Uses MissionCompleteEvents.asm
 
 Set "In Checkpoint" False
 Set OG Timer to the value of New IGT on mission complete, if not Expert Select Mode
-[BlazinZzetti]
+Update Race Timers Depending on Mode
+[BlazinZzetti, dreamsyntax]
 Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 NTSC 1.06 --- 0x80205BC8 ---- 9421FFF0 -> Branch
 
@@ -126,36 +107,34 @@ NTSC 1.06 --- 0x80205BC8 ---- 9421FFF0 -> Branch
 6212D8A6 3A200000
 B2320000 C07F7990
 D07F77BC FC801890
-6212D8FE A2520000
-2C120001 4182004C
-C07F79A0 6212D7C5
-8A320000 2C110001
-41820018 6212D902
-A2320000 2C110001
-41820014 4800001C
-D07F1B94 FC801890
-48000018 D07F1BAC
-FC801890 4800000C
-D07F1B7C FC801890
-3A000000 3A200000
-3A400000 00000000
+3E40805E 6252F9A8
+8A520004 2C120000
+4182004C C07F79A0
+6212D7C4 A2320000
+2C110001 41820018
+3A526F60 82320000
+2C110002 41820014
+4800001C D07F1B94
+FC801890 48000018
+D07F1BAC FC801890
+4800000C D07F1B7C
+FC801890 3A000000
+3A200000 3A400000
+60000000 00000000
 
 
 	-==-
 
 
-SX - Reset Checkpoint and Story Flags on Stage -1
-Uses ResetCheckpointAndStoryFlagsBetweenStages.asm
-[BlazinZzetti]
+SX - Reset Checkpoint Flag on Stage -1
+Uses ResetCheckpointFlagBetweenStages.asm
+[BlazinZzetti, dreamsyntax]
 Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 NTSC 1.06 --- 0x80203894 ---- 90030000 -> Branch
 
 90030000 39E00000
-3E408057 6252D8A6
-B1F20000 3A520050
-B1F20000 3A52000C
-B1F20000 3A400000
-60000000 00000000
+3E008057 6210D8A6
+B1F00000 00000000
 
 
 	-==-
@@ -165,18 +144,19 @@ SX - Use New IGT variable for UI Display
 Uses NewIgtForUiDisplay.asm
 
 Use New IGT by default. Use Race IGT for Story if Race Mode is enabled.
-[BlazinZzetti]
+[BlazinZzetti, dreamsyntax]
 Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 NTSC 1.06 --- 0x80201854 ---- C0210054 -> Branch
 
 C03D7224 3E208057
 3A517B2D 8A120000
-28100001 40820018
-6232D8F6 A2120000
-28100001 40820008
-C03D7234 3A000000
-3A200000 3A400000
-60000000 00000000
+28100001 40820024
+3E00805E 6210F9A8
+8A100004 28100001
+4182000C 28100006
+40820008 C03D7234
+3A000000 3A200000
+3A400000 00000000
 
 
 	-==-
@@ -187,7 +167,7 @@ Uses IncrementNewIgtInNormalLevel.asm
 
 Do not apply scaler
 Race time is Saved time + New IGT
-[BlazinZzetti]
+[BlazinZzetti, dreamsyntax]
 Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 NTSC 1.06 --- 0x80337034 ---- 40820014 -> Branch
 
@@ -198,10 +178,10 @@ C0040020 EC000824
 FC003040 41810008
 FC003090 C02301E0
 EC21002A D02301E0
-6212D7C5 8A320000
+6212D7C4 A2320000
 2C110001 4182001C
-6212D902 A2320000
-2C110001 41820014
+3A526F60 82320000
+2C110002 41820014
 C003A3CC 48000014
 C003A3E4 4800000C
 C003A3FC 48000004
@@ -211,7 +191,6 @@ EC21002A D02301F0
 
 
 	-==-
-
 
 
 SX - Assume Partner Seen
@@ -243,49 +222,17 @@ B2120000 3A000000
 	-==-
 
 
-SX - Set In Cutscene False on Stage Load Expert Set Story post launch
-Uses StageLoading-CutsceneFalse-ExpertFlags.asm
+SX - Set In Cutscene False on Stage Load
+Uses StageLoading-CutsceneFalse.asm
 
 Assume cutscene is false.  Cutscene flag will set to true after load if needed.
-Set Story Flag to true if loading new expert level after starting, unless we entered expert from the Select Mode
-[BlazinZzetti]
+[BlazinZzetti,]
 Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 NTSC 1.06 --- 0x802038C8 ---- 90830000 -> Branch
 
 90830000 3E408057
 6252D8F8 3A000000
-B2120000 3E008057
-6212D8FE A2520000
-2C120001 41820034
-6212D7C5 8A320000
-2C110001 40820024
-6212D8F6 B2320000
-6212D748 82520000
-28120064 4082000C
-62127B0C D0120000
-3A000000 3A200000
-3A400000 00000000
-
-
-	-==-
-
-
-SX - Reset Race IGT on Story Mode Start
-Uses ResetRaceIGTOnStoryStart.asm
-
-Currently checking for Story mode loading Westopolis and The Last Way for Last Story
-[BlazinZzetti]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.06 --- 0x802D1BF4 ---- 7C641B78 -> Branch
-
-7C641B78 3E008057
-6212D748 82520000
-28120064 41820018
-281202BC 40820018
-62127B24 D0520000
-4800000C 62127AF4
-D0720000 3A000000
-3A400000 00000000
+B2120000 00000000
 
 
 	-==-
@@ -360,21 +307,6 @@ NTSC 1.06 --- 0x802D2C8C ---- 881F0018 -> Branch
 62527B2C 8A120000
 28100001 40820008
 38000000 3A000000
-3A400000 00000000
-
-
-	-==-
-
-
-Only Decrement Lives in Story Mode
-Uses OnlyDecrementLiveInStoryMode.asm
-[BlazinZzetti]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.06 --- 0x8016EFA0 ---- 7C002214 -> Branch
-
-3E408057 6252D8F6
-A2520000 28120001
-40820008 7C002214
 3A400000 00000000
 
 
@@ -467,7 +399,7 @@ A2720000 2C13002C
 
 
 Modern UI Control
-Uses ModernUIControl.asm
+Uses ModernUIControl.asm
 
 When enabled with the optional flag, it switches the X and Y button commands when in menus.  This is expected to be used with Xbox and PS controllers to better simulate menus would work in those ports of the game.
 [BlazinZzetti]
@@ -540,7 +472,7 @@ IGT Message Render
 Uses IGTMessageRender.asm
 
 Dynamically modify data related to display the IGT message based on the saved Race IGT
-[BlazinZzetti]
+[BlazinZzetti, dreamsyntax]
 Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 NTSC 1.06 --- 0x8004A480 ---- 38000000 -> Branch
 
@@ -550,10 +482,10 @@ A2520000 2C120001
 3A525700 82520000
 2C12002B 408201C4
 7EC802A6 82AA0000
-3AB50054 6212D7C5
-8A520000 2C120001
-41820020 6212D902
+3AB50054 6212D7C4
 A2520000 2C120001
+41820020 3A526F60
+82520000 2C120002
 4182001C 62127AF4
 C0320000 48000018
 62127B0C C0320000
@@ -610,20 +542,6 @@ B2350000 3AB50002
 3A400000 3A600000
 3A800000 3AA00000
 3AC00000 38000000
-60000000 00000000
-
-
-	-==-
-
-
-Set Last Story Flag on SR Unlock
-Uses SetInLastStoryOnSRUnlock.asm
-[BlazinZzetti]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.06 --- 0x801E5828 ---- 38000001 -> Branch
-
-38000001 2C04000A
-40820008 B003589A
 60000000 00000000
 
 
@@ -805,9 +723,7 @@ NTSC 1.06 --- 0x80206334 ---- 987F0059 -> Branch
 
 3E408058 62523ACC
 82120000 2C100006
-408200B4 3A000001
-3E408057 6252D8FE
-B2120000 3E408056
+408200A4 3E408056
 6252ED4C 82520000
 72520040 2C120040
 40820080 3E408058
@@ -835,35 +751,18 @@ B2720000 987F0059
 	-==-
 
 
-Reset Select Mode Flag If Not Entering From Select Mode
-Uses ResetSelectModeFlageUnlessEnterFromSelect.asm
-[BlazinZzetti]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.06 --- 0x802B7528 ---- 90830000 -> Branch
-
-82030000 2C100006
-41820018 3A000000
-3E408057 6252D8FF
-B2120000 3A400000
-90830000 3A000000
-60000000 00000000
-
-
-	-==-
-
-
 Dont Update Expert Progress In Select Mode
 Uses DontUpdateExpertProgressInSelectMode.asm
 
 Prevent writing the current expert mode progress into save memory if we initiated expert from select mode.
-[BlazinZzetti]
+[BlazinZzetti, dreamsyntax]
 Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 NTSC 1.06 --- 0x80204E60 ---- 901E006C -> Branch
 
-3E408057 6252D8FE
-A2520000 2C120001
+3E00805E 6210F9A8
+8A100004 2C100000
 41820008 901E006C
-3A400000 00000000
+60000000 00000000
 
 
 	-==-
@@ -894,15 +793,15 @@ Expert Select Mode Lives
 Uses ExpertSelectModeLives.asm
 
 Set Lives to 99 if entering Expert Mode from Select Mode
-[BlazinZzetti]
+[BlazinZzetti, dreamsyntax]
 Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 NTSC 1.06 --- 0x8016F014 ---- 800300A0 -> Branch
 
-3E408057 6252D8FE
-A2520000 2C120001
+3E00805E 6210F9A8
+8A100004 28100000
 4182000C 800300A0
 48000008 38000063
-3A400000 00000000
+60000000 00000000
 
 
 	-==-
@@ -912,21 +811,21 @@ Prevent Saving Expert Lives in Select Mode
 Uses ExpertSelectModePreventLivesSave.asm and ExpertSelectModePreventLivesSave2.asm
 
 Prevent saving current lives to Expert Lives in memory card on stage exit or complete if entered into level from Select Mode.
-[BlazinZzetti]
+[BlazinZzetti, dreamsyntax]
 Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 NTSC 1.06 --- 0x801E33BC ---- 901F00A0 -> Branch
 
-3E408057 6252D8FE
-A2520000 2C120001
+3E00805E 6210F9A8
+8A100004 2C100000
 41820008 901F00A0
-3A400000 00000000
+60000000 00000000
 
 ------------- 0x80204E74 ---- 901E0070 -> Branch
 
-3E408057 6252D8FE
-A2520000 2C120001
+3E00805E 6210F9A8
+8A100004 2C100000
 41820008 901E0070
-3A400000 00000000
+60000000 00000000
 
 
 	-==-
@@ -994,7 +893,6 @@ A2520000 28120000
 60000000 00000000
 
 
-
 	-==-
 
 
@@ -1004,3 +902,47 @@ Prevents setting a new Mission Timer Offset on Checkpoint Activate and prevents 
 Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 NTSC 1.06 ---- 0x330878 ----- D003001C -> 60000000
 -------------- 0x330864 ----- D0030014 -> 60000000
+
+
+	-==-
+
+
+SX - Dont Decrement Lives In Select Mode
+Uses DontDecrementLivesInSelectMode.asm
+[BlazinZzetti, dreamsyntax]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.06 --- 0x8016EFA0 ---- 7C002214 -> Branch
+
+3E00805E 6210F9A8
+8A100004 28100000
+41820008 7C002214
+60000000 00000000
+
+
+	-==-
+
+
+SX - Reset Race Timers
+Uses ResetRaceIGTOnStoryNew.asm, ResetRaceIGTOnLastStoryStart.asm, ResetRaceIGTOnExpertModeNew.asm
+
+Resets the Race Timers when triggering
+Story -> New,  Last Story, Expert Mode -> New
+[dreamsyntax]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.06 --- 0x802D2130 ---- 38000064 -> Branch
+
+38000064 3E008057
+62107AF4 EC000028
+D0100000 00000000
+
+------------- 0x802D2214 ---- 386002BC -> Branch
+
+386002BC 3E008057
+62107B24 EC000028
+D0100000 00000000
+
+------------- 0x8035503C ---- 38000000 -> Branch
+
+38000000 3E008057
+62107B0C EC000028
+D0100000 00000000
