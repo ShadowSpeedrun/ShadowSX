@@ -1,16 +1,16 @@
-#To be inserted at 8016f014
+#To be inserted at 8016F014
 ;ExpertSelectModeLives.asm
 
 Start:
-  ;Load Flag for Select Mode
-  lis r18, 0x8057
-  ori r18, r18, 0xD8FE
-  lhz r18, 0(r18)
-  
-  ;If Flag is on, set lives to 99.
-  cmpwi r18, 1
+  ;Load "StageSequenceManager Phase" into r16.
+  lis r16, 0x805E
+  ori r16, r16, 0xF9A8
+  lbz r16, 0x4(r16)
+
+  ;If Phase is "Select Mode" set lives to 99.
+  cmplwi r16, 0
   beq SelectModeLives
-  
+
   ;Original Code
   lwz r0, 0x00A0 (r3)
   b Exit
@@ -19,4 +19,3 @@ SelectModeLives:
   li r0, 99
 
 Exit:
-  li r18, 0

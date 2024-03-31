@@ -1,18 +1,17 @@
-#To be inserted at 80204e60
+#To be inserted at 80204E60
 ;DontUpdateExpertProgressInSelectMode.asm
 
 Start:
-  ;Load Flag for Select Mode
-  lis r18, 0x8057
-  ori r18, r18, 0xD8FE
-  lhz r18, 0(r18)
-  
-  ;If flag is on, do not save update Expert Progress.
-  cmpwi r18, 1
+  ;Load "StageSequenceManager Phase" into r16.
+  lis r16, 0x805E
+  ori r16, r16, 0xF9A8
+  lbz r16, 0x4(r16)
+
+  ;If Select Mode, do not save update Expert Progress.
+  cmpwi r16, 0
   beq End
   
   ;Original Code
   stw r0, 0x006C (r30)
 
 End:
-  li r18, 0

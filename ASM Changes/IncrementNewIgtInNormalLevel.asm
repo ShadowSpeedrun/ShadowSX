@@ -39,15 +39,16 @@ ApplyTime:
   ;Check if in Expert Mode.
   ;to determine if Story or Expert
   ;Race Time should be used.
-  ori r18, r16, 0xD7C5
-  lbz r17, 0(r18)
+  ori r18, r16, 0xD7C4
+  lhz r17, 0(r18)
   cmpwi r17, 0x1
   beq LoadExpertRaceTime
 
   ;Check if Last Story
-  ori r18, r16, 0xD902
-  lhz r17, 0(r18)
-  cmpwi r17, 0x1
+  addi r18, r18, 0x6F60
+  lwz r17, 0(r18)
+  cmpwi r17, 0x2
+
   beq LoadLastStoryRaceTime
   
   ;Default to Story Race Time if neither are enabled.

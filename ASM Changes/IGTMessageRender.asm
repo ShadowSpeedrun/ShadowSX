@@ -26,16 +26,16 @@ Start:
   addi r21, r21, 0x54
 
   ;Determine the Timer to Display
-  ;First check for Expert flag(8057D7C5)
-  ori r18, r16, 0xD7C5
-  lbz r18, 0(r18)
+  ;First check for Expert Flag(8057D7C4)
+  ori r18, r16, 0xD7C4
+  lhz r18, 0(r18)
   cmpwi r18, 1
   beq SetExpertTime
  
-  ;check for Last Story Flag(8057D903)
-  ori r18, r16, 0xD902
-  lhz r18, 0(r18)
-  cmpwi r18, 1
+  ;check for Last Story Flag(80584724)
+  addi r18, r18, 0x6F60
+  lwz r18, 0(r18)
+  cmpwi r18, 2
   beq SetLastTime
 
   ;Both checks failed, default to Story Mode Time
