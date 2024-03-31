@@ -72,32 +72,6 @@ B2120000 3A000000
 	-==-
 
 
-SX - Dont Restart Timer if Story
-Use PreventTimerRestartInStory-Pt1.asm
- and PreventTimerRestartInStory-Pt2.asm
-[BlazinZzetti,]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.06 --- 0x80206198 ---- 48130E4D -> Branch
-
-3E408057 6252D8F6
-A2520000 28120000
-40820014 3E408033
-62526FAC 7E4803A6
-4E800021 3A400000
-60000000 00000000
-
-------------- 0x80206238 ---- 48130DAD -> Branch
-
-3E408057 6252D8F6
-A2520000 28120000
-40820014 3E408033
-62526FE4 7E4803A6
-4E800021 3A400000
-60000000 00000000
-
-
-	-==-
-
 
 SX - Reload Time On Death Checks
 Uses RestoreTimeOnDeathChecks.asm
@@ -238,20 +212,6 @@ EC21002A D02301F0
 
 	-==-
 
-
-SX - Set New IGT to 0 on Restart
-Uses ResetNewIgtOnRestart.asm
-
-Set New IGT to 0 in sync with when we would for the original timer.
-[BlazinZzetti]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.06 --- 0x80336FF0 ---- D003000C -> Branch
-
-D003000C D00301E0
-60000000 00000000
-
-
-	-==-
 
 
 SX - Assume Partner Seen
@@ -1009,3 +969,38 @@ NTSC 1.06 --- 0x804FB964 ---- 4F572054 -> 4f572053
 ------------- 0x804fb9a0 ---- 45484544 -> 00202020
 ------------- 0x804fb9a4 ---- 4745484F -> 20202020
 ------------- 0x804fb9a8 ---- 47000000 -> 20000000
+
+
+	-==-
+
+
+SX - New IGT Timer Reset
+Uses LevelLoadTimerReset.asm, LevelRestartTimerReset.asm
+
+These codes should allow the original timer always to restart, but only allow the New IGT Timer to restart if not in story mode.
+[BlazinZzetti]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.06 ---- 0x171D18 ----- 38600001 -> Branch
+
+D00301E0 38600001
+60000000 00000000
+
+-------------- 0x1FFAFC ----- 7FE00735 -> Branch
+
+3E408057 6252D8F6
+A2520000 28120000
+40820008 D00301E0
+7FE00735 3A400000
+60000000 00000000
+
+
+
+	-==-
+
+
+SX - Adjustments to Mission Timer Resets
+Prevents setting a new Mission Timer Offset on Checkpoint Activate and prevents a new offset from including the current level time upon death.  These changes should keep the timer going between deaths, only reseting upon level reset.
+[BlazinZzetti]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.06 ---- 0x330878 ----- D003001C -> 60000000
+-------------- 0x330864 ----- D0030014 -> 60000000

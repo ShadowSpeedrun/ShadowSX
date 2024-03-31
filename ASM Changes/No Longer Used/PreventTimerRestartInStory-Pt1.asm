@@ -3,6 +3,7 @@
 
 ;Replacing Original Code 
 ;to add new functionality.
+
 Start:
   ;Load value of "Story Mode Flag"
   ;into r18.
