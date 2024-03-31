@@ -19,7 +19,8 @@ Start:
   sth r19, 0(r18)
   
   ;Check if Rom Settings are valid
-  ;If not, assign default settings.
+  ;If not, assign default settings.
+
 
   ;Set r18 to start of flag data.
   lis r18, 0x8057
@@ -43,7 +44,8 @@ CheckRT:
   lbz r19, 1(r18)
 
   ;If not 0, or 1
-  ;assign 0 by default.
+  ;assign 0 by default.
+
   cmpwi r19, 0
   beq CheckMUI
   cmpwi r19, 1
@@ -56,7 +58,8 @@ CheckMUI:
   lbz r19, 2(r18)
 
   ;If not 0, or 1
-  ;assign 0 by default.
+  ;assign 0 by default.
+
   cmpwi r19, 0
   beq End
   cmpwi r19, 1

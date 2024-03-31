@@ -11,8 +11,7 @@ Start:
   lhz r18, 0(r18)
 
   ;If "Story Mode Flag" is false,
-  ;Go run that code....
-  ;TODO: wtf does that code do.
+  ;Run Timer Reset Code
   cmplwi r18, 0
   bne- End
   lis r18, 0x8033
