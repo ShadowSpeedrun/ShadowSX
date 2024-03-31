@@ -13,6 +13,7 @@ ResetSelectFlag:
   li r16, 0x0
   lis r18, 0x8057
   ori r18, r18, 0xD8FF
+  ; Note: Should actually be D8FE, not changing since this code is marked as removed
   sth r16, 0(r18)
   li r18, 0x0
 

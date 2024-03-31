@@ -9,12 +9,6 @@ Start:
   cmpwi r16, 6
   bne Exit
   
-  ;Set from Select Mode Flag to 1
-  li r16, 1
-  lis r18, 0x8057
-  ori r18, r18, 0xD8FE
-  sth r16, 0(r18)
-
   ;Check for Player Input Dpad Up
   ;No Dpad Up = No need to run code.
   lis r18, 0x8056
@@ -81,7 +75,7 @@ DisableEggIL:
   sth r19, 0(r18)
 
 Exit: 
-  ;Original Code?
+  ;Original Code? TODO: Why does this say Original Code?
   stb r3, 89(r31)
   li r3, 0x0
   li r18, 0x0

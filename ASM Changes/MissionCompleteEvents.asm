@@ -20,20 +20,21 @@ Start:
   stfs f3, 30652(r31)
   fmr f4, f3
 
-  ;Load Flag for Select Mode
-  ori r18, r16, 0xD8FE
-  lhz r18, 0(r18)
-  
-  ;If flag is on, skip to the end.
-  cmpwi r18, 1
+  ;Load "StageSequenceManager Phase" into r18.
+  lis r18, 0x805E
+  ori r18, r18, 0xF9A8
+  lbz r18, 0x4(r18)
+
+  ;If Select Mode, skip to the end.
+  cmpwi r18, 0
   beq End
 
   ;Load current Race IGT into f3.
   lfs f3, 31136(r31)
 
   ;Check if we are in Expert Mode.
-  ori r18, r16, 0xD7C5
-  lbz r17, 0(r18)
+  ori r18, r16, 0xD7C4
+  lhz r17, 0(r18)
   
   ;Save Race IGT to the appropriate
   ;save location based on Expert flag.
@@ -41,9 +42,10 @@ Start:
   beq SaveExpertRaceTime
 
   ;Check if we are in Last Story.
-  ori r18, r16, 0xD902
-  lhz r17, 0(r18)
-  cmpwi r17, 0x1
+  addi r18, r18, 0x6F60
+  lwz r17, 0(r18)
+  cmpwi r17, 0x2
+
   beq SaveLastStoryRaceTime
   b SaveRaceTimeStory
   

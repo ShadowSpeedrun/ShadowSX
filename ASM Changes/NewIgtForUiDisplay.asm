@@ -22,14 +22,18 @@ Start:
   cmplwi r16, 1
   bne- End
 
-  ;Load "Story Mode Flag" into r16.
-  ori r18, r17, 0xD8F6
-  lhz r16, 0(r18)
+  ;Load "StageSequenceManager Phase" into r16.
+  lis r16, 0x805E
+  ori r16, r16, 0xF9A8
+  lbz r16, 0x4(r16)
   
-  ;If not "Story Mode", leave.
+  ;If not "Story Mode / Last Story = 1 / Expert Mode = 6", leave.
   cmplwi r16, 1
+  beq- RaceIGTMode
+  cmplwi r16, 6
   bne- End
   
+RaceIGTMode:
   ;Load "Race IGT" into f1.
   lfs f1, 29236(r29)
 
