@@ -877,17 +877,17 @@ SX - New IGT Timer Reset
 Uses LevelLoadTimerReset.asm, LevelRestartTimerReset.asm
 
 These codes should allow the original timer always to restart, but only allow the New IGT Timer to restart if not in story mode.
-[BlazinZzetti]
+[BlazinZzetti, dreamsyntax]
 Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.06 ---- 0x171D18 ----- 38600001 -> Branch
+NTSC 1.06 --- 0x80178458 ---- 38600001 -> Branch
 
 D00301E0 38600001
 60000000 00000000
 
--------------- 0x1FFAFC ----- 7FE00735 -> Branch
+------------- 0x8020623C ---- 7FE00735 -> Branch
 
-3E408057 6252D8F6
-A2520000 28120000
+3E40805E 6252F9A8
+8A520004 28120000
 40820008 D00301E0
 7FE00735 3A400000
 60000000 00000000

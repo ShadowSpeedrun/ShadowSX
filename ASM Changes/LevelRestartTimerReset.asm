@@ -4,16 +4,15 @@
 ;Run this code after the branch returns.
 
 ;We only want to restart the New IGT if we are
-;not in Story Mode.
+;in Select Mode.
 
 Start:
-  ;Load value of "Story Mode Flag"
-  ;into r18.
-  lis r18, 0x8057
-  ori r18, r18, 0xD8F6
-  lhz r18, 0(r18)
+  ;Load "StageSequenceManager Phase" into r18.
+  lis r18, 0x805E
+  ori r18, r18, 0xF9A8
+  lbz r18, 0x4(r18)
 
-  ;If "Story Mode Flag" is false,
+  ;If "Select Mode",
   ;Run Timer Reset Code
   cmplwi r18, 0
   bne- End
