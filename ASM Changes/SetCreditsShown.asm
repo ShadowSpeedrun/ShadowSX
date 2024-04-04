@@ -11,6 +11,9 @@ Start:
   
   li r16, 0x1
   sth r16, 0(r18)
+
+  ;Also Set Message Offset to 1.
+  sth r16, -0x6(r18)
   
   li r16, 0x0
   li r18, 0x0
