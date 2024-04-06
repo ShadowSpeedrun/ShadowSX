@@ -23,7 +23,8 @@ Start:
   ;Load "StageSequenceManager Phase" into r18.
   lis r18, 0x805E
   ori r18, r18, 0xF9A8
-  lbz r18, 0x4(r18)
+  lwz r18, 0x0(r18)
+  lwz r18, 0x4(r18)
 
   ;If Select Mode, skip to the end.
   cmpwi r18, 0

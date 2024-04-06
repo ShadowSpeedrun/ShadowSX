@@ -1,4 +1,4 @@
-#To be inserted at 8004a480
+#To be inserted at 8004A480
 ;IGTMessageRender.asm
 
 Start:
@@ -28,8 +28,8 @@ Start:
   ;Determine the Timer to Display
   ;First check for Expert Flag(8057D7C4)
   ori r18, r16, 0xD7C4
-  lhz r18, 0(r18)
-  cmpwi r18, 1
+  lhz r15, 0(r18)
+  cmpwi r15, 1
   beq SetExpertTime
  
   ;check for Last Story Flag(80584724)
