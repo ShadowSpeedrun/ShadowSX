@@ -1,4 +1,4 @@
-#To be inserted at 80359c94
+#To be inserted at 80359C94
 ;SXIntroMessageSetup.asm
 
 ;Initialize Intro Message
@@ -61,11 +61,25 @@ CheckMUI:
   ;assign 0 by default.
 
   cmpwi r19, 0
+  beq CheckSPWDisable
+  cmpwi r19, 1
+  beq CheckSPWDisable
+  li r19, 0
+  stb r19, 2(r18)
+
+CheckSPWDisable:
+  ;Load location for Disable SPW Unlock flag
+  lbz r19, 3(r18)
+
+  ;If not 0, or 1
+  ;assign 0 by default.
+
+  cmpwi r19, 0
   beq End
   cmpwi r19, 1
   beq End
   li r19, 0
-  stb r19, 2(r18)
+  stb r19, 3(r18)
 
 End:
   li r18, 0x0
