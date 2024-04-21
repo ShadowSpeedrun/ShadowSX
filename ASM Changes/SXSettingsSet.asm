@@ -32,6 +32,8 @@ SetToAutoSave:
   li r19, 40
   sth r19, 0(r18)
   li r3, 0
+  ;Set Offset to Zero
+  sth r3, -2(r18)
   b End
 
 SetToSavePrompt:

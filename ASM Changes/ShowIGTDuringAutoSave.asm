@@ -33,6 +33,8 @@ Start:
   ori r18, r18, 0xD900
   li r19, 0
   sth r19, 0(r18)
+  ;Turn Offset Off.
+  sth r19, -6(r18)
 
 EndMessage:
   li r3, 1
