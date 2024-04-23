@@ -24,7 +24,7 @@ Start:
   ;r18 is already set to be 0x8057D8FC
   lhz r17, -2(r18)
   
-  cmpwi r17, 1
+  cmpwi r17, 2
   beq SetToSavePrompt
 
 SetToAutoSave:
@@ -35,7 +35,7 @@ SetToAutoSave:
   b End
 
 SetToSavePrompt:
-  li r3, 2
+  li r3, 1
   sth r3, -2(r18)
   li r3, 0
 

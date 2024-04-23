@@ -27,8 +27,8 @@ RenderSXIntro:
   cmpwi r16, 0
   beq RenderSXStart
   cmpwi r16, 1
-  beq RenderSXOptions
-  bne RenderSXSaveMessage
+  beq RenderSXSaveMessage
+  bne RenderSXOptions
 
 RenderSXStart:
   ;r10 contains address to start of our message.
@@ -42,7 +42,7 @@ RenderSXStart:
   andi. r18, r16, 32
   ;r18 is z button press isolated.  
 
-  li r19, 1
+  li r19, 2
   cmpwi r18, 32
   beql ScreenToOptionsR19
   
@@ -99,7 +99,8 @@ StoreCurrentInput:
 
 RenderSXOptions:
   ;r10 contains address to start of our message.
-  lwz r21, 0x14(r10)
+  ;rx = (0x14 * (Page Number + 1))
+  lwz r21, 0x28(r10)
 
   ;Start by rendering a blank screen
   mr r20, r21
@@ -108,12 +109,8 @@ RenderSXOptions:
   ;80576972 = 0
 
   lis r16, 0x8057
-  addi r18, r16, 0x6972
-  lhz r16, 0(r18)
-  cmpwi r16, 0
-  beql JPNOffset1ToR16
-  bnel ENGOffset1ToR16
-
+  ori r18, r16, 0xFB80
+  lbz r16, 4(r18)
   bl MoveCursorR16X
 
   lis r16, 0x8057
@@ -122,12 +119,8 @@ RenderSXOptions:
   bl RenderOptionR17On
 
   lis r16, 0x8057
-  addi r18, r16, 0x6972
-  lhz r16, 0(r18)
-  cmpwi r16, 0
-  beql JPNOffset2ToR16
-  bnel ENGOffset2ToR16
-
+  ori r18, r16, 0xFB80
+  lbz r16, 5(r18)
   bl MoveCursorR16X
 
   lis r16, 0x8057
@@ -136,12 +129,8 @@ RenderSXOptions:
   bl RenderOptionR17On
 
   lis r16, 0x8057
-  addi r18, r16, 0x6972
-  lhz r16, 0(r18)
-  cmpwi r16, 0
-  beql JPNOffset3ToR16
-  bnel ENGOffset3ToR16
-
+  ori r18, r16, 0xFB80
+  lbz r16, 6(r18)
   bl MoveCursorR16X
 
   lis r16, 0x8057
@@ -149,12 +138,19 @@ RenderSXOptions:
   lbz r17, 0(r18)
   bl RenderOptionR17On
 
+  ;Show Option 4
   lis r16, 0x8057
-  addi r18, r16, 0x6972
-  lhz r16, 0(r18)
-  cmpwi r16, 0
-  beql SelectedOptionJPN
-  bnel SelectedOption
+  ori r18, r16, 0xFB80
+  lhz r16, 7(r18)
+  bl MoveCursorR16X
+
+  ;Load Value of Option
+  lis r16, 0x8057
+  addi r18, r16, 0x7B2F
+  lbz r17, 0(r18)
+  bl RenderOptionR17On
+
+  bl SelectedOption
 
   bl GetNewButtonPressesToR16
 
@@ -240,7 +236,7 @@ DpadDownOptions:
   ori r18, r18, 0xD8F4
   lhz r16, 0(r18)
   ;r16 is now the current options index
-  cmpwi r16, 2
+  cmpwi r16, 3
   bltl MoveOptionDown
 
   mtlr r14
@@ -299,30 +295,6 @@ DpadRightOptions:
   li r14, 0
   blr
 
-JPNOffset1ToR16:
-  li r16, 0x54
-  blr
-
-ENGOffset1ToR16:
-  li r16, 0x62
-  blr
-
-JPNOffset2ToR16:
-  li r16, 0x8C
-  blr
-
-ENGOffset2ToR16:
-  li r16, 0xA2
-  blr
-
-JPNOffset3ToR16:
-  li r16, 0xBE
-  blr
-
-ENGOffset3ToR16:
-  li r16, 0xE2
-  blr
-
 RenderOptionR17On:
   mflr r14
 
@@ -379,66 +351,53 @@ SelectedOption:
   lhz r16, 0(18)
   mr r17, r16
   
+  ;Load Option Offset
+  lis r16, 0x8057
+  ori r18, r16, 0xFB80
+  lbz r16, 0(r18)
+  add r21, r20, r16
+
   li r16, 0
-  addi r21, r20, 0x38
   cmpwi r17, 0
   beql SelectedCharacter
   bnel UnselectedCharacter
   sth r16, 0(r21)
 
+  ;Load Option Offset
+  lis r16, 0x8057
+  ori r18, r16, 0xFB80
+  lbz r16, 1(r18)
+  add r21, r20, r16
+
   li r16, 0
-  addi r21, r20, 0x78
   cmpwi r17, 1
   beql SelectedCharacter
   bnel UnselectedCharacter
   sth r16, 0(r21)
 
+  ;Load Option Offset
+  lis r16, 0x8057
+  ori r18, r16, 0xFB80
+  lbz r16, 2(r18)
+  add r21, r20, r16
+
   li r16, 0
-  addi r21, r20, 0xB8
   cmpwi r17, 2
   beql SelectedCharacter
   bnel UnselectedCharacter
   sth r16, 0(r21)
 
-  mtlr r14
-  li r14, 0
-  blr
+  ;Load Option Offset
+  lis r16, 0x8057
+  ori r18, r16, 0xFB80
+  lbz r16, 3(r18)
+  add r21, r20, r16
 
-SelectedOptionJPN:
-  mflr r14
-
-  lis r18, 0x8057
-  ori r18, r18, 0xD8F4
-
-  lhz r16, 0(18)
-  mr r17, r16
-  
   li r16, 0
-  addi r21, r20, 0x38
-  cmpwi r17, 0
+  cmpwi r17, 3
   beql SelectedCharacter
   bnel UnselectedCharacter
   sth r16, 0(r21)
-
-  li r16, 0
-  addi r21, r20, 0x6A
-  cmpwi r17, 1
-  beql SelectedCharacter
-  bnel UnselectedCharacter
-  sth r16, 0(r21)
-
-  li r16, 0
-  addi r21, r20, 0xA2
-  cmpwi r17, 2
-  beql SelectedCharacter
-  bnel UnselectedCharacter
-  sth r16, 0(r21)
-
-  ;Set r16 back to 0 and
-  ;run compare again to
-  ;prevent branch on leave.
-  li r16, 0
-  cmpwi r16, 0
 
   mtlr r14
   li r14, 0
