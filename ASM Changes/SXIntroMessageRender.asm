@@ -45,21 +45,15 @@ RenderSXStart:
   li r19, 2
   cmpwi r18, 32
   beql ScreenToOptionsR19
-  
-  bl StoreCurrentInput 
  
-  b Exit
+  b StoreCurrentInputAndExit
 
 ScreenToOptionsR19:
-  mflr r15
-
   lis r18, 0x8057
   ori r18, r18, 0xD8FA
 
   sth r19, 0(r18)
 
-  mtlr r15
-  li r15, 0
   blr
 
 GetNewButtonPressesToR16:
@@ -85,7 +79,7 @@ GetNewButtonPressesToR16:
   blr
 
 
-StoreCurrentInput:
+StoreCurrentInputAndExit:
   ;Load the value of "P1 Button State" into r19.(8056ED4C)
   lis r18, 0x8056
   ori r18, r18, 0xED4C
@@ -95,7 +89,7 @@ StoreCurrentInput:
   lis r18, 0x8057
   ori r18, r18, 0xD8F6
   stw r19, 0(r18)
-  blr
+  b Exit
 
 RenderSXOptions:
   ;r10 contains address to start of our message.
@@ -160,9 +154,7 @@ RenderSXOptions:
   cmpwi r19, 0
   bgtl ProcessDpadOptions
 
-  bl StoreCurrentInput 
-
-  b Exit
+  b StoreCurrentInputAndExit
 
 RenderSXSaveMessage:
   ;r10 contains address to start of our message.
@@ -173,12 +165,10 @@ RenderSXSaveMessage:
 
   bl GetNewButtonPressesToR16
   
-  bl StoreCurrentInput 
- 
-  b Exit
+  b StoreCurrentInputAndExit
 
 ProcessDpadOptions:
-  mflr r15
+  mflr r14
   ;r19 is dpad buttons pressed
 
   ;Check for Dpad Up
@@ -201,60 +191,39 @@ ProcessDpadOptions:
   cmpwi r16, 512
   beql DpadRightOptions
 
-  mtlr r15
-  li r15, 0
-  blr
+  b ReturnR14BLR 
 
 DpadUpOptions:
-  mflr r14
+  mflr r15
 
   lis r18, 0x8057
   ori r18, r18, 0xD8F4
   lhz r16, 0(r18)
   ;r16 is now the current options index
   cmpwi r16, 0
-  bgtl MoveOptionUp
+  beq ReturnR15BLR
 
-  mtlr r14
-  li r14, 0
-  blr
-
-MoveOptionUp:
-  mflr r17
- 
   subi r16, r16, 1
-  sth r16, 0(r18)  
-
-  mtlr r17
-  li r17, 0
-  blr
+  sth r16, 0(r18)
+  b ReturnR15BLR 
 
 DpadDownOptions:
-  mflr r14
+  mflr r15
 
   lis r18, 0x8057
   ori r18, r18, 0xD8F4
   lhz r16, 0(r18)
   ;r16 is now the current options index
   cmpwi r16, 3
-  bltl MoveOptionDown
+  beq ReturnR15BLR
 
-  mtlr r14
-  li r14, 0
-  blr
-
-MoveOptionDown:
-  mflr r17
- 
   addi r16, r16, 1
   sth r16, 0(r18)  
 
-  mtlr r17
-  li r17, 0
-  blr
+  b ReturnR15BLR 
 
 DpadLeftOptions:
-  mflr r14
+  mflr r15
 
   lis r18, 0x8057
   ori r18, r18, 0xD8F4
@@ -270,12 +239,10 @@ DpadLeftOptions:
   li r16, 1
   stb r16, 0(r17)
 
-  mtlr r14
-  li r14, 0
-  blr
+  b ReturnR15BLR 
 
 DpadRightOptions:
-  mflr r14
+  mflr r15
 
   lis r18, 0x8057
   ori r18, r18, 0xD8F4
@@ -291,30 +258,28 @@ DpadRightOptions:
   li r16, 0
   stb r16, 0(r17)
 
-  mtlr r14
-  li r14, 0
-  blr
+  b ReturnR15BLR 
 
 RenderOptionR17On:
   mflr r14
 
   ; +On +Off
   lis r16, 0x20 ;Space before
+  addi r16, r16, 0x20 ;Default to Space for unselected
 
   cmpwi r17, 1
-  beql SelectedCharacter
-  bnel UnselectedCharacter
+  beql SpaceToCrossCharacter 
 
   bl RenderR16R21
   	lis r16, 0x4f
   addi r16, r16, 0x6e
   bl RenderR16R21
 
-  lis r16, 0x20 ;Space between
+  lis r16, 0x20 ;Space before
+  addi r16, r16, 0x20 ;Default to Space for unselected
 
   cmpwi r17, 0
-  beql SelectedCharacter
-  bnel UnselectedCharacter
+  beql SpaceToCrossCharacter 
 
   bl RenderR16R21
   	lis r16, 0x4f
@@ -324,23 +289,12 @@ RenderOptionR17On:
   addi r16, r16, 0x0A
   bl RenderR16R21
 
-  mtlr r14
-  li r14, 0
-  blr
+  b ReturnR14BLR 
 
-SelectedCharacter:
+SpaceToCrossCharacter:
   mflr r15
-  addi r16, r16, 0x2b
-  mtlr r15
-  li r15, 0
-  blr
-
-UnselectedCharacter:
-  mflr r15
-  addi r16, r16, 0x20
-  mtlr r15
-  li r15, 0
-  blr
+  addi r16, r16, 0x0b
+  b ReturnR15BLR
 
 SelectedOption:
   mflr r14
@@ -351,57 +305,39 @@ SelectedOption:
   lhz r16, 0(18)
   mr r17, r16
   
-  ;Load Option Offset
-  lis r16, 0x8057
-  ori r18, r16, 0xFB80
-  lbz r16, 0(r18)
-  add r21, r20, r16
+  li r19, 0
+  bl CheckOptionR19Selected
+  
+  li r19, 1
+  bl CheckOptionR19Selected
 
-  li r16, 0
-  cmpwi r17, 0
-  beql SelectedCharacter
-  bnel UnselectedCharacter
-  sth r16, 0(r21)
+  li r19, 2
+  bl CheckOptionR19Selected
 
-  ;Load Option Offset
-  lis r16, 0x8057
-  ori r18, r16, 0xFB80
-  lbz r16, 1(r18)
-  add r21, r20, r16
+  li r19, 3
+  bl CheckOptionR19Selected
 
-  li r16, 0
-  cmpwi r17, 1
-  beql SelectedCharacter
-  bnel UnselectedCharacter
-  sth r16, 0(r21)
+  b ReturnR14BLR
+
+CheckOptionR19Selected:
+  mflr r15
 
   ;Load Option Offset
   lis r16, 0x8057
   ori r18, r16, 0xFB80
-  lbz r16, 2(r18)
+  lbzx r16, r18, r19
   add r21, r20, r16
 
-  li r16, 0
-  cmpwi r17, 2
-  beql SelectedCharacter
-  bnel UnselectedCharacter
+  li r16, 0x20
+  cmpw r17, r19
+  bne EndCheckOption
+  
+  ;Make the it a selected character if not branched past  
+  addi r16, r16, 0x0b
+
+EndCheckOption:
   sth r16, 0(r21)
-
-  ;Load Option Offset
-  lis r16, 0x8057
-  ori r18, r16, 0xFB80
-  lbz r16, 3(r18)
-  add r21, r20, r16
-
-  li r16, 0
-  cmpwi r17, 3
-  beql SelectedCharacter
-  bnel UnselectedCharacter
-  sth r16, 0(r21)
-
-  mtlr r14
-  li r14, 0
-  blr
+  b ReturnR15BLR
 
 MoveCursorR16X:
   ;Use Saved start
@@ -412,9 +348,17 @@ RenderR16R21:
   mflr r15
   stw r16, 0(r21)
   addi r21, r21, 4
+  b ReturnR15BLR
+
+ReturnR14BLR:
+  mtlr r14
+  li r14, 0
+  blr
+
+ReturnR15BLR:
   mtlr r15
   li r15, 0
-  blr 
+  blr
 
 Exit:
   ;Restore LR before exiting
