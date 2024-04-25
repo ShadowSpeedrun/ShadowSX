@@ -40,21 +40,18 @@ RenderSXStart:
   bl GetNewButtonPressesToR16
 
   andi. r18, r16, 32
-  ;r18 is z button press isolated.  
-
-  li r19, 2
+  ;r18 is z button press isolated.
+  
   cmpwi r18, 32
-  beql ScreenToOptionsR19
- 
-  b StoreCurrentInputAndExit
+  bne StoreCurrentInputAndExit
 
-ScreenToOptionsR19:
+  ;Set Screen to Options if Z is pressed.
+  li r19, 2
   lis r18, 0x8057
   ori r18, r18, 0xD8FA
-
   sth r19, 0(r18)
-
-  blr
+ 
+  b StoreCurrentInputAndExit
 
 GetNewButtonPressesToR16:
   ;Load the value of "P1 Button State" into r19.(8056ED4C)
@@ -110,7 +107,7 @@ RenderSXOptions:
   lis r16, 0x8057
   addi r18, r16, 0x7B2C
   lbz r17, 0(r18)
-  bl RenderOptionR17On
+  bl RenderOptionR17
 
   lis r16, 0x8057
   ori r18, r16, 0xFB80
@@ -120,7 +117,7 @@ RenderSXOptions:
   lis r16, 0x8057
   addi r18, r16, 0x7B2D
   lbz r17, 0(r18)
-  bl RenderOptionR17On
+  bl RenderOptionR17
 
   lis r16, 0x8057
   ori r18, r16, 0xFB80
@@ -130,7 +127,7 @@ RenderSXOptions:
   lis r16, 0x8057
   addi r18, r16, 0x7B2E
   lbz r17, 0(r18)
-  bl RenderOptionR17On
+  bl RenderOptionR17
 
   ;Show Option 4
   lis r16, 0x8057
@@ -142,7 +139,7 @@ RenderSXOptions:
   lis r16, 0x8057
   addi r18, r16, 0x7B2F
   lbz r17, 0(r18)
-  bl RenderOptionR17On
+  bl RenderOptionR17
 
   bl SelectedOption
 
@@ -155,6 +152,53 @@ RenderSXOptions:
   bgtl ProcessDpadOptions
 
   b StoreCurrentInputAndExit
+
+RenderOptionR17:
+  mflr r14
+
+  ;Load address to Options into r19
+  lwz r19, 0x3C(r10)
+  cmpwi r17, 0 ; Render "Off"  
+  beql RenderOptionText
+
+  addi r19, r19, 0x14 
+  cmpwi r17, 1 ; Render "On"
+  beql RenderOptionText
+
+  addi r19, r19, 0x14 
+  cmpwi r17, 2 ; Render "No Change"
+  beql RenderOptionText
+
+  addi r19, r19, 0x14 
+  cmpwi r17, 3 ; Render "Unlock"
+  beql RenderOptionText
+
+  addi r19, r19, 0x14 
+  cmpwi r17, 4 ; Render "Remove"
+  beql RenderOptionText
+
+  addi r19, r19, 0x14 
+  cmpwi r17, 5 ; Render "Level 1"
+  beql RenderOptionText
+
+  addi r19, r19, 0x14 
+  cmpwi r17, 6 ; Render "Level 2"
+  beql RenderOptionText
+ 
+  b ReturnR14BLR
+
+RenderOptionText:
+  mflr r15
+
+  RenderTextLoop:
+    lhz r16, 0(r19) ;Get Character data to write
+    cmpwi r16, 0x0A; Check if we are writing a newline.    
+    sth r16, 0(r21) ;Write Character Data to Message
+    addi r21, r21, 2
+    addi r19, r19, 2
+    bne RenderTextLoop  
+
+  b ReturnR15BLR
 
 RenderSXSaveMessage:
   ;r10 contains address to start of our message.
