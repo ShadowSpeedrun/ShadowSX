@@ -28,7 +28,10 @@ RenderSXIntro:
   beq RenderSXStart
   cmpwi r16, 1
   beq RenderSXSaveMessage
-  bne RenderSXOptions
+  cmpwi r16, 3
+  beq RenderSXOptions
+  ;cmpwi r16, 4
+  bne RenderSXOptions2
 
 RenderSXStart:
   ;r10 contains address to start of our message.
@@ -46,7 +49,7 @@ RenderSXStart:
   bne StoreCurrentInputAndExit
 
   ;Set Screen to Options if Z is pressed.
-  li r19, 2
+  li r19, 3
   lis r18, 0x8057
   ori r18, r18, 0xD8FA
   sth r19, 0(r18)
@@ -75,7 +78,6 @@ GetNewButtonPressesToR16:
 
   blr
 
-
 StoreCurrentInputAndExit:
   ;Load the value of "P1 Button State" into r19.(8056ED4C)
   lis r18, 0x8056
@@ -90,74 +92,115 @@ StoreCurrentInputAndExit:
 
 RenderSXOptions:
   ;r10 contains address to start of our message.
-  ;rx = (0x14 * (Page Number + 1))
-  lwz r21, 0x28(r10)
+  ;r16 is currently the value of the page offset.
+  ;Page 1 starts at index 3
+  
+  ;rx = (0x14 * Page Number)
+  mulli r16, r16, 0x14
+  lwzx r21, r10, r16
 
   ;Start by rendering a blank screen
   mr r20, r21
 
-  ;Sub Offset if JPN
-  ;80576972 = 0
-
+  li r19, 0
   lis r16, 0x8057
-  ori r18, r16, 0xFB80
-  lbz r16, 4(r18)
-  bl MoveCursorR16X
+  addi r17, r16, 0x7B2C
+  lbz r17, 0(r17)
+  bl RenderOptionR17ToPosR19
 
+  li r19, 1
   lis r16, 0x8057
-  addi r18, r16, 0x7B2C
-  lbz r17, 0(r18)
-  bl RenderOptionR17
+  addi r17, r16, 0x7B2D
+  lbz r17, 0(r17)
+  bl RenderOptionR17ToPosR19
 
+  li r19, 2
   lis r16, 0x8057
-  ori r18, r16, 0xFB80
-  lbz r16, 5(r18)
-  bl MoveCursorR16X
+  addi r17, r16, 0x7B2E
+  lbz r17, 0(r17)
+  bl RenderOptionR17ToPosR19
 
+  li r19, 3
   lis r16, 0x8057
-  addi r18, r16, 0x7B2D
-  lbz r17, 0(r18)
-  bl RenderOptionR17
-
-  lis r16, 0x8057
-  ori r18, r16, 0xFB80
-  lbz r16, 6(r18)
-  bl MoveCursorR16X
-
-  lis r16, 0x8057
-  addi r18, r16, 0x7B2E
-  lbz r17, 0(r18)
-  bl RenderOptionR17
-
-  ;Show Option 4
-  lis r16, 0x8057
-  ori r18, r16, 0xFB80
-  lhz r16, 7(r18)
-  bl MoveCursorR16X
-
-  ;Load Value of Option
-  lis r16, 0x8057
-  addi r18, r16, 0x7B2F
-  lbz r17, 0(r18)
-  bl RenderOptionR17
+  addi r17, r16, 0x7B2F
+  lbz r17, 0(r17)
+  bl RenderOptionR17ToPosR19
 
   bl SelectedOption
 
   bl GetNewButtonPressesToR16
 
-  andi. r19, r16, 960
+  andi. r19, r16, 0x33C0
   ;r19 is dpad button presses isolated.  
 
   cmpwi r19, 0
-  bgtl ProcessDpadOptions
+  bgtl ProcessButtonOptions
 
   b StoreCurrentInputAndExit
 
-RenderOptionR17:
+RenderSXOptions2:
+  ;r10 contains address to start of our message.
+  ;r16 is currently the value of the page offset.
+  ;Page 1 starts at index 3
+  
+  ;rx = (0x14 * Page Number)
+  mulli r16, r16, 0x14
+  lwzx r21, r10, r16
+
+  ;Start by rendering a blank screen
+  mr r20, r21
+
+  li r19, 0
+  lis r16, 0x8057
+  ori r17, r16, 0xFB90
+  lbz r17, 0(r17)
+  bl RenderOptionR17ToPosR19
+
+  li r19, 1
+  lis r16, 0x8057
+  ori r17, r16, 0xFB91
+  lbz r17, 0(r17)
+  bl RenderOptionR17ToPosR19
+
+  li r19, 2
+  lis r16, 0x8057
+  ori r17, r16, 0xFB92
+  lbz r17, 0(r17)
+  bl RenderOptionR17ToPosR19
+
+  li r19, 3
+  lis r16, 0x8057
+  ori r17, r16, 0xFB93
+  lbz r17, 0(r17)
+  bl RenderOptionR17ToPosR19
+
+  bl SelectedOption
+
+  bl GetNewButtonPressesToR16
+
+  andi. r19, r16, 0x33C0
+  ;r19 is dpad button presses isolated.  
+
+  cmpwi r19, 0
+  bgtl ProcessButtonOptions
+
+  b StoreCurrentInputAndExit
+
+RenderOptionR17ToPosR19:
   mflr r14
 
+  ;r19 = position on screen
+  lis r16, 0x8057
+  ori r18, r16, 0xFB80
+  ;Multiply by 2 for halfword then offset by 4 bytes
+  mulli r19, r19, 2
+  addi r19, r19, 4
+  
+  lhzx r16, r18, r19
+  add r21, r20, r16 ;MoveCursorR16X
+
   ;Load address to Options into r19
-  lwz r19, 0x3C(r10)
+  lwz r19, 0x28(r10)
   cmpwi r17, 0 ; Render "Off"  
   beql RenderOptionText
 
@@ -185,7 +228,7 @@ RenderOptionR17:
   cmpwi r17, 6 ; Render "Level 2"
   beql RenderOptionText
  
-  b ReturnR14BLR
+  b ReturnR14BLR  
 
 RenderOptionText:
   mflr r15
@@ -211,7 +254,7 @@ RenderSXSaveMessage:
   
   b StoreCurrentInputAndExit
 
-ProcessDpadOptions:
+ProcessButtonOptions:
   mflr r14
   ;r19 is dpad buttons pressed
 
@@ -234,6 +277,16 @@ ProcessDpadOptions:
   andi. r16, r19, 512
   cmpwi r16, 512
   beql DpadRightOptions
+
+  ;Check for L Button
+  andi. r16, r19, 4096
+  cmpwi r16, 4096
+  beql LButtonOptions
+
+  ;Check for R Button
+  andi. r16, r19, 8192
+  cmpwi r16, 8192
+  beql RButtonOptions
 
   b ReturnR14BLR 
 
@@ -274,14 +327,39 @@ DpadLeftOptions:
   lhz r16, 0(r18)
   ;r16 is now the current options index
 
-  lis r17, 0x8057
-  addi r17, r17, 0x7B2C
-  add r17, r17, r16
-  ;r17 is now the selected option
+  ;Check which screen to show
+  lis r18, 0x8057
+  ori r18, r18, 0xD8FA
+  lhz r18, 0(r18)
+  cmpwi r18, 3
+  beq Page1DLeftCommand
+  cmpwi r18, 4
+  beq Page2DLeftCommand
 
-  ;Turn Option On
-  li r16, 1
-  stb r16, 0(r17)
+  Page1DLeftCommand:
+    lis r17, 0x8057
+    addi r17, r17, 0x7B2C
+    add r17, r17, r16
+    ;r17 is now the selected option
+    
+    lbz r16, 0(r17)
+    cmpwi r16, 0
+    bgt DecrementOption
+    b ReturnR15BLR
+
+  Page2DLeftCommand:
+    lis r17, 0x8057
+    ori r17, r17, 0xFB90
+    add r17, r17, r16
+    ;r17 is now the selected option
+    
+    lbz r16, 0(r17)
+    cmpwi r16, 2
+    beq ReturnR15BLR
+
+  DecrementOption:    
+    subi r16, r16, 1; Decrement to next option.
+    stb r16, 0(r17)
 
   b ReturnR15BLR 
 
@@ -293,52 +371,69 @@ DpadRightOptions:
   lhz r16, 0(r18)
   ;r16 is now the current options index
 
-  lis r17, 0x8057
-  addi r17, r17, 0x7B2C
-  add r17, r17, r16
-  ;r17 is now the selected option
+  ;Check which screen to show
+  lis r18, 0x8057
+  ori r18, r18, 0xD8FA
+  lhz r18, 0(r18)
+  cmpwi r18, 3
+  beq Page1DRightCommand
+  cmpwi r18, 4
+  beq Page2DRightCommand
 
-  ;Turn Option Off
-  li r16, 0
-  stb r16, 0(r17)
+  Page1DRightCommand:
+    lis r17, 0x8057
+    addi r17, r17, 0x7B2C
+    add r17, r17, r16
+    ;r17 is now the selected option
+    
+    lbz r16, 0(r17)
+    cmpwi r16, 1
+    blt IncrementOption
+    b ReturnR15BLR
+
+  Page2DRightCommand:
+    lis r17, 0x8057
+    ori r17, r17, 0xFB90
+    add r17, r17, r16
+    ;r17 is now the selected option
+    
+    lbz r16, 0(r17)
+    cmpwi r16, 4
+    beq ReturnR15BLR
+
+  IncrementOption:    
+    addi r16, r16, 1; Increment to next option.
+    stb r16, 0(r17)
 
   b ReturnR15BLR 
 
-RenderOptionR17On:
-  mflr r14
-
-  ; +On +Off
-  lis r16, 0x20 ;Space before
-  addi r16, r16, 0x20 ;Default to Space for unselected
-
-  cmpwi r17, 1
-  beql SpaceToCrossCharacter 
-
-  bl RenderR16R21
-  	lis r16, 0x4f
-  addi r16, r16, 0x6e
-  bl RenderR16R21
-
-  lis r16, 0x20 ;Space before
-  addi r16, r16, 0x20 ;Default to Space for unselected
-
-  cmpwi r17, 0
-  beql SpaceToCrossCharacter 
-
-  bl RenderR16R21
-  	lis r16, 0x4f
-  addi r16, r16, 0x66
-  bl RenderR16R21
-  	lis r16, 0x66
-  addi r16, r16, 0x0A
-  bl RenderR16R21
-
-  b ReturnR14BLR 
-
-SpaceToCrossCharacter:
+LButtonOptions:
   mflr r15
-  addi r16, r16, 0x0b
-  b ReturnR15BLR
+
+  lis r18, 0x8057
+  ori r18, r18, 0xD8FA
+  lhz r16, 0(r18) ;Load Screen Offset
+  cmpwi r16, 3
+  beq Return15BLR
+  
+  subi r16, r16, 1
+  sth r16, 0(r18) ;Go Back 1 Page.
+
+  b ReturnR15BLR 
+
+RButtonOptions:
+  mflr r15
+
+  lis r18, 0x8057
+  ori r18, r18, 0xD8FA
+  lhz r16, 0(r18) ;Load Screen Offset
+  cmpwi r16, 4
+  beq Return15BLR
+  
+  addi r16, r16, 1
+  sth r16, 0(r18) ;Go Forward 1 Page.
+
+  b ReturnR15BLR 
 
 SelectedOption:
   mflr r14
@@ -346,7 +441,7 @@ SelectedOption:
   lis r18, 0x8057
   ori r18, r18, 0xD8F4
 
-  lhz r16, 0(18)
+  lhz r16, 0(r18)
   mr r17, r16
   
   li r19, 0
@@ -379,14 +474,9 @@ CheckOptionR19Selected:
   ;Make the it a selected character if not branched past  
   addi r16, r16, 0x0b
 
-EndCheckOption:
+  EndCheckOption:
   sth r16, 0(r21)
   b ReturnR15BLR
-
-MoveCursorR16X:
-  ;Use Saved start
-  add r21, r20, r16
-  blr
 
 RenderR16R21: 
   mflr r15
