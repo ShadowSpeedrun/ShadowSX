@@ -24,8 +24,8 @@ Start:
   ;r18 is already set to be 0x8057D8FC
   lhz r17, -2(r18)
   
-  cmpwi r17, 2
-  beq SetToSavePrompt
+  cmpwi r17, 3
+  bge SetToSavePrompt
 
 SetToAutoSave:
   ;Move on to the AutoSave, dont allow the message to close.
