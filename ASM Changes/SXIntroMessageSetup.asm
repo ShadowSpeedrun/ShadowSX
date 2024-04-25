@@ -36,29 +36,27 @@ Start:
   ori r16, r16, 0x8080 ;r16 = 0xb8f8
   sth r16, 2(r18)
 
-  ;62, A2, E2, 122
-  li r16, 0x62A2
+  ;0062, 00A2, 00E2, 0122
+  li r16, 0x0062
   sth r16, 4(r18)
-  li r16, 0xE2
-  stb r16, 6(r18)
-  li r16, 0x122
-  sth r16, 7(r18)
+  li r16, 0x00A2
+  sth r16, 6(r18)
+  li r16, 0x00E2
+  sth r16, 8(r18)
+  li r16, 0x0122
+  sth r16, 10(r18)
   b InitOptionDefaults
 
 Set2Offsets:
-  ;38, 6A, A2, 00
-  li r16, 0x386A
-  sth r16, 0(r18)
-  addi r16, r16, 0x6996 ;r16 = 0xA200
-  sth r16, 2(r18)
-
-  ;54, 8C, BE, 000
-  li r16, 0x548C
+  ;0038, 006A, 00A2, 0000
+  li r16, 0x0038
   sth r16, 4(r18)
-  li r16, 0xBE
-  stb r16, 6(r18)
-  li r16, 0x000
-  sth r16, 7(r18)
+  li r16, 0x006A
+  sth r16, 6(r18)
+  li r16, 0x00A2
+  sth r16, 8(r18)
+  li r16, 0x0000
+  sth r16, 10(r18)
 
 InitOptionDefaults:  
   ;Check if Rom Settings are valid
@@ -117,13 +115,40 @@ CheckSPWDisable:
   ;assign 0 by default.
 
   cmpwi r19, 0
-  beq End
+  beq CheckKeyDisable
   cmpwi r19, 1
-  beq End
+  beq CheckKeyDisable
   li r19, 0
   stb r19, 3(r18)
 
+CheckKeyDisable:
+  ;Load location for Disable SPW Unlock flag
+  lbz r19, 3(r18)
+
+  ;If not 0, or 1
+  ;assign 0 by default.
+
+  cmpwi r19, 0
+  beq InitMenuOptions
+  cmpwi r19, 1
+  beq InitMenuOptions
+  li r19, 0
+  stb r19, 3(r18)
+
+InitMenuOptions:
+  ;8057FB80 is current level keys. Borrowing for lookup table data.
+  lis r16, 0x8057
+  ori r18, r16, 0xFB90
+
+  ;Set the values for Page 2 to be "No Change" by default
+  ;02, 02, 02, 02
+  li r16, 0x0202
+
+  sth r16, 0(r18)
+  sth r16, 2(r18)
+
 End:
+  li r16, 0x0
   li r18, 0x0
   li r19, 0x0
   
