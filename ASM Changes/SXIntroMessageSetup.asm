@@ -30,21 +30,50 @@ Start:
   beql Set2Offsets
   
   ;Not JPN Offsets
-  ;38, 78, B8, F8
-  li r16, 0x3878
+  ;38, 78, B8, F8, 138
+  li r17, 10
+
+  li r16, 0x0038
+  add r16, r16, r17
   sth r16, 0(r18)
-  ori r16, r16, 0x8080 ;r16 = 0xb8f8
+
+  li r16, 0x0078
+  add r16, r16, r17
   sth r16, 2(r18)
 
-  ;0062, 00A2, 00E2, 0122
-  li r16, 0x0062
+  li r16, 0x00b8
+  add r16, r16, r17
   sth r16, 4(r18)
-  li r16, 0x00A2
+
+  li r16, 0x00f8
+  add r16, r16, r17
   sth r16, 6(r18)
-  li r16, 0x00E2
+
+  li r16, 0x0138
+  add r16, r16, r17
   sth r16, 8(r18)
-  li r16, 0x0122
+
+  ;0062, 00A2, 00E2, 0122, 162
+  li r16, 0x0062
+  add r16, r16, r17
   sth r16, 10(r18)
+
+  li r16, 0x00A2
+  add r16, r16, r17
+  sth r16, 12(r18)
+
+  li r16, 0x00E2
+  add r16, r16, r17
+  sth r16, 14(r18)
+
+  li r16, 0x0122
+  add r16, r16, r17
+  sth r16, 16(r18)
+
+  li r16, 0x0162
+  add r16, r16, r17
+  sth r16, 18(r18)
+
   b InitOptionDefaults
 
 Set2Offsets:
@@ -138,7 +167,7 @@ CheckKeyDisable:
 InitMenuOptions:
   ;8057FB80 is current level keys. Borrowing for lookup table data.
   lis r16, 0x8057
-  ori r18, r16, 0xFB90
+  ori r18, r16, 0xFBA0
 
   ;Set the values for Page 2 to be "No Change" by default
   ;02, 02, 02, 02
