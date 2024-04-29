@@ -319,7 +319,9 @@ RenderSXOptions4:
   b StoreCurrentInputAndExit
 
 RenderOptionR17ToPosR19:
+  stwu sp, -8(sp)
   mflr r14
+  stw r14, 4(sp)
 
   ;r19 = position on screen
   lis r16, 0x8057
@@ -367,11 +369,14 @@ RenderOptionR17ToPosR19:
   addi r19, r19, 0x14 
   cmpwi r17, 8 ; Render "Yes"
   beql RenderOptionText
+
+  lwz r14, 4(sp)
+  addi sp, sp, 8
  
   b ReturnR14BLR  
 
 RenderOptionText:
-  mflr r15
+  mflr r14
 
   RenderTextLoop:
     lhz r16, 0(r19) ;Get Character data to write
@@ -381,7 +386,7 @@ RenderOptionText:
     addi r19, r19, 2
     bne RenderTextLoop  
 
-  b ReturnR15BLR
+  b ReturnR14BLR
 
 RenderSXSaveMessage:
   ;r10 contains address to start of our message.
@@ -395,8 +400,11 @@ RenderSXSaveMessage:
   b StoreCurrentInputAndExit
 
 ProcessButtonOptions:
-  mflr r14
   ;r19 is dpad buttons pressed
+
+  stwu sp, -8(sp)
+  mflr r14
+  stw r14, 4(sp)
 
   ;Check for Dpad Up
   andi. r16, r19, 64
@@ -428,39 +436,57 @@ ProcessButtonOptions:
   cmpwi r16, 8192
   beql RButtonOptions
 
-  b ReturnR14BLR 
+  lwz r14, 4(sp)
+  addi sp, sp, 8
+ 
+  b ReturnR14BLR  
 
 DpadUpOptions:
-  mflr r15
+  stwu sp, -8(sp)
+  mflr r14
+  stw r14, 4(sp)
 
   lis r18, 0x8057
   ori r18, r18, 0xD8F4
   lhz r16, 0(r18)
   ;r16 is now the current options index
   cmpwi r16, 0
-  beq ReturnR15BLR
+  beq DpadUpEnd
 
   subi r16, r16, 1
   sth r16, 0(r18)
-  b ReturnR15BLR 
+
+DpadUpEnd:
+  lwz r14, 4(sp)
+  addi sp, sp, 8
+ 
+  b ReturnR14BLR  
 
 DpadDownOptions:
-  mflr r15
+  stwu sp, -8(sp)
+  mflr r14
+  stw r14, 4(sp)
 
   lis r18, 0x8057
   ori r18, r18, 0xD8F4
   lhz r16, 0(r18)
   ;r16 is now the current options index
   cmpwi r16, 4
-  beq ReturnR15BLR
+  beq DpadDownEnd
 
   addi r16, r16, 1
-  sth r16, 0(r18)  
-
-  b ReturnR15BLR 
+  sth r16, 0(r18)
+  
+DpadDownEnd:
+  lwz r14, 4(sp)
+  addi sp, sp, 8
+ 
+  b ReturnR14BLR   
 
 DpadLeftOptions:
-  mflr r15
+  stwu sp, -8(sp)
+  mflr r14
+  stw r14, 4(sp)
 
   lis r18, 0x8057
   ori r18, r18, 0xD8F4
@@ -485,7 +511,7 @@ DpadLeftOptions:
     lbz r16, 0(r17)
     cmpwi r16, 0
     bgt DecrementOption
-    b ReturnR15BLR
+    b DpadLeftEnd
 
   Page2DLeftCommand:
     lis r17, 0x8057
@@ -495,16 +521,22 @@ DpadLeftOptions:
     
     lbz r16, 0(r17)
     cmpwi r16, 2
-    beq ReturnR15BLR
+    beq DpadLeftEnd
 
   DecrementOption:    
     subi r16, r16, 1; Decrement to next option.
     stb r16, 0(r17)
 
-  b ReturnR15BLR 
+DpadLeftEnd:
+  lwz r14, 4(sp)
+  addi sp, sp, 8
+ 
+  b ReturnR14BLR  
 
 DpadRightOptions:
-  mflr r15
+  stwu sp, -8(sp)
+  mflr r14
+  stw r14, 4(sp)
 
   lis r18, 0x8057
   ori r18, r18, 0xD8F4
@@ -529,7 +561,7 @@ DpadRightOptions:
     lbz r16, 0(r17)
     cmpwi r16, 1
     blt IncrementOption
-    b ReturnR15BLR
+    b DpadRightEnd
 
   Page2DRightCommand:
     lis r17, 0x8057
@@ -539,44 +571,62 @@ DpadRightOptions:
     
     lbz r16, 0(r17)
     cmpwi r16, 4
-    beq ReturnR15BLR
+    beq DpadRightEnd
 
   IncrementOption:    
     addi r16, r16, 1; Increment to next option.
     stb r16, 0(r17)
 
-  b ReturnR15BLR 
+DpadRightEnd:
+  lwz r14, 4(sp)
+  addi sp, sp, 8
+ 
+  b ReturnR14BLR  
 
 LButtonOptions:
-  mflr r15
+  stwu sp, -8(sp)
+  mflr r14
+  stw r14, 4(sp)
 
   lis r18, 0x8057
   ori r18, r18, 0xD8FA
   lhz r16, 0(r18) ;Load Screen Offset
   cmpwi r16, 3
-  beq ReturnR15BLR
+  beq LButtonEnd
   
   subi r16, r16, 1
   sth r16, 0(r18) ;Go Back 1 Page.
 
-  b ReturnR15BLR 
+LButtonEnd:
+  lwz r14, 4(sp)
+  addi sp, sp, 8
+ 
+  b ReturnR14BLR  
 
 RButtonOptions:
-  mflr r15
+  stwu sp, -8(sp)
+  mflr r14
+  stw r14, 4(sp)
 
   lis r18, 0x8057
   ori r18, r18, 0xD8FA
   lhz r16, 0(r18) ;Load Screen Offset
   cmpwi r16, 6
-  beq ReturnR15BLR
+  beq RButtonEnd
   
   addi r16, r16, 1
   sth r16, 0(r18) ;Go Forward 1 Page.
 
-  b ReturnR15BLR 
+RButtonEnd:
+  lwz r14, 4(sp)
+  addi sp, sp, 8
+ 
+  b ReturnR14BLR  
 
 SelectedOption:
+  stwu sp, -8(sp)
   mflr r14
+  stw r14, 4(sp)
   
   ;Load value for current menu option
   lis r18, 0x8057
@@ -601,10 +651,15 @@ SelectedOption:
   li r19, 4
   bl CheckOptionR19Selected
 
-  b ReturnR14BLR
+  lwz r14, 4(sp)
+  addi sp, sp, 8
+ 
+  b ReturnR14BLR  
 
 CheckOptionR19Selected:
-  mflr r15
+  stwu sp, -8(sp)
+  mflr r14
+  stw r14, 4(sp)
 
   ;Load Option Offset
   lis r16, 0x8057
@@ -625,22 +680,21 @@ CheckOptionR19Selected:
 
   EndCheckOption:
   sth r16, 0(r21)
-  b ReturnR15BLR
+  
+  lwz r14, 4(sp)
+  addi sp, sp, 8
+ 
+  b ReturnR14BLR  
 
 RenderR16R21: 
-  mflr r15
+  mflr r14
   stw r16, 0(r21)
   addi r21, r21, 4
-  b ReturnR15BLR
+  b ReturnR14BLR
 
 ReturnR14BLR:
   mtlr r14
   li r14, 0
-  blr
-
-ReturnR15BLR:
-  mtlr r15
-  li r15, 0
   blr
 
 Exit:
