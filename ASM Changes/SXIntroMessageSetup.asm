@@ -170,10 +170,10 @@ InitMenuOptions:
   ori r18, r16, 0xFBA0
 
   ;Set the values for Page 2 to be "No Change" by default
-  ;02, 02, 02, 02
-  li r16, 0x0202
-
+  ;07, 07, 07, 02
+  li r16, 0x0707
   sth r16, 0(r18)
+  li r16, 0x0702
   sth r16, 2(r18)
 
 End:
