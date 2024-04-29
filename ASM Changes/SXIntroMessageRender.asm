@@ -211,7 +211,7 @@ SetupPage3SXOptions:
   ;Get Value for Shadow Rifle
   lhz r16, 0(r17)
   andi. r16, r16, 0x400
-  srawi r16, r16, 6 ;This should result in either 1 or 0 for Shadow Rifle Status. 
+  srawi r16, r16, 10 ;This should result in either 1 or 0 for Shadow Rifle Status. 
   
   stb r16, 0(r18)
   ;Configure avaiable settings for option
@@ -222,24 +222,24 @@ SetupPage3SXOptions:
   lhz r16, 0(r17) ; bits 1 & 2 signify Samurai Blade Unlocks
   andi. r16, r16, 3 ;Filter out all other weapon statuses
   cmpwi r16, 0 ;Only need to adjust r16 if not 0.
-  bne SPWStatusOptionIndex
+  bnel SPWStatusOptionIndex
   
-  stb r16, 0(r18)
+  stb r16, 1(r18)
   ;Configure avaiable settings for option
   li r16, 3
-  stb r16, 5(r18)
+  stb r16, 6(r18)
 
   ;Get Value for Satellite Laser
   lhz r16, 0(r17) ; bits 3 & 4 signify Samurai Blade Unlocks
   andi. r16, r16, 0xC ;Filter out all other weapon statuses
   srawi r16, r16, 2 ;make r16 use the right most bits for weapon status.
   cmpwi r16, 0 ;Only need to adjust r16 if not 0.
-  bne SPWStatusOptionIndex
+  bnel SPWStatusOptionIndex
   
-  stb r16, 0(r18)
+  stb r16, 2(r18)
   ;Configure avaiable settings for option
   li r16, 3
-  stb r16, 5(r18)
+  stb r16, 7(r18)
   
   ;Set 8057FBBA as the max index for the option selection (0 based)
   li r17, 2
@@ -264,7 +264,7 @@ SetupPage4SXOptions:
   andi. r16, r16, 0x30 ;Filter out all other weapon statuses
   srawi r16, r16, 4 ;make r16 use the right most bits for weapon status.
   cmpwi r16, 0 ;Only need to adjust r16 if not 0.
-  bne SPWStatusOptionIndex
+  bnel SPWStatusOptionIndex
   
   stb r16, 0(r18)
   ;Configure avaiable settings for option
@@ -276,24 +276,24 @@ SetupPage4SXOptions:
   andi. r16, r16, 0xC0 ;Filter out all other weapon statuses
   srawi r16, r16, 6 ;make r16 use the right most bits for weapon status.
   cmpwi r16, 0 ;Only need to adjust r16 if not 0.
-  bne SPWStatusOptionIndex
+  bnel SPWStatusOptionIndex
   
-  stb r16, 0(r18)
+  stb r16, 1(r18)
   ;Configure avaiable settings for option
   li r16, 3
-  stb r16, 5(r18)
+  stb r16, 6(r18)
 
   ;Get Value for Heal Cannon
   lhz r16, 0(r17) ; bits 9 & 10 signify Samurai Blade Unlocks
   andi. r16, r16, 0x300 ;Filter out all other weapon statuses
   srawi r16, r16, 8 ;make r16 use the right most bits for weapon status.
   cmpwi r16, 0 ;Only need to adjust r16 if not 0.
-  bne SPWStatusOptionIndex
+  bnel SPWStatusOptionIndex
   
-  stb r16, 0(r18)
+  stb r16, 2(r18)
   ;Configure avaiable settings for option
   li r16, 3
-  stb r16, 5(r18)
+  stb r16, 7(r18)
   
   ;Set 8057FBBA as the max index for the option selection (0 based)
   li r17, 2
@@ -329,8 +329,8 @@ SavePage1SXOptions:
   lbz r16, 3(r18)
   stb r16, 3(r17)  
 
-  lbz r16, 5(r18)
-  stb r16, 5(r17)  
+  lbz r16, 4(r18)
+  stb r16, 4(r17)  
 
   lwz r14, 4(sp)
   addi sp, sp, 8
@@ -390,6 +390,7 @@ SavePage3SXOptions:
   lbz r16, 0(r18)
   mulli r16, r16, 0x400
   lhz r15, 0(r17)
+  andi. r15, r15, 0x3FF ;Set to off to start
   or r15, r15, r16
   sth r15, 0(r17)
 
@@ -399,6 +400,7 @@ SavePage3SXOptions:
   li r15, 0
   slw r16, r16, r15
   lhz r15, 0(r17)
+  andi. r15, r15, 0x7FC ;Set to off to start
   or r15, r15, r16
   sth r15, 0(r17)
 
@@ -408,6 +410,7 @@ SavePage3SXOptions:
   li r15, 2
   slw r16, r16, r15
   lhz r15, 0(r17)
+  andi. r15, r15, 0x7F3 ;Set to off to start
   or r15, r15, r16
   sth r15, 0(r17)
 
@@ -438,6 +441,7 @@ SavePage4SXOptions:
   li r15, 4
   slw r16, r16, r15
   lhz r15, 0(r17)
+  andi. r15, r15, 0x7CF ;Set to off to start
   or r15, r15, r16
   sth r15, 0(r17)
 
@@ -447,6 +451,7 @@ SavePage4SXOptions:
   li r15, 6
   slw r16, r16, r15
   lhz r15, 0(r17)
+  andi. r15, r15, 0x73F ;Set to off to start
   or r15, r15, r16
   sth r15, 0(r17)
 
@@ -456,6 +461,7 @@ SavePage4SXOptions:
   li r15, 8
   slw r16, r16, r15
   lhz r15, 0(r17)
+  andi. r15, r15, 0x4FF ;Set to off to start
   or r15, r15, r16
   sth r15, 0(r17)
   
@@ -833,8 +839,15 @@ DpadLeftOptions:
 
   ;Get current option mode
   lis r18, 0x8057
-  ori r18, r18, 0x7BB5
+  ori r18, r18, 0xFBB5
   lbzx r15, r18, r16
+  ;r15 is now the current option mode
+
+  ;Get the current option value
+  addi r18, r18, -5
+  lbzx r17, r18, r16
+  ;r17 is now the selected option
+
   cmpwi r15, 0
   beq Mode0LeftCommand
   cmpwi r15, 1
@@ -845,34 +858,38 @@ DpadLeftOptions:
   beq Mode3LeftCommand
 
   Mode0LeftCommand:
-    ;CONTINUE FROM HERE TO MODIFY THE OPTION
-    lis r17, 0x8057
-    addi r17, r17, 0x7B2C
-    add r17, r17, r16
-    ;r17 is now the selected option
-    
-    lbz r16, 0(r17)
-    cmpwi r16, 0
+    cmpwi r17, 0
     bgt DecrementOption
     b DpadLeftEnd
 
   Mode1LeftCommand:
-    lis r17, 0x8057
-    ori r17, r17, 0xFBA0
-    add r17, r17, r16
-    ;r17 is now the selected option
-    
-    lbz r16, 0(r17)
-    cmpwi r16, 2
-    beq DpadLeftEnd
+    cmpwi r17, 2
+    bgt DecrementOption
+    b DpadLeftEnd
+
+  Mode2LeftCommand:
+    cmpwi r17, 7
+    bgt DecrementOption
+    b DpadLeftEnd
+
+  Mode3LeftCommand:
+    cmpwi r17, 5
+    bgt DecrementOption
+
+    ;If not 6, we want to make the value 0,
+    ;since we want to go 5 -> 0, and setting
+    ;0 to 0 is fine.
+    li r17, 0
+    stbx r17, r18, r16
+    b DpadLeftEnd
 
   DecrementOption:    
-    subi r16, r16, 1; Decrement to next option.
-    stb r16, 0(r17)
+    subi r17, r17, 1; Decrement to next option.
+    stbx r17, r18, r16
 
-DpadLeftEnd:
-  lwz r14, 4(sp)
-  addi sp, sp, 8
+  DpadLeftEnd:
+    lwz r14, 4(sp)
+    addi sp, sp, 8
  
   b ReturnR14BLR  
 
@@ -886,43 +903,59 @@ DpadRightOptions:
   lhz r16, 0(r18)
   ;r16 is now the current options index
 
-  ;Check which screen to show
+  ;Get current option mode
   lis r18, 0x8057
-  ori r18, r18, 0xD8FA
-  lhz r18, 0(r18)
-  cmpwi r18, 3
-  beq Page1DRightCommand
-  cmpwi r18, 4
-  beq Page2DRightCommand
+  ori r18, r18, 0xFBB5
+  lbzx r15, r18, r16
+  ;r15 is now the current option mode
 
-  Page1DRightCommand:
-    lis r17, 0x8057
-    addi r17, r17, 0x7B2C
-    add r17, r17, r16
-    ;r17 is now the selected option
-    
-    lbz r16, 0(r17)
-    cmpwi r16, 1
+  ;Get the current option value
+  addi r18, r18, -5
+  lbzx r17, r18, r16
+  ;r17 is now the selected option
+
+  cmpwi r15, 0
+  beq Mode0RightCommand
+  cmpwi r15, 1
+  beq Mode1RightCommand
+  cmpwi r15, 2
+  beq Mode2RightCommand
+  cmpwi r15, 3
+  beq Mode3RightCommand
+
+  Mode0RightCommand:
+    cmpwi r17, 1
     blt IncrementOption
     b DpadRightEnd
 
-  Page2DRightCommand:
-    lis r17, 0x8057
-    ori r17, r17, 0xFBA0
-    add r17, r17, r16
-    ;r17 is now the selected option
-    
-    lbz r16, 0(r17)
-    cmpwi r16, 4
-    beq DpadRightEnd
+  Mode1RightCommand:
+    cmpwi r17, 4
+    blt IncrementOption
+    b DpadRightEnd
+
+  Mode2RightCommand:
+    cmpwi r17, 8
+    blt IncrementOption
+    b DpadRightEnd
+
+  Mode3RightCommand:
+    cmpwi r17, 6
+    blt IncrementOption
+    cmpwi r17, 5
+    blt IncrementOption
+
+    ;Is 0 if not branched by now.
+    li r17, 5 ; 0 -> 5 to go Off to Level 1
+    stbx r17, r18, r16
+    b DpadRightEnd
 
   IncrementOption:    
-    addi r16, r16, 1; Increment to next option.
-    stb r16, 0(r17)
+    addi r17, r17, 1; Increment to next option.
+    stbx r17, r18, r16
 
-DpadRightEnd:
-  lwz r14, 4(sp)
-  addi sp, sp, 8
+  DpadRightEnd:
+    lwz r14, 4(sp)
+    addi sp, sp, 8
  
   b ReturnR14BLR  
 
