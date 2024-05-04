@@ -1256,3 +1256,20 @@ NTSC 1.06 --- 0x801E5838 ---- B0030000 -> Branch
 41820008 B0030000
 3A400000 3A600000
 60000000 00000000
+
+
+	-==-
+
+
+Disableable Key Unlock
+Uses DisableableKeyUnlock.asm
+
+Toggleable option to prevent saving currently collected keys to memory card.
+[BlazinZzetti]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.06 --- 0x8011BDF0 ---- 7C66012E -> Branch
+
+3E408057 62527B30
+8A520000 2C120001
+41820008 7C66012E
+3A400000 00000000
