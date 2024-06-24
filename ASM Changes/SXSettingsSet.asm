@@ -1,13 +1,13 @@
-#To be inserted at 8035a290
-;SXSettingsSet.asm
+#8035a290
+#SXSettingsSet.asm
 
 Start:
-  ;Original Code
+  #Original Code
   cmpwi r3, 2
   bne- End
   
-  ;Check the current Message ID to see if we are showing the SX intro.
-  ;Load Intro Message ID (8057D8FC)
+  #Check the current Message ID to see if we are showing the SX intro.
+  #Load Intro Message ID (8057D8FC)
   lis r18, 0x8057
   ori r18, r18, 0xD8FC
   lhz r19, 0(r18)
@@ -15,20 +15,20 @@ Start:
   cmpwi r19, 44
   bne- End
   
-  ;OK was pressed while one of the SX intros was up.
+  #OK was pressed while one of the SX intros was up.
   
-  ;Check if we were in a screen that is supposed to move to
-  ;the AutoSave Screen next.
+  #Check if we were in a screen that is supposed to move to
+  #the AutoSave Screen next.
   
-  ;Load value of 0x8057D8FA
-  ;r18 is already set to be 0x8057D8FC
+  #Load value of 0x8057D8FA
+  #r18 is already set to be 0x8057D8FC
   lhz r17, -2(r18)
   
   cmpwi r17, 3
   bge SetToSavePrompt
 
 SetToAutoSave:
-  ;Move on to the AutoSave, dont allow the message to close.
+  #Move on to the AutoSave, dont allow the message to close.
   li r19, 40
   sth r19, 0(r18)
   li r3, 0
@@ -40,8 +40,8 @@ SetToSavePrompt:
   li r3, 0
 
 CheckSPWChanges:
-  ;Next, apply changes from options menu.
-  ;Check if SPW were adjusted.
+  #Next, apply changes from options menu.
+  #Check if SPW were adjusted.
   lis r18, 0x8057
   ori r17, r18, 0x8068
   ori r18, r18, 0x9FC4
@@ -53,51 +53,51 @@ CheckSPWChanges:
     andi. r16, r19, 0x3
     cmpw r15, r16
     beq CheckSatelliteLaserChange
-    andi. r19, r19, 0x7FC ;Clear SB from Save so it appears on next save.
+    andi. r19, r19, 0x7FC #Clear SB from Save so it appears on next save.
 
   CheckSatelliteLaserChange:
     andi. r16, r17, 0xC
     andi. r15, r19, 0xC
     cmpw r15, r16
     beq CheckVacuumEggChange
-    andi. r19, r19, 0x7F3 ;Clear SL from Save so it appears on next save.
+    andi. r19, r19, 0x7F3 #Clear SL from Save so it appears on next save.
 
   CheckVacuumEggChange:
     andi. r16, r17, 0x30
     andi. r15, r19, 0x30
     cmpw r15, r16
     beq CheckOmochaoGunChange
-    andi. r19, r19, 0x7CF ;Clear SL from Save so it appears on next save.
+    andi. r19, r19, 0x7CF #Clear SL from Save so it appears on next save.
 
   CheckOmochaoGunChange:
     andi. r16, r17, 0xC0
     andi. r15, r19, 0xC0
     cmpw r15, r16
     beq CheckHealCannonChange
-    andi. r19, r19, 0x73F ;Clear SL from Save so it appears on next save.
+    andi. r19, r19, 0x73F #Clear SL from Save so it appears on next save.
 
   CheckHealCannonChange:
     andi. r16, r17, 0x300
     andi. r15, r19, 0x300
     cmpw r15, r16
     beq CheckShadowRifleChange
-    andi. r19, r19, 0x4FF ;Clear SL from Save so it appears on next save.
+    andi. r19, r19, 0x4FF #Clear SL from Save so it appears on next save.
 
   CheckShadowRifleChange:
     andi. r16, r17, 0x400
     andi. r15, r19, 0x400
     cmpw r15, r16
     beq SaveSPWStatus
-    andi. r19, r19, 0x3FF ;Clear SL from Save so it appears on next save.
+    andi. r19, r19, 0x3FF #Clear SL from Save so it appears on next save.
   SaveSPWStatus: 
     sth r19, 0(r18)
 
 CheckPage2Options:
   lis r16, 0x8057
   ori r18, r16, 0xFBA0
-  ori r17, r16, 0x8020 ;Last Story & Expert Bytes 
+  ori r17, r16, 0x8020 #Last Story & Expert Bytes 
 
-  ;Check if we want to unlock Last Story
+  #Check if we want to unlock Last Story
   lbz r19, 0(r18)
   cmpwi r19, 8 
   bne CheckExpert
@@ -106,35 +106,35 @@ CheckPage2Options:
 
 CheckExpert:
   lbz r19, 1(r18)
-  cmpwi r19, 8 ;Check if we want to unlock Expert Mode
+  cmpwi r19, 8 #Check if we want to unlock Expert Mode
   bne CheckStages
   li r19, 1
   stb r19, 1(r17)
 
 CheckStages:
   lbz r19, 2(r18)
-  cmpwi r19, 8 ;Check if we want to unlock Stages And Bosses
+  cmpwi r19, 8 #Check if we want to unlock Stages And Bosses
   bne CheckKeys
 
-  lis r18, 0x8057 ;Westopolis Played
+  lis r18, 0x8057 #Westopolis Played
   ori r18, r18, 0x6BE0
-  li r17, 0 ;r17 = stage counter.
+  li r17, 0 #r17 = stage counter.
   li r19, 1
 
   SetStagesAvailableLoop:
-    mulli r16, r17, 0x60 ;r16 = RAM offset to stage data
+    mulli r16, r17, 0x60 #r16 = RAM offset to stage data
     stwx r19, r18, r16
     addi r17, r17, 1
     cmpwi r17, 39
     blt SetStagesAvailableLoop
 
-  lis r18, 0x8057 ;Black Bull Show Stats
+  lis r18, 0x8057 #Black Bull Show Stats
   ori r18, r18, 0x749C
-  li r17, 0 ;r17 = stage counter.
+  li r17, 0 #r17 = stage counter.
   li r19, 1
 
   SetBossesVisiableLoop:
-    mulli r16, r17, 0x60 ;r16 = RAM offset to stage data
+    mulli r16, r17, 0x60 #r16 = RAM offset to stage data
     stbx r19, r18, r16
     addi r17, r17, 1
     cmpwi r17, 17
@@ -144,35 +144,35 @@ CheckKeys:
   lis r16, 0x8057
   ori r18, r16, 0xFBA0
   lbz r19, 3(r18)
-  cmpwi r19, 3 ;Check if we want to unlock Stages
+  cmpwi r19, 3 #Check if we want to unlock Stages
   beq UnlockAllKeys
   bgt RemoveAllKeys
-  ;Not greater than or equal means we dont want to change anything.
+  #Not greater than or equal means we dont want to change anything.
   b End
 
 UnlockAllKeys:
-  ;Do all of "Group 60"
-  lis r18, 0x8057 ;Westopolis Keys
+  #Do all of "Group 60"
+  lis r18, 0x8057 #Westopolis Keys
   ori r18, r18, 0x6C2C
-  li r17, 0 ;r17 = stage counter.
+  li r17, 0 #r17 = stage counter.
 
   li r19, 60
   li r15, 2
   bl KeySetActiveLoop
 
-  ;Glyphic Canyon
+  #Glyphic Canyon
   li r19, 95
   li r15, 3
   bl KeySetActiveLoop
 
-  ;Lethal Highway
+  #Lethal Highway
   li r19, 60
   li r15, 8
   bl KeySetActiveLoop
 
-  ;Doom
+  #Doom
   li r19, 201
-  mulli r16, r17, 0x60 ;r16 = RAM offset to stage data
+  mulli r16, r17, 0x60 #r16 = RAM offset to stage data
   stwx r19, r18, r16
   addi r16, r16, 4
   addi r19, r19, 1
@@ -188,42 +188,42 @@ UnlockAllKeys:
   stwx r19, r18, r16
   addi r17, r17, 1
 
-  ;Sky Troops
+  #Sky Troops
   li r19, 95
   li r15, 10
   bl KeySetActiveLoop
 
-  ;Mad Matrix
+  #Mad Matrix
   li r19, 60
   li r15, 11
   bl KeySetActiveLoop
 
-  ;Death Ruins
+  #Death Ruins
   li r19, 1
   li r15, 13
   bl KeySetActiveLoop
 
-  ;Air Fleet
+  #Air Fleet
   li r19, 95
   li r15, 15
   bl KeySetActiveLoop
 
-  ;Space Gadget
+  #Space Gadget
   li r19, 1
   li r15, 17
   bl KeySetActiveLoop
 
-  ;GUN Fortress
+  #GUN Fortress
   li r19, 95
   li r15, 20
   bl KeySetActiveLoop
 
-  ;Cosmic Fall
+  #Cosmic Fall
   li r19, 1
   li r15, 21
   bl KeySetActiveLoop
 
-  ;Final Haunt 
+  #Final Haunt 
   li r19, 95
   li r15, 23
   bl KeySetActiveLoop
@@ -236,7 +236,7 @@ KeySetActiveLoop:
   stw r16, 4(sp)
 
   KeyLoop:
-    mulli r16, r17, 0x60 ;r16 = RAM offset to stage data
+    mulli r16, r17, 0x60 #r16 = RAM offset to stage data
     stwx r19, r18, r16
     addi r16, r16, 4
     addi r19, r19, 1
@@ -251,7 +251,7 @@ KeySetActiveLoop:
     addi r19, r19, 1
     stwx r19, r18, r16
     addi r17, r17, 1
-    subi r19, r19, 4 ;Go back to starting amount for next loop.
+    subi r19, r19, 4 #Go back to starting amount for next loop.
     cmpw r17, r15
     blt KeyLoop
 
@@ -261,14 +261,14 @@ KeySetActiveLoop:
   blr
 
 RemoveAllKeys:
-  lis r18, 0x8057 ;Westopolis Keys
+  lis r18, 0x8057 #Westopolis Keys
   ori r18, r18, 0x6C2C
-  li r17, 0 ;r17 = stage counter.
+  li r17, 0 #r17 = stage counter.
   li r19, 0
-  subi r19, r19, 1 ;r19 = FFFFFFFF
+  subi r19, r19, 1 #r19 = FFFFFFFF
 
   RemoveKeysLoop:
-    mulli r16, r17, 0x60 ;r16 = RAM offset to stage data
+    mulli r16, r17, 0x60 #r16 = RAM offset to stage data
     stwx r19, r18, r16
     addi r16, r16, 4
     stwx r19, r18, r16
@@ -288,6 +288,6 @@ End:
   li r18, 0x0
   li r19, 0x0
 
-  ;Rerun Original Code for branches to work.
+  #Rerun Original Code for branches to work.
   cmpwi r3, 2
 

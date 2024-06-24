@@ -1,8 +1,8 @@
-#To be inserted at 8011bdf0
-;DisableableKeyUnlock.asm
-;Prevent saving keys after level end.
+#8011bdf0
+#DisableableKeyUnlock.asm
+#Prevent saving keys after level end.
 
-;80577B30 = Address to prevent Key Saving
+#80577B30 = Address to prevent Key Saving
 
 Start:
   lis r18, 0x8057
@@ -11,8 +11,8 @@ Start:
   cmpwi r18, 1
   beq End
 
-  ;Original Code - Store the value of 1 of the keys.
-  ;This will happen 5 times.
+  #Original Code - Store the value of 1 of the keys.
+  #This will happen 5 times.
   stwx r3, r6, r0
 
 End:  

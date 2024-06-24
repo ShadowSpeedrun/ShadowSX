@@ -1,18 +1,18 @@
-#To be inserted at 80178BC4
-;RestoreTimeOnDeathChecks.asm
+#80178BC4
+#RestoreTimeOnDeathChecks.asm
 
-;Normally we do not want to restore the timer to
-;the last checkpoint / save, but for Bosses we need to
-;reset the OG timer to keep functionality the same as OG.
-;We also only want to reset the New IGT if we are in select mode.
+#Normally we do not want to restore the timer to
+#the last checkpoint / save, but for Bosses we need to
+#reset the OG timer to keep functionality the same as OG.
+#We also only want to reset the New IGT if we are in select mode.
 
-;To check for if we are in a boss fight, we will do some bit math
-;on the Stage ID. Boss IDs are set as: Level Column - Boss - #
-;So 412 = Column 4 Third Boss = Black Bull 2.
+#To check for if we are in a boss fight, we will do some bit math
+#on the Stage ID. Boss IDs are set as: Level Column - Boss - #
+#So 412 = Column 4 Third Boss = Black Bull 2.
 
 Start:
-  ;Load value of "Boss Selected"
-  ;into r18. (8057D748)
+  #Load value of "Boss Selected"
+  #into r18. (8057D748)
   lis r18, 0x8057
   ori r17, r18, 0xD748
   lwz r17, 0(r17)
@@ -27,13 +27,13 @@ Start:
   blt End
 
 RestoreTimerOG:
-  ;Original Code
-  ;r4+148 = 8057D734
+  #Original Code
+  #r4+148 = 8057D734
   stfs f0, 148(r4)
 
 CheckSelectMode:
-  ;Load value of "Select Mode Flag"
-  ;into r18. (8057D8FE)
+  #Load value of "Select Mode Flag"
+  #into r18. (8057D8FE)
   lis r18, 0x8057
   ori r18, r18, 0xD8FE
   lhz r18, 0(r18)
