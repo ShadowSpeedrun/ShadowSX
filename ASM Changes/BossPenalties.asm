@@ -24,17 +24,15 @@
 
 #Times for bosses in order of Intro, Mid
 #
-#                  Heavy Dog = 4   , 2.5 (410)
-#           Egg Breaker Dark = 4   , 1.5 (310)
-#           Egg Breaker Hero = 4   , 1.5 (411)
-#         Egg Breaker Normal = 4   , 4   (511)
-#               Black Bull 1 = 5   , 3   (210)
-#               Black Bull 2 = 5   , 3   (412)
-#                Blue Falcon = 4   , 2   (510)
-#          Sonic and Diablon = 4   , 3   (611, 613, 618)
-#                 Black Doom = 5   , 2   (610, 616, 617)
-#                 Egg Dealer = 14.5, 2   (612, 614, 615)
-#                 Devil Doom = 4   , 5   (710)
+#                     Heavy Dog = 4   , 2.5 (410)
+#       Egg Breaker Dark & Hero = 4   , 1.5 (310, 411)
+#            Egg Breaker Normal = 4   , 4   (511)
+#                    Black Bull = 5   , 3   (210, 412)
+#                   Blue Falcon = 4   , 2   (510)
+#(Not Required) Sonic & Diablon = 4   , 3   (611, 613, 618)
+#                    Black Doom = 5   , 2   (610, 616, 617)
+#     (Not Required) Egg Dealer = 14.5, 2   (612, 614, 615)
+#                    Devil Doom = 4   , 5   (710)
 #
 #1.5, 2, 2.5, 3, 4, 5, 14.5
 
@@ -45,7 +43,7 @@
 #f10 = Should be safe (volatile)
 
 Start:
-  #if Story# 
+  #if Story;
   #Load "StageSequenceManager Phase" into r16.
   #Dont continue if not Story Mode
   lis r16, 0x805E
@@ -85,14 +83,6 @@ IntroPenalty:
 
   #load #8057D748
   lwz r17, -0x1B8(r18)
-
-  #if Egg Dealer -> Penalty14_5
-  cmpwi r17, 612
-  beq Penalty14_5
-  cmpwi r17, 614
-  beq Penalty14_5
-  cmpwi r17, 615
-  beq Penalty14_5
 
   #if Penalty5
   cmpwi r17, 610
@@ -145,12 +135,6 @@ MidPenalty:
   beq Penalty3
   cmpwi r17, 412
   beq Penalty3
-  cmpwi r17, 611
-  beq Penalty3
-  cmpwi r17, 613
-  beq Penalty3
-  cmpwi r17, 618
-  beq Penalty3
 
   #else -> 2
   b Penalty2
@@ -196,11 +180,6 @@ Penalty5:
   stw r17, 2(r18)
   b ApplyPenalty
 
-Penalty14_5:
-  #Add 14.5 seconds 0x41680000
-  lis r17, 0x4168
-  stw r17, 2(r18)
-
 ApplyPenalty:
   lfs f9, 2(r18)
 
@@ -217,8 +196,6 @@ TimeCleanup:
   ori r18, r18, 0xD902
   li r17, 0
   stw r17, 0(r18)
-  #lfs f4, 0(r18)
-  #lfs f6, 0(r18)
   b End
 
 FightEndCleanup:
@@ -231,12 +208,3 @@ FightEndCleanup:
 End:
   #Original Code
   li r4, 4
-
-
-
-
-
-
-
-
-
