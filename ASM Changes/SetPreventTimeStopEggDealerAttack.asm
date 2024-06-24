@@ -44,12 +44,11 @@ IntroCheck:
   cmpwi r18, 0
   beq IntroSet
 
-  #If Intro Seen Again, Add 14.54 seconds 0x4168A3D7
+  #If Intro Seen Again, Add 14.5 seconds 0x41680000
   lis r18, 0x8057
   ori r18, r18, 0xD902
 
   lis r17, 0x4168
-  ori r17, r17, 0xA3D7
   stw r17, 0(r18)
   lfs f0, 0(r18)
 
@@ -82,12 +81,11 @@ MidCheck:
   cmpwi r18, 0
   beq MidSet
 
-  #If Mid Seen Again, Add 1.99 seconds 0x3FFEB852
+  #If Mid Seen Again, Add 2 seconds 0x40000000
   lis r18, 0x8057
   ori r18, r18, 0xD902
 
-  lis r17, 0x3FFE
-  ori r17, r17, 0xB852
+  lis r17, 0x4000
   stw r17, 0(r18)
   lfs f0, 0(r18)
 
