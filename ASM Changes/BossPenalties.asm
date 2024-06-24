@@ -36,174 +36,115 @@
 #
 #1.5, 2, 2.5, 3, 4, 5, 14.5
 
-#This SEEMS to be consistant every time we reach here
-#Would be nice to verify why that is the case.
-#f6 = 0,0
-#f9 = Should be safe (volatile)
-#f10 = Should be safe (volatile)
-
 Start:
-  #if Story;
-  #Load "StageSequenceManager Phase" into r16.
-  #Dont continue if not Story Mode
-  lis r16, 0x805E
-  ori r16, r16, 0xF9A8
-  lwz r16, 0x0(r16)
-  lwz r16, 0x4(r16)
-  cmpwi r16, 1
-  bne End
-
-  #Load value of Boss Health into f4
-  lis r16, 0x805E
-  ori r16, r16, 0xE65C  
-  lfs f10, 0(r16)
-
-  #f6 = 0#  
-  #if Health == 0, clean up values used for checks.
-  fcmpu cr0, f10, f6
-  beq FightEndCleanup
-
+  mflr r16
   #Try to keep D900 available for reference.
   lis r18, 0x8057
   ori r18, r18, 0xD900
 
-  #Set f9 = 1
-  li r16, 0x3F80
-  sth r16, 2(18)
-  lfs f9, 2(r18)
-
-  #Health != 1 means mid fight cutscene
-  fcmpu cr0, f10, f9
-  bne MidPenalty
-
-IntroPenalty:
-  lbz r17, 0(r18)
-  cmpwi r17, 1
-  bne IntroSet
-
-  #load #8057D748
-  lwz r17, -0x1B8(r18)
-
-  #if Penalty5
-  cmpwi r17, 610
-  beq Penalty5
-  cmpwi r17, 616
-  beq Penalty5
-  cmpwi r17, 617
-  beq Penalty5
-  cmpwi r17, 210
-  beq Penalty5
-  cmpwi r17, 412
-  beq Penalty5
-
-  #else Penalty4
-  b Penalty4
-
-IntroSet:
-  li r17, 1
-  stb r17, 0(r18)
-  bne TimeCleanup
-
 MidPenalty:
-  lbz r17, 1(r18)
-  cmpwi r17, 1
-  bne MidSet
+  #load Stage ID into r19
+  lwz r19, -0x1B8(r18)
 
-  #load #8057D748
-  lwz r17, -0x1B8(r18)
+  #Assume 2 Seconds and overwrite 
+  #if another check passes.
+  bl Penalty2
 
   #if DD -> Penalty5
-  cmpwi r17, 710
-  beq Penalty5
+  cmpwi r19, 710
+  beql Penalty5
 
   #if EB-N -> Penalty4
-  cmpwi r17, 511
-  beq Penalty4
+  cmpwi r19, 511
+  beql Penalty4
 
   #if HD -> 2.5
-  cmpwi r17, 410
-  beq Penalty2_5
+  cmpwi r19, 410
+  beql Penalty2_5
 
   #if EB-DH -> 1.5
-  cmpwi r17, 310
-  beq Penalty1_5
-  cmpwi r17, 411
-  beq Penalty1_5
+  cmpwi r19, 310
+  beql Penalty1_5
+  cmpwi r19, 411
+  beql Penalty1_5
 
   #if BB or SD -> 3
-  cmpwi r17, 210
-  beq Penalty3
-  cmpwi r17, 412
-  beq Penalty3
+  cmpwi r19, 210
+  beql Penalty3
+  cmpwi r19, 412
+  beql Penalty3
 
-  #else -> 2
-  b Penalty2
+  #Move Mid to correct register
+  #Penalty routines load to f11 for condensed code.
+  fmr f12, f11 
 
-MidSet:
-  li r17, 1
-  stb r17, 1(r18)
-  bne TimeCleanup
+IntroPenalty:
+  #load Stage ID into r19
+  lwz r19, -0x1B8(r18)
+
+  #Assume 4 Seconds and overwrite 
+  #if another check passes.
+  bl Penalty4
+
+  #if Penalty5
+  cmpwi r19, 610
+  beql Penalty5
+  cmpwi r19, 616
+  beql Penalty5
+  cmpwi r19, 617
+  beql Penalty5
+  cmpwi r19, 210
+  beql Penalty5
+  cmpwi r19, 412
+  beql Penalty5
+
+  mtlr r16
+  #bl TimePenaltyCheck
+  #To be injected in MCM
+  nop
+  b End
 
 Penalty1_5:
   #Add 1.5 seconds 0x3FC00000
   lis r17, 0x3FC0
   stw r17, 2(r18)
-  b ApplyPenalty
+  lfs f11, 2(r18)
+  blr
 
 Penalty2:
   #Add 2 seconds 0x40000000
   lis r17, 0x4000
   stw r17, 2(r18)
-  b ApplyPenalty
+  lfs f11, 2(r18)
+  blr
 
 Penalty2_5:
   #Add 2.5 seconds 0x40200000
   lis r17, 0x4020
   stw r17, 2(r18)
-  b ApplyPenalty
+  lfs f11, 2(r18)
+  blr
 
 Penalty3:
   #Add 3 seconds 0x40400000
   lis r17, 0x4040
   stw r17, 2(r18)
-  b ApplyPenalty
+  lfs f11, 2(r18)
+  blr
 
 Penalty4:
   #Add 4 seconds 0x40800000
   lis r17, 0x4080
   stw r17, 2(r18)
-  b ApplyPenalty
+  lfs f11, 2(r18)
+  blr
 
 Penalty5:
   #Add 5 seconds 0x40A00000
   lis r17, 0x40A0
   stw r17, 2(r18)
-  b ApplyPenalty
-
-ApplyPenalty:
-  lfs f9, 2(r18)
-
-  lis r18, 0x8057
-  ori r18, r18, 0xD734
-
-  lfs f10, 0x1D4(r18)
-  fadds f9, f9, f10
-  stfs f9, 0x1D4(r18)
-
-TimeCleanup:
-  #Restore Memory and Registries
-  lis r18, 0x8057
-  ori r18, r18, 0xD902
-  li r17, 0
-  stw r17, 0(r18)
-  b End
-
-FightEndCleanup:
-  lis r18, 0x8057
-  ori r18, r18, 0xD900
-  li r17, 0
-  sth r17, 0(r18)
-  stw r17, 2(r18)
+  lfs f11, 2(r18)
+  blr
 
 End:
   #Original Code
