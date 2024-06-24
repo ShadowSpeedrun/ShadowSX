@@ -35,6 +35,14 @@ Start:
   sth r19, 0(r18)
   ;Turn Offset Off.
   sth r19, -6(r18)
+ 
+  ;Set Message Addresses to hide message.
+  lis r18, 0x807D
+  ori r18, r18, 0x5700
+  li r19, -1
+  stw r19, 0(r18)
+  li r19, -2
+  stw r19, 4(r18)
 
 EndMessage:
   li r3, 1
