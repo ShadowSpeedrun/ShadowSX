@@ -23,7 +23,7 @@ Start:
   #r10 contains address to start of our message.
   #Offset it to the start of the dynamic section.
   lwz r21, 0(r10)
-  addi r21, r21, 0x54
+  addi r21, r21, 0x7A
 
   #Determine the Timer to Display
   #First check for Expert Flag(8057D7C4)
