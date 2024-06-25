@@ -32,10 +32,10 @@ SetToAutoSave:
   li r19, 40
   sth r19, 0(r18)
   li r3, 0
-  ;Set Offset to Zero
+  #Set Offset to Zero
   sth r3, -2(r18)
 
-  ;Set Last seen Message to Autosave to prevent showing 0 offset 44.
+  #Set Last seen Message to Autosave to prevent showing 0 offset 44.
   lis r18, 0x807D
   ori r18, r18, 0x5700
   stw r19, 0(r18)

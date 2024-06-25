@@ -33,10 +33,10 @@ Start:
   ori r18, r18, 0xD900
   li r19, 0
   sth r19, 0(r18)
-  ;Turn Offset Off.
+  #Turn Offset Off.
   sth r19, -6(r18)
  
-  ;Set Message Addresses to hide message.
+  #Set Message Addresses to hide message.
   lis r18, 0x807D
   ori r18, r18, 0x5700
   li r19, -1
