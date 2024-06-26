@@ -23,8 +23,14 @@ Start:
   #r10 contains address to start of our message.
   #Offset it to the start of the dynamic section.
   lwz r21, 0x14(r10)
-  addi r21, r21, 0x54
+  addi r21, r21, 0x22#0x22 JPN, 0x54 everyone else.
+  ori r18, r16, 0x6972
+  lwz r18, 0(r18)
+  cmpwi r18, 0
+  beq GetTimer
+  addi r21, r21, 0x32 #add remaining offset if not JPN.
 
+GetTimer:
   #Determine the Timer to Display
   #First check for Expert Flag(8057D7C4)
   ori r18, r16, 0xD7C4
