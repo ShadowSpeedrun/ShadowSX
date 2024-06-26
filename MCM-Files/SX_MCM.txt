@@ -1279,14 +1279,7 @@ The following codes will prevent the HUD from hiding and the IGT from pausing du
 It will also apply the Intro and Mid fight penalties if needed.
 [BlazinZzetti]
 Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.06 --- 0x801E33DC ---- 38A00001 -> Branch
-
-38A00000 3E408057
-6252D900 B0B20000
-38A00001 3A400000
-60000000 00000000
-
-------------- 0x80204CE8 ---- 98050148 -> Branch
+NTSC 1.06 --- 0x80204CE8 ---- 98050148 -> Branch
 
 3E408057 6252D8A6
 A2520000 28120000
@@ -1441,6 +1434,83 @@ NTSC 1.06 --- 0x80049E0C ---- 806A0000 -> Branch
 1E500014 7C6A902E
 3A000000 3A400000
 60000000 00000000
+
+
+	-==-
+
+
+Practice Mode - Restart on Mission Complete
+If Practice Mode is active, prevent goal complete and restart instead.
+
+Order of Replacements:
+Missions
+Black Bull
+Heavy Dog
+Blue Falcon
+Egg Dealer
+Black Doom
+Sonic & Diablon
+Egg Breaker
+[BlazinZzetti]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+<PracticeRestartOnMissionComplete> NTSC 1.06
+9421fff8 7e6802a6
+92610004 38800006
+3e408057 6252d8f4
+8a520000 2c120001
+40820008 38800007
+82610004 38210008
+3a730004 7e6803a6
+3a600000 4e800020
+
+NTSC 1.06 --- 0x8016B08C ---- 38800006 -> Branch
+
+b <PracticeRestartOnMissionComplete>
+
+------------- 0x80235AD4 ---- 38800006 -> Branch
+
+b <PracticeRestartOnMissionComplete>
+
+------------- 0x80250F20 ---- 38800006 -> Branch
+
+b <PracticeRestartOnMissionComplete>
+
+------------- 0x8025326C ---- 38800006 -> Branch
+
+b <PracticeRestartOnMissionComplete>
+
+------------- 0x80310108 ---- 38800006 -> Branch
+
+b <PracticeRestartOnMissionComplete>
+
+------------- 0x80286910 ---- 38800006 -> Branch
+
+b <PracticeRestartOnMissionComplete>
+
+------------- 0x802D4B6C ---- 38800006 -> Branch
+
+b <PracticeRestartOnMissionComplete>
+
+------------- 0x802ab654 ---- 38800006 -> Branch
+
+b <PracticeRestartOnMissionComplete>
+
+
+	-==-
+
+
+SetShowRaceTimeFalseOnPauseExit
+SetShowRaceTimeFalseOnPauseExit.asm
+
+Used for Bosses and Practice Mode
+[BlazinZzetti]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.06 --- 0x801E33DC ---- 38A00001 -> Branch
+
+38a00000 3e408057
+6252d900 b0b20000
+b0b2fff4 38a00001
+3a400000 00000000
 
 
 	-==-

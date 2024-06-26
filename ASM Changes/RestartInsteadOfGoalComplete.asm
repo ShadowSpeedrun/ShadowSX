@@ -9,6 +9,11 @@
 #Practice Mode Flag = 8057D8F4
 
 Start:
+  #Manage Stack Pointer
+  stwu sp, -8(sp)
+  mflr r19
+  stw r19, 4(sp)
+
   #Original Code
   li r4, 6
 
@@ -22,3 +27,12 @@ Start:
   #Change Action
   li r4, 7
 End:
+
+  #Manage Stack Pointer and Return
+  lwz r19, 4(sp)
+  addi sp, sp, 8
+  addi r19, r19, 4 #Return to Instruction after initial inject branch.
+
+  mtlr r19
+  li r19, 0
+  blr
