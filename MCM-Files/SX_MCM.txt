@@ -1447,7 +1447,11 @@ NTSC 1.06 --- 0x80049E0C ---- 806A0000 -> Branch
 
 
 Rounding Patch for IGT Displays
-Uses GetTimeDigitsRoundedPatch.asm, GetTimeDigitsRoundedPatch2.asm
+Uses the following code files:
+GetTimeDigitsRoundedPatch.asm
+GetTimeDigitsRoundedPatch2.asm
+GetTimeDigitsRoundedPatch3.asm
+GetTimeDigitsRoundedPatch4.asm
 
 Various patches to show a time value that is able to round up if the rounding decimal is 5 or higher.
 [BlazinZzetti]
@@ -1461,6 +1465,21 @@ ec00182a 3e4042c8
 60000000 00000000
 
 ------------- 0x801E45F4 ---- 7C003050 -> Branch
+
+7c003050 2c050064
+40820014 88a30004
+38a50001 98a30004
+38a00000 00000000
+
+------------- 0x801E46B8 ---- EC030032 -> Branch
+
+ec030032 3e403f00
+9241fffc c061fffc
+ec00182a 3e4042c8
+9241fffc c061fffc
+60000000 00000000
+
+------------- 0x801E46CC ---- 7C003050 -> Branch
 
 7c003050 2c050064
 40820014 88a30004
