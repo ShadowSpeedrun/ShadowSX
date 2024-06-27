@@ -64,44 +64,23 @@ SetLastTime:
   #b GetDigits
 
 GetDigits:
-  #r4 -> r14
-  #r0 -> r15
-  #r6 -> r16
-  #r5 -> r17
-  #r3 -> r18
-  #sp -> r19
-  
-  #Load what sp would be into r19
-  lis r16, 0x8060
-  ori r19, r16, 0xB2C0
-  
-  ori r18, r16, 0xB33C
-  
-  fctiwz f0, f1
-  stwu r19, -0x0020 (r19)
-  lis r14, 0x4330
-  li r15, 60
-  stw r14, 0x0010 (r19)
-  lfd f2, -0x3678 (rtoc)
-  stfd f0, 0x0008 (r19)
-  lfs f3, -0x367C (rtoc)
-  lwz r16, 0x000C (r19)
-  xoris r17, r16, 0x8000
-  divw r14, r16, r15
-  stw r17, 0x0014 (r19)
-  lfd f0, 0x0010 (r19)
-  fsubs f0, f0, f2
-  fsubs f0, f1, f0
-  fmuls f0, f3, f0
-  fctiwz f0, f0
-  mullw r15, r14, r15
-  stfd f0, 0x0018 (r19)
-  lwz r17, 0x001C (r19)
-  sub r15, r16, r15
-  stb r17, 0x0005 (r18)
-  stw r14, 0 (r18)
-  stb r15, 0x0004 (r18)
-  addi r19, r19, 32
+  #Do a bl to 0x801e45a4
+  lis r18, 0x801e
+  ori r18, r18, 0x45a4
+  #Set r3 to location for time bytes
+  lis r3, 0x8060
+  ori r3, r3, 0xB33C
+  #Keep copy of r4 to restore later.
+  mr r23, r4
+  mtctr r18
+  bctrl
+  #Restore r3
+  mr r3, r30
+  #Restore r4
+  mr r4, r23
+  li r23, 0
+  #Restore r5
+  lis r5, 0x8057
 
   #LocationOfTimeBytes(8060B33F)
 
