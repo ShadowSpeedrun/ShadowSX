@@ -1560,3 +1560,78 @@ ec00182a 3e4042c8
 40820014 88a30004
 38a50001 98a30004
 38a00000 00000000
+
+
+	-==-
+
+
+Practice Mode - Show Meter Values as Scores
+Uses:
+ToggleShowHeroMeterAsHeroScore.asm
+ToggleShowDarkMeterAsDarkScore.asm
+
+If in Practice Mode and a toggle flag is set, show the meter values instead of the score values.
+[BlazinZzetti]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.06 --- 0x802018F8 ---- 80BD0030 -> Branch
+
+8a1d7210 2c100001
+40820018 8a1d7211
+2c100001 4082000c
+80bdffe4 48000008
+80bd0030 00000000
+
+------------- 0x80201924 ---- 80BD0034 -> Branch
+
+8a1d7210 2c100001
+40820018 8a1d7211
+2c100001 4082000c
+80bdfff0 48000008
+80bd0034 00000000
+
+
+
+	-==-
+
+
+Practice Mode - Controller Commands
+Uses PracticeModeCommands.asm
+
+Adds following commands when in Practice Mode
+Z+L+R = Clear Dark and Hero Meters
+Z+L = Fill Dark Meter
+Z+R = Fill Hero Meter
+Z + DPad Up = Toggle Display of Score or Meter Values
+[BlazinZzetti]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.06 --- 0x803499CC ---- 901F0028 -> Branch
+
+901f0028 3e408057
+6252d8f4 8a120000
+2c100001 408200cc
+70100020 2c100020
+408200c0 70103020
+2c103020 4082001c
+3a200000 3e408057
+625266c8 92320000
+9232000c 4800009c
+70102020 2c102020
+40820018 3a207530
+3e408057 625266c8
+92320000 4800007c
+70101020 2c101020
+40820018 3a207530
+3e408057 625266c8
+9232000c 4800005c
+70100060 2c100060
+40820040 3e408057
+6252d8f5 8a120001
+2c100001 4182003c
+3a000001 9a120001
+8a120000 2c100000
+4082000c 3a000001
+48000008 3a000000
+9a120000 48000014
+3e408057 6252d8f6
+3a000000 9a120000
+60000000 00000000
