@@ -1,6 +1,8 @@
 #80206334
 #DpadUpSelectModeLevelEnter.asm
 
+#8057D8F4 = Practice Mode (Normally Option Index for Intro Message????)
+
 Start:
   #Check if we are running from the select mode screen
   lis r18, 0x8058
@@ -13,9 +15,26 @@ Start:
   #No Dpad Up = No need to run code.
   lis r18, 0x8056
   ori r18, r18, 0xED4C
-  lwz r18, 0(r18)
-  andi. r18, r18, 0x40
-  cmpwi r18, 0x40  
+  lwz r19, 0(r18)
+  #Check for Z Button First.
+  #Z = Practice Mode.
+  andi. r19, r19, 0x20
+  cmpwi r19, 0x20
+  bne CheckDPadUp
+  
+  #Set Practice Mode to 1
+  lis r18, 0x8057
+  ori r18, r18, 0xD8F4
+  li r19, 1
+  stb r19, 0(r18)
+  #Continue on for other checks.
+
+CheckDPadUp:
+  lis r18, 0x8056
+  ori r18, r18, 0xED4C
+  lwz r19, 0(r18)
+  andi. r19, r19, 0x40
+  cmpwi r19, 0x40  
   bne DisableEggIL
 
   #Load the value of "Level Boss Selected" into r18.(80584568)
@@ -75,8 +94,9 @@ DisableEggIL:
   sth r19, 0(r18)
 
 Exit: 
-  #Original Code? TODO: Why does this say Original Code?
+  #Original Code
   stb r3, 89(r31)
+
   li r3, 0x0
   li r18, 0x0
   li r19, 0x0

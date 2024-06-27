@@ -1002,31 +1002,36 @@ This also sets the From Select Mode Flag needed to prevent modifying other save 
 Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 NTSC 1.06 --- 0x80206334 ---- 987F0059 -> Branch
 
-3E408058 62523ACC
-82120000 2C100006
-408200A4 3E408056
-6252ED4C 82520000
-72520040 2C120040
-40820080 3E408058
-62524568 8A520000
-2C120001 4182006C
-3E408058 62524570
-8A520000 2C120001
-4182000C 38600001
-48000050 3E408058
-6252456C 82520000
-28120003 4182002C
+3e408058 62523acc
+82120000 2c100006
+408200cc 3e408056
+6252ed4c 82720000
+72730020 2c130020
+40820014 3e408057
+6252d8f4 3a600001
+9a720000 3e408056
+6252ed4c 82720000
+72730040 2c130040
+40820080 3e408058
+62524568 8a520000
+2c120001 4182006c
+3e408058 62524570
+8a520000 2c120001
+4182000c 38600001
+48000050 3e408058
+6252456c 82520000
+28120003 4182002c
 28120004 41820024
-28120005 4182001C
+28120005 4182001c
 28120006 41820014
-48000020 3E408057
-6252D928 4E800020
-4BFFFFF5 3A600001
-B2720000 48000010
-4BFFFFE5 3A600000
-B2720000 987F0059
-38600000 3A400000
-3A600000 00000000
+48000020 3e408057
+6252d928 4e800020
+4bfffff5 3a600001
+b2720000 48000010
+4bffffe5 3a600000
+b2720000 987f0059
+38600000 3a400000
+3a600000 00000000
 
 
 	-==-
@@ -1279,14 +1284,7 @@ The following codes will prevent the HUD from hiding and the IGT from pausing du
 It will also apply the Intro and Mid fight penalties if needed.
 [BlazinZzetti]
 Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.06 --- 0x801E33DC ---- 38A00001 -> Branch
-
-38A00000 3E408057
-6252D900 B0B20000
-38A00001 3A400000
-60000000 00000000
-
-------------- 0x80204CE8 ---- 98050148 -> Branch
+NTSC 1.06 --- 0x80204CE8 ---- 98050148 -> Branch
 
 3E408057 6252D8A6
 A2520000 28120000
@@ -1446,6 +1444,83 @@ NTSC 1.06 --- 0x80049E0C ---- 806A0000 -> Branch
 	-==-
 
 
+Practice Mode - Restart on Mission Complete
+If Practice Mode is active, prevent goal complete and restart instead.
+
+Order of Replacements:
+Missions
+Black Bull
+Heavy Dog
+Blue Falcon
+Egg Dealer
+Black Doom
+Sonic & Diablon
+Egg Breaker
+[BlazinZzetti]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+<PracticeRestartOnMissionComplete> NTSC 1.06
+9421fff8 7e6802a6
+92610004 38800006
+3e408057 6252d8f4
+8a520000 2c120001
+40820008 38800007
+82610004 38210008
+3a730004 7e6803a6
+3a600000 4e800020
+
+NTSC 1.06 --- 0x8016B08C ---- 38800006 -> Branch
+
+b <PracticeRestartOnMissionComplete>
+
+------------- 0x80235AD4 ---- 38800006 -> Branch
+
+b <PracticeRestartOnMissionComplete>
+
+------------- 0x80250F20 ---- 38800006 -> Branch
+
+b <PracticeRestartOnMissionComplete>
+
+------------- 0x8025326C ---- 38800006 -> Branch
+
+b <PracticeRestartOnMissionComplete>
+
+------------- 0x80310108 ---- 38800006 -> Branch
+
+b <PracticeRestartOnMissionComplete>
+
+------------- 0x80286910 ---- 38800006 -> Branch
+
+b <PracticeRestartOnMissionComplete>
+
+------------- 0x802D4B6C ---- 38800006 -> Branch
+
+b <PracticeRestartOnMissionComplete>
+
+------------- 0x802ab654 ---- 38800006 -> Branch
+
+b <PracticeRestartOnMissionComplete>
+
+
+	-==-
+
+
+SetShowRaceTimeFalseOnPauseExit
+SetShowRaceTimeFalseOnPauseExit.asm
+
+Used for Bosses and Practice Mode
+[BlazinZzetti]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.06 --- 0x801E33DC ---- 38A00001 -> Branch
+
+38a00000 3e408057
+6252d900 b0b20000
+b0b2fff4 38a00001
+3a400000 00000000
+
+
+	-==-
+
+
 Rounding Patch for IGT Displays
 Uses the following code files:
 GetTimeDigitsRoundedPatch.asm
@@ -1485,3 +1560,78 @@ ec00182a 3e4042c8
 40820014 88a30004
 38a50001 98a30004
 38a00000 00000000
+
+
+	-==-
+
+
+Practice Mode - Show Meter Values as Scores
+Uses:
+ToggleShowHeroMeterAsHeroScore.asm
+ToggleShowDarkMeterAsDarkScore.asm
+
+If in Practice Mode and a toggle flag is set, show the meter values instead of the score values.
+[BlazinZzetti]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.06 --- 0x802018F8 ---- 80BD0030 -> Branch
+
+8a1d7210 2c100001
+40820018 8a1d7211
+2c100001 4082000c
+80bdffe4 48000008
+80bd0030 00000000
+
+------------- 0x80201924 ---- 80BD0034 -> Branch
+
+8a1d7210 2c100001
+40820018 8a1d7211
+2c100001 4082000c
+80bdfff0 48000008
+80bd0034 00000000
+
+
+
+	-==-
+
+
+Practice Mode - Controller Commands
+Uses PracticeModeCommands.asm
+
+Adds following commands when in Practice Mode
+Z+L+R = Clear Dark and Hero Meters
+Z+L = Fill Dark Meter
+Z+R = Fill Hero Meter
+Z + DPad Up = Toggle Display of Score or Meter Values
+[BlazinZzetti]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.06 --- 0x803499CC ---- 901F0028 -> Branch
+
+901f0028 3e408057
+6252d8f4 8a120000
+2c100001 408200cc
+70100020 2c100020
+408200c0 70103020
+2c103020 4082001c
+3a200000 3e408057
+625266c8 92320000
+9232000c 4800009c
+70102020 2c102020
+40820018 3a207530
+3e408057 625266c8
+92320000 4800007c
+70101020 2c101020
+40820018 3a207530
+3e408057 625266c8
+9232000c 4800005c
+70100060 2c100060
+40820040 3e408057
+6252d8f5 8a120001
+2c100001 4182003c
+3a000001 9a120001
+8a120000 2c100000
+4082000c 3a000001
+48000008 3a000000
+9a120000 48000014
+3e408057 6252d8f6
+3a000000 9a120000
+60000000 00000000
