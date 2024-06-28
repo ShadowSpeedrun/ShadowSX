@@ -3,7 +3,7 @@
 
 Start:
   #Determine that we are trying to render the Time message.
-  #Check for Time Flag (8057D901)
+  #Check for Time Flag (8057D900)
   lis r16, 0x8057
   ori r18, r16, 0xD900
   lhz r18, 0(r18)
