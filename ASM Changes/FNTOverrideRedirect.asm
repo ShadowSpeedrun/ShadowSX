@@ -8,22 +8,7 @@ Start:
   #TODO: Confirm this is checking for OK prompt
   cmpwi r11, 1
   bne End
-
-  #Check if it's a message we are expecting to override.
-  #43 = IGT Messages
-  #44 = SX Intro
-  lis r18, 0x807D
-  addi r18, r18, 0x5700
-  lwz r16, 0(r18)
-  #Incase of exit
-  li r18, 0
   
-  cmpwi r16, 43
-  beq SetOffset
-  cmpwi r16, 44
-  bne End
-
-SetOffset:  
   #Get Custom Offset.
   #If above 0, assume we want to show a custom message.
   lis r18, 0x8057
