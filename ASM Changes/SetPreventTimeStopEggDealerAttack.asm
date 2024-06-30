@@ -28,7 +28,7 @@ Start:
 PenaltyCheck:
   #Setup Memory Bucket
   lis r18, 0x8057
-  ori r18, r18, 0xD902
+  ori r18, r18, 0xD904
 
   #Intro is 14.5 seconds 0x41680000
   lis r17, 0x4168

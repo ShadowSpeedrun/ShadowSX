@@ -7,7 +7,7 @@
 Start:
   #Setup Memory Bucket
   lis r18, 0x8057
-  ori r18, r18, 0xD902
+  ori r18, r18, 0xD904
 
   #Intro is 4 seconds 0x40800000
   lis r17, 0x4080

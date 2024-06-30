@@ -107,43 +107,43 @@ IntroPenalty:
 Penalty1_5:
   #Add 1.5 seconds 0x3FC00000
   lis r17, 0x3FC0
-  stw r17, 2(r18)
-  lfs f11, 2(r18)
+  stw r17, 4(r18)
+  lfs f11, 4(r18)
   blr
 
 Penalty2:
   #Add 2 seconds 0x40000000
   lis r17, 0x4000
-  stw r17, 2(r18)
-  lfs f11, 2(r18)
+  stw r17, 4(r18)
+  lfs f11, 4(r18)
   blr
 
 Penalty2_5:
   #Add 2.5 seconds 0x40200000
   lis r17, 0x4020
-  stw r17, 2(r18)
-  lfs f11, 2(r18)
+  stw r17, 4(r18)
+  lfs f11, 4(r18)
   blr
 
 Penalty3:
   #Add 3 seconds 0x40400000
   lis r17, 0x4040
-  stw r17, 2(r18)
-  lfs f11, 2(r18)
+  stw r17, 4(r18)
+  lfs f11, 4(r18)
   blr
 
 Penalty4:
   #Add 4 seconds 0x40800000
   lis r17, 0x4080
-  stw r17, 2(r18)
-  lfs f11, 2(r18)
+  stw r17, 4(r18)
+  lfs f11, 4(r18)
   blr
 
 Penalty5:
   #Add 5 seconds 0x40A00000
   lis r17, 0x40A0
-  stw r17, 2(r18)
-  lfs f11, 2(r18)
+  stw r17, 4(r18)
+  lfs f11, 4(r18)
   blr
 
 End:
