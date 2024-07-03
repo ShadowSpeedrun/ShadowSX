@@ -184,41 +184,22 @@ SetupPage1SXOptions:
 
   #r17 = value save address
   #r18 = value to use address
-
-  #Get value for CS Skip
-  lbz r16, 0(r17)
-  stb r16, 0(r18)
-  #Configure avaiable settings for option
+  #Using Loop since they all the options here are using the same init code
+  #r24 = Iterator
+  #r25 = NumOfItems
+  li r24, 0
+  li r25, 5
+Page1Loop:
+  #Get value for CS Skip	 
+  lbzx r16, r17, r24
+  stbx r16, r18, r24
+  #Configure avaiable settings for optioxd3wn
   li r16, 0
-  stb r16, 5(r18)
-
-  #Get value for Race Mode
-  lbz r16, 1(r17)
-  stb r16, 1(r18)
-  #Configure avaiable settings for option
-  li r16, 0
-  stb r16, 6(r18)
-
-  #Get value for Modern UI Control
-  lbz r16, 2(r17)
-  stb r16, 2(r18)
-  #Configure avaiable settings for option
-  li r16, 0
-  stb r16, 7(r18)
-
-  #Get value for Disable SPW Unlock
-  lbz r16, 3(r17)
-  stb r16, 3(r18)
-  #Configure avaiable settings for option
-  li r16, 0
-  stb r16, 8(r18)
-
-  #Get value for Disable Key Saving
-  lbz r16, 4(r17)
-  stb r16, 4(r18)
-  #Configure avaiable settings for option
-  li r16, 0
-  stb r16, 9(r18)
+  addi r24, r24, 5 #Add 5 to get new offset
+  stbx r16, r18, r24
+  subi r24, r24, 4 #Sub 4 to get Interator++
+  cmpw r24, r25
+  blt Page1Loop
   
   #Set 8057FBBA as the max index for the option selection (0 based)
   li r17, 4
@@ -236,27 +217,21 @@ SetupPage2SXOptions:
 
   #r17 = value save address
   #r18 = value to use address
+  #r24 = Iterator
+  #r25 = NumOfItems
+  li r24, 0
+  li r25, 3
 
-  #Get Value for Unlock Last Story
-  lbz r16, 0(r17)
-  stb r16, 0(r18)
+Page2Loop:
+  lbzx r16, r17, r24
+  stbx r16, r18, r24
   #Configure avaiable settings for option
   li r16, 2
-  stb r16, 5(r18)
-
-  #Get Value for Unlock Expert Mode
-  lbz r16, 1(r17)
-  stb r16, 1(r18)
-  #Configure avaiable settings for option
-  li r16, 2
-  stb r16, 6(r18)
-  
-  #Get Value for Unlock Stages
-  lbz r16, 2(r17)
-  stb r16, 2(r18)
-  #Configure avaiable settings for option
-  li r16, 2
-  stb r16, 7(r18)
+  addi r24, r24, 5 #Add 5 to get new offset
+  stbx r16, r18, r24
+  subi r24, r24, 4 #Sub 4 to get Interator++
+  cmpw r24, r25
+  blt Page2Loop
   
   #Get Value for All Keys Action
   lbz r16, 3(r17)
@@ -298,7 +273,7 @@ SetupPage3SXOptions:
   andi. r16, r16, 3 #Filter out all other weapon statuses
   cmpwi r16, 0 #Only need to adjust r16 if not 0.
   bnel SPWStatusOptionIndex
-  
+
   stb r16, 1(r18)
   #Configure avaiable settings for option
   li r16, 3
@@ -310,12 +285,12 @@ SetupPage3SXOptions:
   srawi r16, r16, 2 #make r16 use the right most bits for weapon status.
   cmpwi r16, 0 #Only need to adjust r16 if not 0.
   bnel SPWStatusOptionIndex
-  
+
   stb r16, 2(r18)
   #Configure avaiable settings for option
   li r16, 3
   stb r16, 7(r18)
-  
+
   #Set 8057FBBA as the max index for the option selection (0 based)
   li r17, 2
   stb r17, 10(r18)
@@ -381,45 +356,29 @@ SavePage1SXOptions:
   #8057FBB0 are the current configured options.
   #80577B2C = Where Memory Card options are saved.
 
-  stwu sp, -8(sp)
-  mflr r14
-  stw r14, 4(sp)
-
   lis r16, 0x8057
   ori r17, r16, 0x7B2C
   ori r18, r16, 0xFBB0
 
   #r17 = value save address
   #r18 = value to use address
+  #r24 = Iterator
+  #r25 = NumOfItems
+  li r24, 0
+  li r25, 5
 
-  lbz r16, 0(r18)
-  stb r16, 0(r17)  
-
-  lbz r16, 1(r18)
-  stb r16, 1(r17)  
-
-  lbz r16, 2(r18)
-  stb r16, 2(r17)  
-
-  lbz r16, 3(r18)
-  stb r16, 3(r17)  
-
-  lbz r16, 4(r18)
-  stb r16, 4(r17)  
-
-  lwz r14, 4(sp)
-  addi sp, sp, 8
- 
-  b ReturnR14BLR  
+SavePage1Loop:
+  lbzx r16, r18, r24
+  stbx r16, r17, r24
+  addi r24, r24, 1
+  cmpw r24, r25
+  blt SavePage1Loop  
+  b EndSavePageSXOptions
 
 SavePage2SXOptions:
   #Run logic to save Page 2 values.
   #8057FBB0 are the current configured options.
   #8057FBA0 = Where Page 2 options are saved.
-
-  stwu sp, -8(sp)
-  mflr r14
-  stw r14, 4(sp)
 
   lis r16, 0x8057
   ori r17, r16, 0xFBA0
@@ -429,21 +388,18 @@ SavePage2SXOptions:
   #r18 = value to use address
 
   lbz r16, 0(r18)
-  stb r16, 0(r17)  
+  stb r16, 0(r17)
 
   lbz r16, 1(r18)
-  stb r16, 1(r17)  
+  stb r16, 1(r17)
 
   lbz r16, 2(r18)
-  stb r16, 2(r17)  
+  stb r16, 2(r17)
 
   lbz r16, 3(r18)
-  stb r16, 3(r17)  
+  stb r16, 3(r17)
 
-  lwz r14, 4(sp)
-  addi sp, sp, 8
- 
-  b ReturnR14BLR  
+  b EndSavePageSXOptions  
 
 SavePage3SXOptions:
   #Run logic to save Page 3 values.
@@ -626,69 +582,23 @@ RenderSXOptionsMain:
   sth r16, 0(r18)
 
 BeginRenderSXOptionsMain:
-  #Start by rendering a blank screen
+  #Initialize Loop
   mr r20, r21
+  lis r23, 0x8057
+  ori r23, r23, 0xFBB0 #Common Address
+  lbz r24, 0xA(r23) #Number of Items to Render.
+  li r25, 0 #Iterator
 
-  li r19, 0
-  lis r16, 0x8057
-  ori r17, r16, 0xFBB0
-  lbz r17, 0(r17)
+RenderSXOptionsLoop:
+  mr r19, r25
+  lbzx r17, r23, r19
   bl RenderOptionR17ToPosR19
  
   #Determine if we should process further options.
-  lis r16, 0x8057
-  ori r17, r16, 0xFBBA
-  lbz r17, 0(r17)
-  cmpwi r17, 1
-  blt EndRenderSXOptionsMain
+  addi r25, r25, 1
+  cmpw r24, r25
+  bge RenderSXOptionsLoop
   
-  li r19, 1
-  lis r16, 0x8057
-  ori r17, r16, 0xFBB1
-  lbz r17, 0(r17)
-  bl RenderOptionR17ToPosR19
-
-  #Determine if we should process further options.
-  lis r16, 0x8057
-  ori r17, r16, 0xFBBA
-  lbz r17, 0(r17)
-  cmpwi r17, 2
-  blt EndRenderSXOptionsMain
-
-  li r19, 2
-  lis r16, 0x8057
-  ori r17, r16, 0xFBB2
-  lbz r17, 0(r17)
-  bl RenderOptionR17ToPosR19
-
-  #Determine if we should process further options.
-  lis r16, 0x8057
-  ori r17, r16, 0xFBBA
-  lbz r17, 0(r17)
-  cmpwi r17, 3
-  blt EndRenderSXOptionsMain
-
-  li r19, 3
-  lis r16, 0x8057
-  ori r17, r16, 0xFBB3
-  lbz r17, 0(r17)
-  bl RenderOptionR17ToPosR19
-
-  #Determine if we should process further options.
-  lis r16, 0x8057
-  ori r17, r16, 0xFBBA
-  lbz r17, 0(r17)
-  cmpwi r17, 4
-  blt EndRenderSXOptionsMain
-
-  li r19, 4
-  lis r16, 0x8057
-  ori r17, r16, 0xFBB4
-  lbz r17, 0(r17)
-  bl RenderOptionR17ToPosR19
-
-  #Dont need to check as we dont support any more options at once.
-
 EndRenderSXOptionsMain:
 
   bl SelectedOption
@@ -703,22 +613,25 @@ EndRenderSXOptionsMain:
 
   #Run apply settings code if we need to save changes now.
   lis r18, 0x8057
-  ori r18, r18, 0xD8FA  
+  ori r18, r18, 0xD8FA
   lhz r16, 0(r18)
 
+  #TODO: Look at here to remove linked branches.
+  #Sould only be doing one of these branches at a time.
   cmpwi r16, 3
-  beql SavePage1SXOptions
+  beq SavePage1SXOptions
   cmpwi r16, 4
-  beql SavePage2SXOptions
+  beq SavePage2SXOptions
   cmpwi r16, 5
   beql SavePage3SXOptions
   cmpwi r16, 6
   beql SavePage4SXOptions
 
+EndSavePageSXOptions:
   bl GetNewButtonPressesToR16
 
   andi. r19, r16, 0x3000
-  #r19 is dpad button presses isolated.  
+  #r19 is dpad button presses isolated.
 
   cmpwi r19, 0
   bgtl ProcessTriggerButtonOptions
