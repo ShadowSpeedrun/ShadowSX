@@ -3,7 +3,7 @@
 
 #805EE65C (float) = Boss Health Bar
 #8057D900 (half) = Cutscene Flags (Normally for IGT at of run)
-#8057D902 (float) = Temp Bucket for applying Time Calcs.
+#8057D904 (float) = Temp Bucket for applying Time Calcs.
 
 #Registers in use:
 #r16 volatile
@@ -46,8 +46,8 @@ Start:
 
   #Set f9 = 1
   lis r16, 0x3F80
-  stw r16, 2(r18)
-  lfs f9, 2(r18)
+  stw r16, 4(r18)
+  lfs f9, 4(r18)
 
   #Health != 1 means mid fight cutscene
   fcmpu cr0, f10, f9
@@ -89,7 +89,7 @@ ApplyPenalty:
 TimeCleanup:
   #Zero out Temp Memory Bucket
   lis r18, 0x8057
-  ori r18, r18, 0xD902
+  ori r18, r18, 0xD904
   li r17, 0
   stw r17, 0(r18)
   b End
@@ -100,7 +100,7 @@ FightEndCleanup:
   ori r18, r18, 0xD900
   li r17, 0
   sth r17, 0(r18)
-  stw r17, 2(r18)
+  stw r17, 4(r18)
 
 End:
   #Original Code
