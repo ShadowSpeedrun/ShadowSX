@@ -193,7 +193,7 @@ Page1Loop:
   #Get value for CS Skip	 
   lbzx r16, r17, r24
   stbx r16, r18, r24
-  #Configure avaiable settings for optioxd3wn
+  #Configure avaiable settings for option
   li r16, 0
   addi r24, r24, 5 #Add 5 to get new offset
   stbx r16, r18, r24
