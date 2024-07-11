@@ -4,7 +4,10 @@
 #Do not apply scaler
 #Race time is Saved time + New IGT
 
-#TODO: Find out why we are not providing original code?
+#TODO: Find out why this is okay?!?!?
+#Original Code
+#bne- ->0x80337048
+
 Start:
   #Load value of "In Cutscene Flag" to r16.
   lis r16, 0x8057
@@ -22,17 +25,37 @@ Start:
   lfs f1, -100(r3)
   lfs f0, 32(r4)
   fdivs f0, f0, f1
+  #If a divide by 0 happens, it will return an infinity or NaN.
   
   #Ensure timestep is not negative.
   #TODO: uh. double check this.
   #It works, but perhaps on accident.
+  #f6 is apparently 0?
   fcmpo cr0, f0, f6
   bgt- ApplyTime
   fmr f0, f6
 
 ApplyTime:
-  #Add timestep to New IGT.
+  #Load New IGT to f1.
   lfs f1, 480(r3)
+
+  #Check for Practice Mode, then if so, check which timer mode we are in.
+  #0 = Zero Timer (Prevent TimeStep and Zero)
+  #1 = Running Timer (Unaltered)
+  #2 = Paused Timer (Prevent TimeStep)
+  lbz r17, -4(r18) #r18 at this point is 0x8057D8F8
+  cmpwi r17, 1
+  bne AddTimeStop
+  lbz r17, -1(r18)
+  cmpwi r17, 1
+  beq AddTimeStop
+  fmr f0, f6 #REALLY NEED TO CHECK IF 0.
+  cmpwi r17, 0
+  bne AddTimeStop
+  fmr f1, f6
+
+AddTimeStop:
+  #Add timestep to New IGT.
   fadds f1, f1, f0
   stfs f1, 480(r3)
 
