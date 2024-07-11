@@ -1,12 +1,12 @@
-#803499cc
+#8040da78
 #PracticeModeCommands.asm
 #All controller commands needed for Practice Mode
 #Will be processed here.
 
-#r0 is the value of 8056ED4E which is the digital button presses.
+#r4 is the value of 8056ED4E which is the digital button presses.
 
 #Original Code
-stw r0, 0x0028 (r31)
+lwz r5, 0 (r30)
 
 #Check if Practice Mode
 lis r18, 0x8057
@@ -15,12 +15,12 @@ lbz r16, 0(r18)
 cmpwi r16, 1
 bne End
 
-andi. r16, r0, 0x20
+andi. r16, r4, 0x20
 cmpwi r16, 0x20
 bne End
 
 #Check if Clear Meters and Score Command
-andi. r16, r0, 0x3020
+andi. r16, r4, 0x3020
 cmpwi r16, 0x3020 #Z+L+R
 bne HeroCheck
 #Execute Clear Meters Command
@@ -35,7 +35,7 @@ b End
 
 HeroCheck:
 #Check if Fill Hero Meter Command
-andi. r16, r0, 0x2020
+andi. r16, r4, 0x2020
 cmpwi r16, 0x2020 #Z+R
 bne DarkCheck
 #Execute Fill Hero Meter Command
@@ -47,9 +47,9 @@ b End
 
 DarkCheck:
 #Check if Fill Dark Meter Command
-andi. r16, r0, 0x1020
+andi. r16, r4, 0x1020
 cmpwi r16, 0x1020 #Z+L
-bne CheckTimerStateChange
+bne CheckMeterScoreToggle
 #Execute Fill Dark Meter Command
 li r17, 0x7530
 lis r18, 0x8057
@@ -59,9 +59,9 @@ b End
 
 CheckMeterScoreToggle:
 #Check if Toggle Meter with Score Command
-andi. r16, r0, 0x60
+andi. r16, r4, 0x60
 cmpwi r16, 0x60 #Z+DPad Up
-bne ClearToggleLock
+bne CheckTimerStateChange
 #Execute Toggle Meter with Score Command
 lis r18, 0x8057
 ori r18, r18, 0xD8F5
@@ -87,10 +87,15 @@ b End
 
 CheckTimerStateChange:
 #Check if Toggle Meter with Score Command
-andi. r16, r0, 0x60
-cmpwi r16, 0x60 #Z+DPad Up
+andi. r16, r4, 0xA0
+cmpwi r16, 0xA0 #Z+DPad Down
 bne ClearToggleLock
-#Execute Toggle Meter with Score Command
+
+#Consume the Dpad Down Input to prevent 
+#it from changing partner character status.
+subi r4, r4, 0x80
+
+#Execute Timer State Change Command
 lis r18, 0x8057
 ori r18, r18, 0xD8F5
 
@@ -118,3 +123,5 @@ li r16, 0
 stb r16, 0(r18)
 
 End:
+  #Rerun earlier cmpwi to fix upcoming beq
+  cmpwi r3, 0
