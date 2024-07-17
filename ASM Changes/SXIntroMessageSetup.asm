@@ -35,7 +35,7 @@ Init:
   ori r18, r18, 0x7B2C
 
 InitMenuOptions:
-  #8057FB80 is current level keys. Borrowing for lookup table data.
+  #8057FBA0 is current level keys. Borrowing for lookup table data.
   lis r16, 0x8057
   ori r18, r16, 0xFBA0
 

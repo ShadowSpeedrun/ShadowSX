@@ -104,7 +104,7 @@ RenderSXStart:
     stb r19, 3(r18)
 
   CheckKeyDisable:
-    #Load location for Disable SPW Unlock flag
+    #Load location for Disable Key Saving flag
     lbz r19, 4(r18)
 
     #If not 0, or 1
@@ -184,7 +184,7 @@ SetupPage1SXOptions:
 
   #r17 = value save address
   #r18 = value to use address
-  #Using Loop since they all the options here are using the same init code
+  #Using Loop since all of the options here are using the same init code
   #r24 = Iterator
   #r25 = NumOfItems
   li r24, 0
@@ -631,7 +631,7 @@ EndSavePageSXOptions:
   bl GetNewButtonPressesToR16
 
   andi. r19, r16, 0x3000
-  #r19 is dpad button presses isolated.
+  #r19 is trigger buttons presses isolated.
 
   cmpwi r19, 0
   bgtl ProcessTriggerButtonOptions

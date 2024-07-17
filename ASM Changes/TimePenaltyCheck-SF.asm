@@ -8,7 +8,7 @@
 #Registers in use:
 #r16 volatile
 #r17 volatile
-#r18 Reference for D900 and near by addresses
+#r18 Reference for D900 and nearby addresses
 
 #f9 = volatile
 #f10 = volatile
