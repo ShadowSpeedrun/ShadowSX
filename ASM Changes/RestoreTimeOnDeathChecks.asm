@@ -32,13 +32,15 @@ RestoreTimerOG:
   stfs f0, 148(r4)
 
 CheckSelectMode:
-  #Load value of "Select Mode Flag"
-  #into r18. (8057D8FE)
-  lis r18, 0x8057
-  ori r18, r18, 0xD8FE
-  lhz r18, 0(r18)
+#Load "StageSequenceManager Phase" into r18.
+  lis r18, 0x805E
+  ori r18, r18, 0xF9A8
+  lwz r18, 0x0(r18)
+  lwz r18, 0x4(r18)
+
+  #If Select Mode, Reset New Timer as well
   cmpwi r18, 0
-  beq End
+  bne End
 
 ResetNewTimer:
   stfs f0, 0x268(r4)
