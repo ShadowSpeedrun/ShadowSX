@@ -1,11 +1,11 @@
-#802D2130
+#802D2134
 #ResetRaceIGTOnStoryNew.asm
 
 #r16, f0 used
 
 Start:
   #Original Code
-  li r0, 100
+  li r5, 0
 
 ResetStory:
   #Load address of Story Race Time
