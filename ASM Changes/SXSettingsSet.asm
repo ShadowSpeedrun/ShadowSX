@@ -48,6 +48,8 @@ SetToSavePrompt:
   li r3, 1
   sth r3, -2(r18)
   li r3, 0
+  #Set Cursor Index to 0 for Practice Mode later.
+  sth r3, -8(r18)
 
 CheckSPWChanges:
   #Next, apply changes from options menu.
