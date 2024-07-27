@@ -1673,3 +1673,32 @@ NTSC 1.06 --- 0x8011C244 ---- 7C03202E -> Branch
 4182000c 7c03202e
 48000008 38000064
 60000000 00000000
+
+
+	-==-
+
+
+Accessibility Turbo
+L+B = B Turbo
+Z+A = A Turbo
+
+Target rate allows for ~6.50 on Egg Breaker Normal.  
+Performance is worse on GC Hardare / clock speed compared to other means of playing the game.
+[BlazinZzetti]
+Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
+NTSC 1.06 --- 0x80358A04 ---- 91030004 -> Branch
+
+3a800000 71130021
+2c130021 40820008
+3a800001 71131002
+2c131002 40820008
+62940002 2c140000
+41820040 3e408057
+6252d90c 3e203daa
+6231aaab 92320004
+c1520004 c1320000
+fc095000 41800010
+3a200000 92320000
+48000010 fd29082a
+d1320000 7d144050
+91030004 00000000
