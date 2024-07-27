@@ -4,7 +4,9 @@
 #Do not apply scaler
 #Race time is Saved time + New IGT
 
-#TODO: Find out why this is okay?!?!?
+#This was a nop for what DontStopTimeInCheckpoint.asm was doing.
+#That's why it's ok to not do the original code.
+#DontStopTimeInCheckpoint.asm is handling it.
 #Original Code
 #bne- ->0x80337048
 
@@ -28,9 +30,7 @@ Start:
   #If a divide by 0 happens, it will return an infinity or NaN.
   
   #Ensure timestep is not negative.
-  #TODO: uh. double check this.
-  #It works, but perhaps on accident.
-  #f6 is apparently 0?
+  #f6 seems to always be 0 at this point.
   fcmpo cr0, f0, f6
   bgt- ApplyTime
   fmr f0, f6
@@ -49,7 +49,7 @@ ApplyTime:
   lbz r17, -1(r18)
   cmpwi r17, 1
   beq AddTimeStop
-  fmr f0, f6 #REALLY NEED TO CHECK IF 0.
+  fmr f0, f6
   cmpwi r17, 0
   bne AddTimeStop
   fmr f1, f6
