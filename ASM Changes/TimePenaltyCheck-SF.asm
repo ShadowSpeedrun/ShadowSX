@@ -35,6 +35,10 @@ Start:
   ori r16, r16, 0xE65C  
   lfs f10, 0(r16)
 
+  #Try to keep D900 available for reference.
+  lis r18, 0x8057
+  ori r18, r18, 0xD900
+
   #Set f9 = 0
   lis r16, 0x0000
   stw r16, 4(r18)
@@ -43,10 +47,6 @@ Start:
   #if Health == 0, clean up values used for checks.
   fcmpu cr0, f10, f9
   beq FightEndCleanup
-
-  #Try to keep D900 available for reference.
-  lis r18, 0x8057
-  ori r18, r18, 0xD900
 
   #Set f9 = 1
   lis r16, 0x3F80
