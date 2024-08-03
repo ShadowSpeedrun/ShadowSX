@@ -1514,50 +1514,6 @@ b0b2fff4 38a00001
 	-==-
 
 
-Rounding Patch for IGT Displays
-Uses the following code files:
-GetTimeDigitsRoundedPatch.asm
-GetTimeDigitsRoundedPatch2.asm
-GetTimeDigitsRoundedPatch3.asm
-GetTimeDigitsRoundedPatch4.asm
-
-Various patches to show a time value that is able to round up if the rounding decimal is 5 or higher.
-[BlazinZzetti]
-Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
-NTSC 1.06 --- 0x801E45E0 ---- EC030032 -> Branch
-
-ec030032 3e403f00
-9241fffc c061fffc
-ec00182a 3e4042c8
-9241fffc c061fffc
-60000000 00000000
-
-------------- 0x801E45F4 ---- 7C003050 -> Branch
-
-7c003050 2c050064
-40820014 88a30004
-38a50001 98a30004
-38a00000 00000000
-
-------------- 0x801E46B8 ---- EC030032 -> Branch
-
-ec030032 3e403f00
-9241fffc c061fffc
-ec00182a 3e4042c8
-9241fffc c061fffc
-60000000 00000000
-
-------------- 0x801E46CC ---- 7C003050 -> Branch
-
-7c003050 2c050064
-40820014 88a30004
-38a50001 98a30004
-38a00000 00000000
-
-
-	-==-
-
-
 Practice Mode - Show Meter Values as Scores
 Uses:
 ToggleShowHeroMeterAsHeroScore.asm
