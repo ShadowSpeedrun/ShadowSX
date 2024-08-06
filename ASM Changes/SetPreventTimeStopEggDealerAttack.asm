@@ -5,8 +5,10 @@ Start:
   #The Flag will be cleared once noticed by the Check.asm
   #Borrowing In Checkpoint Flag for preventing Timer Stop.
 
-  cmpwi r4, 2 #0 = Intro, 1 = Mid, 2 = Fight End
+  cmpwi r4, 1 #0 = Intro, 1 = Mid
   ble PenaltyCheck
+  cmpwi r4, 2 #2 = Fight End
+  beq FightEndCleanup
   cmpwi r4, 6 #Missiles (Intro Attack)
   beq End 
 
@@ -43,6 +45,15 @@ PenaltyCheck:
   #bl TimePenaltyCheck
   #To be injected in MCM
   nop
+  b End
+
+FightEndCleanup:
+  #Zero out Temp Memory Bucket and Flags
+  lis r18, 0x8057
+  ori r18, r18, 0xD900
+  li r17, 0
+  sth r17, 0(r18)
+  stw r17, 4(r18)
 
 End:
   #Original Code
