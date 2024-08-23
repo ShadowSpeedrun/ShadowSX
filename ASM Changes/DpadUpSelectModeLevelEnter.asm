@@ -29,6 +29,9 @@ Start:
   stb r19, 0(r18)
   #Set TimeMode to 1 to prevent 0 timer.
   stb r19, 3(r18)
+  li r19, 0
+  #Set Show Meter as Score to off.
+  stb r19, 1(r18)
   #Continue on for other checks.
 
 CheckDPadUp:
