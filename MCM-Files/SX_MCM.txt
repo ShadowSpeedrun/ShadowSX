@@ -1453,14 +1453,18 @@ Egg Dealer
 Black Doom
 Sonic & Diablon
 Egg Breaker
+Black Bull 2
+The Last Way (Black Doom Ending)'
+Devil Doom
 [BlazinZzetti]
 Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 <PracticeRestartOnMissionComplete> NTSC 1.06
 9421fff8 7e6802a6
 92610004 38800006
 3e408057 6252d8f4
-8a520000 2c120001
-40820008 38800007
+8a320000 2c110001
+40820010 38800007
+3a200000 b232ffb2
 82610004 38210008
 3a730004 7e6803a6
 3a600000 4e800020
@@ -1493,7 +1497,19 @@ b <PracticeRestartOnMissionComplete>
 
 b <PracticeRestartOnMissionComplete>
 
-------------- 0x802ab654 ---- 38800006 -> Branch
+------------- 0x802AB654 ---- 38800006 -> Branch
+
+b <PracticeRestartOnMissionComplete>
+
+------------- 0x80245808 ---- 38800006 -> Branch
+
+b <PracticeRestartOnMissionComplete>
+
+------------- 0x8011CD38 ---- 38800006 -> Branch
+
+b <PracticeRestartOnMissionComplete>
+
+------------- 0x8030FD08 ---- 38800006 -> Branch
 
 b <PracticeRestartOnMissionComplete>
 
