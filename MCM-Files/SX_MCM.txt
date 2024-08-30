@@ -1194,7 +1194,7 @@ Uses ResetRaceIGTOnStoryNew.asm, ResetRaceIGTOnLastStoryStart.asm, ResetRaceIGTO
 
 Resets the Race Timers when triggering
 Story -> New,  Last Story, Expert Mode -> New
-[dreamsyntax, BlazinZzetti]
+[dreamsyntax]
 Revision ---- DOL Offset ---- Hex to Replace ---------- ASM Code -
 NTSC 1.06 --- 0x802D2214 ---- 386002BC -> Branch
 
@@ -1208,9 +1208,9 @@ d0100000 00000000
 62107b0c ec000028
 d0100000 00000000
 
-------------- 0x802D2134 ---- 38A00000 -> Branch
+------------- 0x802D2130 ---- 38000064 -> Branch
 
-38a00000 3e008057
+38000064 3e008057
 62107af4 ec000028
 d0100000 00000000
 
