@@ -24,21 +24,21 @@ RenderSXIntro:
   ori r18, r18, 0xD8FA
   
   lhz r16, 0(r18)
-  cmpwi r16, 0
-  beq RenderSXStart
   cmpwi r16, 1
+  beq RenderSXStart
+  cmpwi r16, 2
   beq RenderSXSaveMessage
-  cmpwi r16, 3
-  beq SetupPage1SXOptions
   cmpwi r16, 4
-  beq SetupPage2SXOptions
+  beq SetupPage1SXOptions
   cmpwi r16, 5
-  beq SetupPage3SXOptions
+  beq SetupPage2SXOptions
   cmpwi r16, 6
+  beq SetupPage3SXOptions
+  cmpwi r16, 7
   beq SetupPage4SXOptions
   
   #If somehow past here, set to final index and retry.
-  li r16, 6
+  li r16, 7
   sth r16, 0(r18)
   b RenderSXIntro
 
@@ -133,7 +133,7 @@ RenderSXStart:
     bne StoreCurrentInputAndExit
 
     #Set Screen to Options if Z is pressed.
-    li r19, 3
+    li r19, 4
     lis r18, 0x8057
     ori r18, r18, 0xD8FA
     sth r19, 0(r18)
@@ -564,7 +564,7 @@ RenderSXOptionsMain:
   ori r18, r18, 0xD8FA
   lhz r16, 0(r18)
   #r16 is currently the value of the page offset.
-  #Page 1 starts at index 3
+  #Page 1 starts at index 4
   
   #rx = (0x14 * Page Number)
   mulli r16, r16, 0x14
@@ -618,13 +618,13 @@ EndRenderSXOptionsMain:
 
   #TODO: Look at here to remove linked branches.
   #Sould only be doing one of these branches at a time.
-  cmpwi r16, 3
-  beq SavePage1SXOptions
   cmpwi r16, 4
-  beq SavePage2SXOptions
+  beq SavePage1SXOptions
   cmpwi r16, 5
-  beql SavePage3SXOptions
+  beq SavePage2SXOptions
   cmpwi r16, 6
+  beql SavePage3SXOptions
+  cmpwi r16, 7
   beql SavePage4SXOptions
 
 EndSavePageSXOptions:
@@ -654,7 +654,7 @@ RenderOptionR17ToPosR19:
   add r21, r20, r16 #MoveCursorR16X
 
   #Load address to Options into r19
-  lwz r19, 0x28(r10)
+  lwz r19, 0x3C(r10)
   cmpwi r17, 0 # Render "Off"  
   beql RenderOptionText
 
@@ -955,7 +955,7 @@ LButtonOptions:
   lis r18, 0x8057
   ori r18, r18, 0xD8FA
   lhz r16, 0(r18) #Load Screen Offset
-  cmpwi r16, 3
+  cmpwi r16, 4
   beq LButtonEnd
   
   subi r16, r16, 1
@@ -975,7 +975,7 @@ RButtonOptions:
   lis r18, 0x8057
   ori r18, r18, 0xD8FA
   lhz r16, 0(r18) #Load Screen Offset
-  cmpwi r16, 6
+  cmpwi r16, 7
   beq RButtonEnd
   
   addi r16, r16, 1

@@ -18,7 +18,7 @@ Start:
   
   #Check if we are past Intro into Options
   lhz r19, -2(r18)
-  cmpwi r19, 0x0
+  cmpwi r19, 1
   bgt InitOptionSets
   b End
 
@@ -26,6 +26,8 @@ Init:
   #Initialize to SX intro
   li r19, 44
   sth r19, 0(r18)
+  li r19, 1
+  sth r19, -2(r18)
 
   #Check if Rom Settings are valid
   #If not, assign default settings.

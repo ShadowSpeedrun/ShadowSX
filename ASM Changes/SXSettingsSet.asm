@@ -24,7 +24,7 @@ Start:
   #r18 is already set to be 0x8057D8FC
   lhz r17, -2(r18)
   
-  cmpwi r17, 3
+  cmpwi r17, 4
   bge SetToSavePrompt
 
 SetToAutoSave:
@@ -45,7 +45,7 @@ SetToAutoSave:
   b End
 
 SetToSavePrompt:
-  li r3, 1
+  li r3, 2
   sth r3, -2(r18)
   li r3, 0
   #Set Cursor Index to 0 for Practice Mode later.
