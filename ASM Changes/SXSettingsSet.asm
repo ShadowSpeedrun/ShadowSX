@@ -137,7 +137,7 @@ CheckStages:
     mulli r16, r17, 0x60 #r16 = RAM offset to stage data
     stwx r19, r18, r16
     addi r17, r17, 1
-    cmpwi r17, 39
+    cmpwi r17, 40
     blt SetStagesAvailableLoop
 
   lis r18, 0x8057 #Black Bull Show Stats
