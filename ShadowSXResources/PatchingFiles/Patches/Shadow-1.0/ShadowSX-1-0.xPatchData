@@ -1,0 +1,12 @@
+<PatchData Name="Shadow SX - 1.0">
+	<Description>Expects CleanRip of the original Shadow the Hedgehog NTSC ROM.<br/>CRC32 - F582CF1E</Description>
+	<Variants>
+		<Variant Name="4:3">
+			<PatchFileName>ShadowSX.vcdiff</PatchFileName>
+			<OriginalGameID>GUPE8P</OriginalGameID>
+			<NewGameID>GUPX8P</NewGameID>
+			<ExpectedBaseCRC>F582CF1E</ExpectedBaseCRC>
+			<ExpectedOutputCRC>8BEE8EBA</ExpectedOutputCRC>
+		</Variant>
+	</Variants>
+</PatchData>
