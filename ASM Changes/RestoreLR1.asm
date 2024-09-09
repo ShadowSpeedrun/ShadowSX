@@ -1,13 +1,13 @@
-#To be inserted at 80337048
-;RestoreLR1.asm
+#80337048
+#RestoreLR1.asm
 
-;Restore link register that DontStopTimeInCheckpoint.asm modified.
+#Restore link register that DontStopTimeInCheckpoint.asm modified.
 
 Start:
-  ;Original Code
+  #Original Code
   lis r4, 0x8058
 
-  ;Restore Link Register to 801E1E94
+  #Restore Link Register to 801E1E94
   lis r18, 0x801E
   ori r18, r18, 0x1E94
   mtlr r18

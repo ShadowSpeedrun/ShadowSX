@@ -1,119 +1,104 @@
-#To be inserted at 8004a480
-;IGTMessageRender.asm
+#8004A480
+#IGTMessageRender.asm
 
 Start:
-  ;Determine that we are trying to render the Time message.
-  ;Check for Time Flag (8057D901)
+  #Determine that we are trying to render the Time message.
+  #Check for Time Flag (8057D900)
   lis r16, 0x8057
   ori r18, r16, 0xD900
   lhz r18, 0(r18)
   cmpwi r18, 1
   bne End
 
-  ;Ensure we are trying to render the IGT Message.
+  #Ensure we are trying to render the IGT Message.
   lis r18, 0x807D
   addi r18, r18, 0x5700
   lwz r18, 0(r18)
   cmpwi r18, 43
   bne End
 
-  ;save LR to restore later
+  #save LR to restore later
   mflr r22
 
-  ;r10 contains address to start of our message.
-  ;Offset it to the start of the dynamic section.
-  lwz r21, 0(r10)
-  addi r21, r21, 0x54
+  #r10 contains address to start of our message.
+  #Offset it to the start of the dynamic section.
+  lwz r21, 0x14(r10)
+  addi r21, r21, 0x22#0x22 JPN, 0x54 everyone else.
+  ori r18, r16, 0x6972
+  lwz r18, 0(r18)
+  cmpwi r18, 0
+  beq GetTimer
+  addi r21, r21, 0x32 #add remaining offset if not JPN.
 
-  ;Determine the Timer to Display
-  ;First check for Expert flag(8057D7C5)
-  ori r18, r16, 0xD7C5
-  lbz r18, 0(r18)
-  cmpwi r18, 1
+GetTimer:
+  #Determine the Timer to Display
+  #First check for Expert Flag(8057D7C4)
+  ori r18, r16, 0xD7C4
+  lhz r15, 0(r18)
+  cmpwi r15, 1
   beq SetExpertTime
  
-  ;check for Last Story Flag(8057D903)
-  ori r18, r16, 0xD902
-  lhz r18, 0(r18)
-  cmpwi r18, 1
+  #check for Last Story Flag(80584724)
+  addi r18, r18, 0x6F60
+  lwz r18, 0(r18)
+  cmpwi r18, 2
   beq SetLastTime
 
-  ;Both checks failed, default to Story Mode Time
-  ;Story Race(80577AF4)
+  #Both checks failed, default to Story Mode Time
+  #Story Race(80577AF4)
 
   ori r18, r16, 0x7AF4
   lfs f1, 0(r18)
   b GetDigits
 
 SetExpertTime:
-  ;Expert Race(80577B0C)
+  #Expert Race(80577B0C)
   ori r18, r16, 0x7B0C
   lfs f1, 0(r18)
   b GetDigits
 
 SetLastTime:
-  ;Last Story Race(80577B24)
+  #Last Story Race(80577B24)
   ori r18, r16, 0x7B24
   lfs f1, 0(r18)
-  ;b GetDigits
+  #b GetDigits
 
 GetDigits:
-  ;r4 -> r14
-  ;r0 -> r15
-  ;r6 -> r16
-  ;r5 -> r17
-  ;r3 -> r18
-  ;sp -> r19
-  
-  ;Load what sp would be into r19
-  lis r16, 0x8060
-  ori r19, r16, 0xB2C0
-  
-  ori r18, r16, 0xB33C
-  
-  fctiwz f0, f1
-  stwu r19, -0x0020 (r19)
-  lis r14, 0x4330
-  li r15, 60
-  stw r14, 0x0010 (r19)
-  lfd f2, -0x3678 (rtoc)
-  stfd f0, 0x0008 (r19)
-  lfs f3, -0x367C (rtoc)
-  lwz r16, 0x000C (r19)
-  xoris r17, r16, 0x8000
-  divw r14, r16, r15
-  stw r17, 0x0014 (r19)
-  lfd f0, 0x0010 (r19)
-  fsubs f0, f0, f2
-  fsubs f0, f1, f0
-  fmuls f0, f3, f0
-  fctiwz f0, f0
-  mullw r15, r14, r15
-  stfd f0, 0x0018 (r19)
-  lwz r17, 0x001C (r19)
-  sub r15, r16, r15
-  stb r17, 0x0005 (r18)
-  stw r14, 0 (r18)
-  stb r15, 0x0004 (r18)
-  addi r19, r19, 32
+  #Do a bl to 0x801e45a4
+  lis r18, 0x801e
+  ori r18, r18, 0x45a4
+  #Set r3 to location for time bytes
+  lis r3, 0x8060
+  ori r3, r3, 0xB33C
+  #Keep copy of r4 to restore later.
+  mr r23, r4
+  mtctr r18
+  bctrl
+  #Restore r3
+  mr r3, r30
+  #Restore r4
+  mr r4, r23
+  li r23, 0
+  #Restore r5
+  lis r5, 0x8057
 
-  ;LocationOfTimeBytes(8060B33F)
+  #LocationOfTimeBytes(8060B33F)
 
-  ;Load Byte for Minutes
+  #Load Byte for Minutes
   lis r18, 0x8060
   ori r18, r18, 0xB33F
   lbz r20, 0(r18)
 
   li r17, 60
   divw r16, r20, r17
-  ;r16 is now Hours;
+  #r16 is now Hours#
 
-  ;Render Hours if any
+  #Render Hours if any
   cmpwi r16, 0
   bne RenderHours
 
 RemoveHours:
-  ;0x20 = space
+  #0x20 = space
   li r16, 0x20
   sth r16, 0(r21)
   addi r21, r21, 2
@@ -125,7 +110,7 @@ RenderHours:
   sth r16, 0(r21)
   addi r21, r21, 2
   
-  ;Render Colon
+  #Render Colon
   li r16, 0x3A
   sth r16, 0(r21)
   addi r21, r21, 2
@@ -135,39 +120,39 @@ RenderHours:
 
   mulli r17, r16, 60
   sub r20, r20, r17
-  ;r20 is now Minutes
+  #r20 is now Minutes
 
 RenderMinutes:
   mr r16, r20
   bl RenderTimeSection
 
-  ;Render Colon
+  #Render Colon
   li r16, 0x3A
   sth r16, 0(r21)
   addi r21, r21, 2
-  ;Fall Through to continue on.
+  #Fall Through to continue on.
 
 Continue:
-  ;Load Byte for Seconds
+  #Load Byte for Seconds
   lis r18, 0x8060
   ori r18, r18, 0xB33F
 
   lbz r16, 1(r18)
   bl RenderTimeSection
 
-  ;Render Period
+  #Render Period
   li r16, 0x2E
   sth r16, 0(r21)
   addi r21, r21, 2
 
-  ;Load Byte for SubSeconds
+  #Load Byte for SubSeconds
   lis r18, 0x8060
   ori r18, r18, 0xB33F
 
   lbz r16, 2(r18)
   bl RenderTimeSection
 
-  ;Restore LR before exiting
+  #Restore LR before exiting
   mtlr r22
   b End
 
@@ -178,10 +163,10 @@ RenderTimeSection:
   blr
 
 RenderTensPlace:
-  ;r16 input
-  ;r17 ones
-  ;r18 tens
-  ;r19 = 10
+  #r16 input
+  #r17 ones
+  #r18 tens
+  #r19 = 10
   li r19, 10
 
   mr r17, r16
@@ -223,7 +208,7 @@ End:
   li r20, 0x0
   li r21, 0x0
   li r22, 0x0
-  ;Original Code
+  #Original Code
   li r0,0
 
 

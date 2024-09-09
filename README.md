@@ -3,11 +3,9 @@
 ## What is Shadow SX
 Shadow SX is a ROM hack of the ENG NTSC version of Shadow the Hedgehog that aims to provide quality of life changes for improving the speedrunning experience without any major changes to the core gameplay experience. 
 
-Shadow SX is playable on GameCubes, on Wiis with Homebrew, or on computers using Dolpin Emulator.
+Shadow SX is playable on GameCubes, on Wiis with Homebrew, or on computers using Dolphin Emulator.
 
-Although this website started as a means of consolidating and proving data for the console releases. Everything you see on this site should apply to both the console versions and Shadow SX.
-
-Due to changes to the game code, Shadow SX will be considered it's own thing seperate from the original console releases.  Seperate Leaderboards for any of the categories or levels will be provided at a future time.
+Due to changes to the game code, Shadow SX will be considered its own thing separate from the original console releases.  Separate Leaderboards for any of the categories or levels will be provided at a future time.
 
 <br/>
 
@@ -22,12 +20,15 @@ The game will no longer pause the timer while in the checkpoint menu.  This prev
 One of the biggest headaches when timing IGT runs on console was having to manually calculate the time from deaths to checkpoints.  With this change, the time continues without interruptions after death.  The time you end the level with is the final time now.
 
 #### Restarting a stage during a "Story Mode" playthrough no longer resets the IGT
-This change, while applies to every level, is mainly targeted to the shorter Boss Fights where one might reset quickly early on if a setup doesnt go to plan. Like with the Death fix above, the timer will simply continue form that point on until the end of the level or boss fight.  
+This change, while applies to every level, is mainly targeted to the shorter Boss Fights where one might reset quickly early on if a setup doesn’t go to plan. Like with the Death fix above, the timer will simply continue form that point on until the end of the level or boss fight.  
 
 This does NOT apply to levels or bosses that are started with "Select Mode" as this would quickly become annoying for Individual Level (IL) runs and attempts. This applies only for Normal Story, Last Story, and Expert Mode playthroughs.
 
 #### Preventing timer slow down during boss fight Chaos Control
 A neat mechanic for boss fights was slowing down time when using Chaos Control instead of speeding through the level, which makes sense considering that boss arenas are small enclosed areas.  When time slows down, the IGT slows down considerably. Since SX changes the IGT to be more of a RTA without loads timer, the IGT will now longer slow down.  Everything else should remain unaffected.
+
+#### Accounting for rewatched cutscenes during Boss Fights in Story Mode.
+To keep the new IGT as close as possible how a Times without Loads timer would work, a time penalty is now added for each rewatched cutscene during the fight.
 
 <br/>
 
@@ -45,6 +46,9 @@ If you have all 5 keys for a level, the Secret Door will now automatically open,
 
 #### Expert Mode from Select Mode
 Holding D-Pad Up while entering a level will place you in the Expert Mode Variant of the level for easier access and practice of those level layouts.
+
+#### Practice Mode from Select Mode
+Holding the Z button when entering a stage in select mode will unlock various commands which can be used to improve practicing the game.
 
 <br/>
 
@@ -86,4 +90,4 @@ When using GameCube controls, no changes are needed.  But if you are using a Pla
 #### Custom Shadow Colors
 Use the color adjuster tool in the Shadow SX Launcher to customize the color of Shadow for a more personalized experience.
 
-Repository for the launcher currently at https://github.com/BlazinZzetti/ShadowSXLauncher
+Repository for the launcher currently at https://github.com/ShadowSpeedrun/ShadowSXLauncher

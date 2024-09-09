@@ -1,0 +1,36 @@
+<PatchData Name="Shadow SX - 1.1">
+	<Description>Expects CleanRip of the original Shadow the Hedgehog NTSC ROM.
+Learn more at: https://wiibrew.org/wiki/CleanRip
+
+Extra controls
+Hold Z when entering stage in Select Mode to enable Practice Mode.
+Hold D-Pad Up for Expert Mode for that stage.
+Both can be held to enable Expert Mode Practice Mode.
+
+Practice Mode Commands (Z + Button)
+L = Fill Dark Meter
+R = Fill Hero Meter
+L + R = Clear Both Meters
+D-Pad Up = Toggle Meter Value as Score
+D-Pad Down = Toggle Timer State (Running, Paused, Reset)
+
+Turbo Action Commmands (Built in ~10hz input)
+L + B = Turbo B input
+Z + A = Turbo A input</Description>
+	<Variants>
+		<Variant Name="4:3">
+			<PatchFileName>ShadowSX-v1.1-4x3.vcdiff</PatchFileName>
+			<OriginalGameID>GUPE8P</OriginalGameID>
+			<NewGameID>GUPX8P</NewGameID>
+			<ExpectedBaseCRC>F582CF1E</ExpectedBaseCRC>
+			<ExpectedOutputCRC>013E30C6</ExpectedOutputCRC>
+		</Variant>
+		<Variant Name="16:9">
+			<PatchFileName>ShadowSX-v1.1-16x9.vcdiff</PatchFileName>
+			<OriginalGameID>GUPE8P</OriginalGameID>
+			<NewGameID>GUPX8P</NewGameID>
+			<ExpectedBaseCRC>F582CF1E</ExpectedBaseCRC>
+			<ExpectedOutputCRC>2BA3ABBC</ExpectedOutputCRC>
+		</Variant>
+	</Variants>
+</PatchData>

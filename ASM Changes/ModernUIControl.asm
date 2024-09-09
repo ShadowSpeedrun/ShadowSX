@@ -1,18 +1,18 @@
-#To be inserted at 803562A0
-;ModernUIControl.asm
+#803562A0
+#ModernUIControl.asm
 
-;If the option is enabled, this code will swap the
-;action that X and B would preform to match what the
-;non-gamecube versions did.
+#If the option is enabled, this code will swap the
+#action that X and B would preform to match what the
+#non-gamecube versions did.
 
-;Original Code
+#Original Code
 lwzx r4, r29, r0
 
-;Load "EnableXboxUI" Address into r18. (80577B2E)
+#Load "EnableXboxUI" Address into r18. (80577B2E)
 lis r18, 0x8057
 addi r18, r18, 0x7B2E
 
-;Check if feature is enabled.
+#Check if feature is enabled.
 lbz r19, 0(r18)
 cmplwi r19, 1
 bne- End

@@ -1,15 +1,15 @@
-#To be inserted at 8035b1dc
-;ShowIGTDuringAutoSave.asm
+#8035b1dc
+#ShowIGTDuringAutoSave.asm
 
 Start:
-  ;LoadTimeFlagAddress
+  #LoadTimeFlagAddress
   lis r18, 0x8057
   ori r18, r18, 0xD900
   lhz r19, 0(r18)
   cmpwi r19, 1
   bne- CleanupAndEnd
   
-  ;Display Time Message
+  #Display Time Message
   lis r18, 0x8011
   ori r18, r18, 0x7514
   mtlr r18
@@ -27,12 +27,22 @@ Start:
   cmpwi r3, 2
   bne- EndMessage
   
-  ;Message Accept. Disable Time Flag
-  ;LoadTimeFlagAddress
+  #Message Accept. Disable Time Flag
+  #LoadTimeFlagAddress
   lis r18, 0x8057
   ori r18, r18, 0xD900
   li r19, 0
   sth r19, 0(r18)
+  #Turn Offset Off.
+  sth r19, -6(r18)
+ 
+  #Set Message Addresses to hide message.
+  lis r18, 0x807D
+  ori r18, r18, 0x5700
+  li r19, -1
+  stw r19, 0(r18)
+  li r19, -2
+  stw r19, 4(r18)
 
 EndMessage:
   li r3, 1
@@ -53,8 +63,8 @@ Cleanup:
   
 CleanupAndEnd:
   bl Cleanup
-  ;Will continue into End
+  #Will continue into End
 
 End:
-  ;Original Code
+  #Original Code
   lbz r3, 0x16C8 (r30)
